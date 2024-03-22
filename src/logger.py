@@ -2,8 +2,8 @@
 Logging helper class
 """
 
-import os
 import logging as log
+import os
 
 LOG_DIR = str(os.getcwd()) + "/logs/"
 

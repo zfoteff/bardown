@@ -14,13 +14,13 @@ class MySQLClient:
         self.__password = ""
         self.__host = ""
         self.__table = ""
-        self.__conn = mysql
+        self.__connection = mysql
         self.__cursor = None
 
     def open_connection(self) -> bool:
         logger.log("Attempting DB connection . . .")
         try:
-            self.__conn = mysql.connect(
+            self.__connection = mysql.connect(
                 user=self.__user,
                 password=self.__password,
                 host=self.__host,
@@ -28,7 +28,7 @@ class MySQLClient:
             )
 
             if self.__cursor != None:
-                self.__cursor = self.__conn.cursor(buffered=True)
+                self.__cursor = self.__connection.cursor(buffered=True)
                 logger.log("Successfully connected to database")
                 return True
 
@@ -41,5 +41,5 @@ class MySQLClient:
     def close_connection(self) -> None:
         """Save changes and close connection to database"""
         self.__cursor.close()
-        self.__conn.close()
+        self.__connection.close()
         logger.log(f"Connection closed")
