@@ -2,7 +2,12 @@
 
 from src.logger import Logger
 
-logger = Logger("")
+logger = Logger("player-data-service")
+
 
 def main() -> None:
-    while True:
+    pass
+
+
+if __name__ == "__main__":
+    main()

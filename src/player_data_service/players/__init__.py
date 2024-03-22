@@ -1,1 +1,1 @@
-TABLE_NAME="players"
+TABLE_NAME = "players"

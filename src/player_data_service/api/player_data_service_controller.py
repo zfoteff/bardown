@@ -1,7 +1,8 @@
-from fastapi import FastAPI, APIRouter
+from contextlib import asynccontextmanager
+
+from fastapi import APIRouter, FastAPI
 from fastapi.responses import JSONResponse
 from uvicorn import run
-from contextlib import asynccontextmanager
 
 from src.logger import Logger
 from src.player_data_service.db_client import MySQLClient
@@ -23,7 +24,8 @@ class PlayerDataServiceController:
         return JSONResponse(
             status_code=200, content={"status": 200, "response": "Running"}
         )
-    
+
+
 @asynccontextmanager
 async def lifespan(api: FastAPI):
     # Startup events
@@ -32,9 +34,9 @@ async def lifespan(api: FastAPI):
     # Shutdown events
     print("shutdown")
 
+
 player_data_service_controller = PlayerDataServiceController()
 api = FastAPI(title="Player Data Service", lifespan=lifespan)
-
 
 
 @api.life("startup")
