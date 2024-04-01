@@ -13,10 +13,10 @@ logger = Logger("mysql-client")
 
 class MySQLClient:
     def __init__(self, config_map: dict) -> Self:
-        self.__user = ""
-        self.__password = ""
-        self.__host = ""
-        self.__table = ""
+        self.__user = config_map["user"]
+        self.__password = config_map["password"]
+        self.__host = config_map["host"]
+        self.__table = config_map["table"]
         self.__connection = mysql
         self.__cursor = None
 
