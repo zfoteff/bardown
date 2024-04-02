@@ -1,8 +1,7 @@
 __version__ = "0.0.1"
 __author__ = "Zac Foteff"
 
-import datetime
-from typing import Self
+from typing import Self, Tuple
 
 import mysql.connector as mysql
 
@@ -12,25 +11,26 @@ logger = Logger("mysql-client")
 
 
 class MySQLClient:
-    def __init__(self, config_map: dict) -> Self:
-        self.__user = config_map["user"]
-        self.__password = config_map["password"]
-        self.__host = config_map["host"]
-        self.__table = config_map["table"]
+    def __init__(self, user: str, password: str, host: str, table: str) -> Self:
+        self.__user = user
+        self.__password = password
+        self.__host = host
+        self.__table = table
         self.__connection = mysql
+        self.__database = "LaxDB"
         self.__cursor = None
 
     def open_connection(self) -> bool:
-        logger.log(f"Attempting connection to {self.__table} . . .")
+        logger.info(f"Attempting connection to {self.__table} at {self.__host} . . .")
         try:
             self.__connection = mysql.connect(
                 user=self.__user,
                 password=self.__password,
                 host=self.__host,
-                database=self.__table,
+                database=self.__database,
             )
 
-            if self.__cursor != None:
+            if self.__cursor == None:
                 self.__cursor = self.__connection.cursor(buffered=True)
                 logger.log("Successfully connected to database")
                 return True
@@ -45,24 +45,22 @@ class MySQLClient:
 
     def close_connection(self) -> bool:
         """Save changes and close connection to database"""
-        logger.log(f"Closing connection to {self.__table} . . .")
+        logger.info(f"Closing connection to {self.__table} . . .")
         try:
             self.__cursor.close()
             self.__connection.close()
-            logger.log(f"Connection closed")
+            logger.info(f"Connection closed")
             return True
         except mysql.Error as err:
             logger.error(
                 f"Database error when closing connection: {err} . . . Quitting"
             )
 
-    """
-    ====== PLAYER TABLE METHODS ======
-    """
-
-    def get_all_players(self) -> Tuple:
-        query = """SELECT * FROM players"""
-
-    """
-    ====== STATISTICS TABLE METHODS ======
-    """
+    def execute_query(self, query: str) -> Tuple:
+        logger.info(f"Executing query: {query}")
+        try:
+            self.__cursor.execute(query + ";")
+            return (True, self.__cursor.fetchall())
+        except mysql.Error as err:
+            logger.error(f"Database error when running query: {err}")
+            return (False, err)
