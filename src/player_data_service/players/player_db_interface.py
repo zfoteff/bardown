@@ -1,7 +1,9 @@
 __version__ = "1.0.0"
 __author__ = "Zac Foteff"
 
+import time
 from typing import List, Tuple
+from uuid import uuid4
 
 from src.logger import Logger
 from src.player_data_service.config.db_config import PLAYER_TABLE_DB_CONFIG
@@ -20,7 +22,29 @@ class PlayerDatabaseInterface:
         self.__client.close_connection()
 
     def create_player(self, player: Player) -> bool:
-        query = f""
+        create_modify_time = time.time()
+        query = f"""
+            INSERT INTO players 
+            VALUES (
+                {str(uuid4())}
+                {player.number}, 
+                {player.first_name}, 
+                {player.position}, 
+                {player.grade}, 
+                {player.school}, 
+                {create_modify_time}, 
+                {create_modify_time}) 
+        """
+
+        logger.info(query)
+
+        success, result = self.__client.execute_query(query)
+
+        if not success:
+            return False, []
+
+        logger.info(result)
+        return True, result
 
     def get_players(
         self, limit: int = None, offset: int = None, order: str = None

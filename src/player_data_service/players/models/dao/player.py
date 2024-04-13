@@ -5,13 +5,13 @@ class Player:
     def __init__(self, **kwargs):
         self.__player_id = kwargs["playerid"]
         self.__number = kwargs["number"]
-        self.__first_name = kwargs["firstname"]
-        self.__last_name = kwargs["lastname"]
+        self.__first_name = kwargs["first_name"]
+        self.__last_name = kwargs["last_name"]
         self.__position = kwargs["position"]
         self.__grade = kwargs["grade"]
         self.__school = kwargs["school"]
-        self.__created = kwargs["created"]
-        self.__modified = kwargs["modified"]
+        self.__created = kwargs["created"] | None
+        self.__modified = kwargs["modified"] | None
 
     @property
     def player_id(self) -> str:
@@ -51,3 +51,16 @@ class Player:
 
     def __str__(self) -> str:
         return f"{self.number}. {self.last_name}, {self.first_name} [{self.position}] | {self.grade} at {self.school}"
+
+    def to_dict(self) -> str:
+        return {
+            "player_id": f"{self.__player_id}",
+            "number": f"{self.__number}",
+            "first_name": f"{self.__first_name}",
+            "last_name": f"{self.__last_name}",
+            "position": f"{self.__position}",
+            "grade": f"{self.__grade}",
+            "school": f"{self.__school}",
+            "create_date": f"{self.__created}",
+            "modified_data": f"{self.__modified}",
+        }

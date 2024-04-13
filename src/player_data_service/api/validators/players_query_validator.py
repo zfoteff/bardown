@@ -1,10 +1,11 @@
 from typing import Tuple
 
-from src.player_data_service.errors.player_validation_error import \
-    PlayerValidationError
+from src.player_data_service.errors.player_validation_error import PlayerValidationError
 
 
-def validate_players(limit: int, offset: int, order: str, orderBy: str) -> Tuple:
+def validate_players(
+    limit: int, offset: int, order: str, orderBy: str
+) -> Tuple | PlayerValidationError:
     valid_limit = limit
     valid_offset = offset
     valid_order = (order, orderBy)
