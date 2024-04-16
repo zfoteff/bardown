@@ -1,7 +1,7 @@
 __version__ = "0.0.1"
 __author__ = "Zac Foteff"
 
-from typing import Self, Tuple
+from typing import List, Self, Tuple
 
 import mysql.connector as mysql
 
@@ -56,11 +56,21 @@ class MySQLClient:
                 f"Database error when closing connection: {err} . . . Quitting"
             )
 
-    def execute_query(self, query: str) -> Tuple:
+    def execute_query(
+        self, query: str, commit_candidate: bool = False, return_results: bool = False
+    ) -> Tuple[bool, List]:
         logger.info(f"Executing query: {query}")
+        data = []
         try:
             self.__cursor.execute(query + ";")
-            return (True, self.__cursor.fetchall())
         except mysql.Error as err:
             logger.error(f"Database error when running query: {err}")
             return (False, err)
+
+        if commit_candidate:
+            self.__connection.commit()
+
+        if return_results:
+            data = self.__cursor.fetchall()
+
+        return (True, data)

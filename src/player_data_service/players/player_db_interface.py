@@ -1,15 +1,23 @@
 __version__ = "1.0.0"
 __author__ = "Zac Foteff"
 
-import time
+from datetime import datetime
 from typing import List, Tuple
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 from src.logger import Logger
 from src.player_data_service.config.db_config import PLAYER_TABLE_DB_CONFIG
 from src.player_data_service.db_client import MySQLClient
+from src.player_data_service.errors.player_validation_error import (
+    PlayerAlreadyExists,
+    PlayerDoesNotExist,
+)
 from src.player_data_service.players import TABLE_NAME
-from src.player_data_service.players.models.dto.player import Player
+from src.player_data_service.players.models.dao.player import Player as PlayerDAO
+from src.player_data_service.players.models.dto.player import Player as PlayerDTO
+from src.player_data_service.players.models.dto.players_request_filters import (
+    PlayersRequestFilters,
+)
 
 logger = Logger("player-db-interface")
 
@@ -22,84 +30,115 @@ class PlayerDatabaseInterface:
     def close_connection(self):
         self.__client.close_connection()
 
-    def create_player(self, player: Player) -> Tuple[bool, List[Player]]:
-        create_modify_time = time.time()
+    def create_player(self, player: PlayerDTO) -> bool | PlayerAlreadyExists:
+        create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        new_player_id = str(uuid4())
         query = f"""
             INSERT INTO players 
             VALUES (
-                {str(uuid4())},
+                "{new_player_id}",
                 {player.number},
-                {player.first_name}, 
-                {player.position}, 
-                {player.grade}, 
-                {player.school}, 
-                {create_modify_time},
-                {create_modify_time})
+                "{player.first_name}", 
+                "{player.last_name}", 
+                "{player.position}", 
+                "{player.grade}", 
+                "{player.school}", 
+                "{create_modify_time}",
+                "{create_modify_time}"
+            )
         """
 
-        logger.info(query)
+        success, _ = self.__client.execute_query(query, commit_candidate=True)
 
-        success, result = self.__client.execute_query(query)
+        if not success:
+            return False, ""
+
+        player.player_id = new_player_id
+        player.created = create_modify_time
+        player.modified = create_modify_time
+        return True
+
+    def update_player(
+        self, player_id: str, player: PlayerDTO
+    ) -> Tuple[bool, str] | PlayerDoesNotExist:
+        player_id = self.player_exists(player_id)
+
+        modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        query = f"""
+            UPDATE f{TABLE_NAME}
+            SET number={player.number},
+                first_name="{player.first_name}",
+                last_name="{player.last_name}",
+                position="{player.position}",
+                grade="{player.grade}",
+                school="{player.school}",
+                modified="{modify_time}")
+            WHERE player_id={player_id}
+        """
+
+        success, result = self.__client.execute_query(query, commit_candidate=True)
+
+        if not success:
+            return False, result
+
+        logger.info(result)
+        return True, result
+
+    def get_players(self, filters: PlayersRequestFilters) -> Tuple[bool, List]:
+        query = f"SELECT * FROM players"
+
+        if filters.order is not None:
+            query += f" ORDER BY {filters.order_by} {filters.order}"
+
+        if filters.limit is not None:
+            query += f" LIMIT {filters.limit}"
+
+        if filters.offset is not None:
+            query += f" OFFSET {filters.offset}"
+
+        success, result = self.__client.execute_query(query, return_results=True)
 
         if not success:
             return False, []
 
         logger.info(result)
-        return True, result
 
-    def update_player(self, player: Player) -> Tuple[bool, str]:
-        query = f"""
-            UPDATE f{TABLE_NAME}
-            SET number={player.number},
-                first_name={player.first_name},
-                position={player.position},
-                grade={player.grade},
-                school={player.school},
-                modify_time{time.time()})
-            WHERE player_id={player.player_id}
-        """
+        players = [
+            PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result
+        ]
 
-        logger.info(query)
+        return True, players
 
-        success, result = self.__client.execute_query(query)
+    def delete_players(self, player_id: str) -> str | PlayerDoesNotExist:
+        query = f"DELETE FROM {TABLE_NAME} WHERE playerid='{player_id}'"
+
+        success = self.__client.execute_query(query, commit_candidate=True)
 
         if not success:
             return False
 
-        logger.info(result)
-        return True, result
+        return True
 
-    def get_players(
-        self, limit: int = None, offset: int = None, order: str = None
-    ) -> Tuple[bool, List]:
-        query = f"SELECT * FROM players"
+    def player_exists(
+        self, player_id=None, first_name=None, last_name=None
+    ) -> str | PlayerDoesNotExist:
+        query = f"SELECT playerid FROM {TABLE_NAME} WHERE "
 
-        if order is not None:
-            (direction, field) = order
-            query += f" ORDER BY {field} {direction}"
+        if player_id is None:
+            # Perform query with first and last name
+            query += f"firstname='{first_name}' AND lastname='{last_name}'"
+        else:
+            query += f"playerid='{player_id}'"
 
-        if limit is not None:
-            query += f" LIMIT {limit}"
-
-        if offset is not None:
-            query += f" OFFSET {offset}"
-
-        success, result = self.__client.execute_query(query)
+        success, player = self.__client.execute_query(query, return_results=True)
 
         if not success:
-            return False, []
+            raise
 
-        logger.info(result)
-        return True, result
+        if len(player) == 0 or player is None:
+            raise PlayerDoesNotExist(
+                f"Could not find player with provided fields: {player_id}, {first_name} {last_name}"
+            )
 
-    def delete_players(self, player_id: str) -> Tuple[bool, str]:
-        query = f"DELETE FROM {TABLE_NAME} WHERE player_id={player_id}"
-
-        success, result = self.__client.execute_query(query)
-
-        if not success:
-            logger.error(result)
-            return False, result
-
-        logger.info(result)
-        return True, player_id
+        return player[0][0]

@@ -1,17 +1,16 @@
+from datetime import datetime
 from typing import Optional
-from uuid import UUID, uuid4
 
 from pydantic import BaseModel
 
-from src.player_data_service.players.models.enums.grade import Grade
-from src.player_data_service.players.models.enums.position import Position
-
 
 class Player(BaseModel):
-    player_id: Optional[UUID] = uuid4()
-    number: int
-    first_name: str
-    last_name: str
-    position: Position
-    grade: Grade
-    school: str
+    player_id: Optional[str] = None
+    number: Optional[int] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    position: Optional[str] = None
+    grade: Optional[str] = None
+    school: Optional[str] = None
+    created: Optional[datetime] = None
+    modified: Optional[datetime] = None

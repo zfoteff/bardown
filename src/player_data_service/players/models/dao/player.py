@@ -1,66 +1,55 @@
-import datetime
+import inspect
+from datetime import datetime
+from typing import Self, Tuple
+
+from src.player_data_service.players.models.enums.grade import Grade
+from src.player_data_service.players.models.enums.position import Position
 
 
 class Player:
-    def __init__(self, **kwargs):
-        self.__player_id = kwargs["playerid"]
-        self.__number = kwargs["number"]
-        self.__first_name = kwargs["first_name"]
-        self.__last_name = kwargs["last_name"]
-        self.__position = kwargs["position"]
-        self.__grade = kwargs["grade"]
-        self.__school = kwargs["school"]
-        self.__created = kwargs["created"] | None
-        self.__modified = kwargs["modified"] | None
+    def __init__(
+        self,
+        player_id: str = None,
+        number: int = None,
+        first_name: str = None,
+        last_name: str = None,
+        position: Position = None,
+        grade: Grade = None,
+        school: str = None,
+        created: datetime = None,
+        modified: datetime = None,
+    ) -> Self:
+        self.player_id = player_id
+        self.number = number
+        self.first_name = first_name
+        self.last_name = last_name
+        self.position = position
+        self.grade = grade
+        self.school = school
+        self.created = created
+        self.modified = modified
 
-    @property
-    def player_id(self) -> str:
-        return self.__player_id
+    @classmethod
+    def from_tuple(cls, player_tuple: Tuple) -> None:
+        """Create player from a tuple
 
-    @property
-    def number(self) -> int:
-        return self.__number
-
-    @property
-    def first_name(self) -> str:
-        return self.__first_name
-
-    @property
-    def last_name(self) -> str:
-        return self.__last_name
-
-    @property
-    def position(self) -> str:
-        return self.__position
-
-    @property
-    def grade(self) -> str:
-        return self.__grade
-
-    @property
-    def school(self) -> str:
-        return self.__school
-
-    @property
-    def created(self) -> datetime:
-        return self.__created
-
-    @property
-    def modified(self) -> datetime:
-        return self.__modified
+        Args:
+            player_tuple (Tuple): Tuple containing ordered player data
+        """
+        return cls(**{k: v for k, v in zip(cls().to_dict().keys(), player_tuple)})
 
     def __str__(self) -> str:
         return f"{self.number}. {self.last_name}, {self.first_name} [{self.position}] | {self.grade} at {self.school}"
 
     def to_dict(self) -> str:
         return {
-            "player_id": f"{self.__player_id}",
-            "number": f"{self.__number}",
-            "first_name": f"{self.__first_name}",
-            "last_name": f"{self.__last_name}",
-            "position": f"{self.__position}",
-            "grade": f"{self.__grade}",
-            "school": f"{self.__school}",
-            "create_date": f"{self.__created}",
-            "modified_data": f"{self.__modified}",
+            "player_id": f"{self.player_id}",
+            "number": {self.number},
+            "first_name": f"{self.first_name}",
+            "last_name": f"{self.last_name}",
+            "position": self.position,
+            "grade": self.grade,
+            "school": f"{self.school}",
+            "created": f"{self.created}",
+            "modified": f"{self.modified}",
         }

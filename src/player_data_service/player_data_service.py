@@ -1,29 +1,58 @@
 #!/usr/bin/env python
 __author__ = "Zac Foteff"
-__version__ = "v0.0.1"
+__version__ = "v0.0.2"
 
 from contextlib import asynccontextmanager
 from logging import Logger
 
-from api.player_data_service_controller import PLAYER_DATA_SERVICE_CONTROLLER
 from fastapi import APIRouter, FastAPI
 from fastapi.responses import JSONResponse
 
 from src.player_data_service.bin.metadata import servers, tags_metadata
+from src.player_data_service.players.api.player_router import PLAYER_ROUTER
+from src.player_data_service.statistics.api.statistics_router import STATISTICS_ROUTER
 
 logger = Logger("player-data-service")
+
+
+async def get_health() -> JSONResponse:
+    """Healthcheck for the Player data service. Asserts the service is running and has
+    connection to database
+
+    Returns:
+        JSONResponse: Healthcheck response
+    """
+    return JSONResponse(status_code=200, content={"status": 200, "response": "Running"})
+
+
+default_router = APIRouter()
+default_router.add_api_route(
+    "/health",
+    get_health,
+    description="Healthcheck endpoint for the Player Data Service",
+    methods=["GET"],
+    tags=["default"],
+    responses={
+        200: {
+            "description": "Service is running as expected",
+            "content": {
+                "application/json": {
+                    "example": [{"status": 200, "response": "Running"}],
+                }
+            },
+        }
+    },
+)
 
 
 @asynccontextmanager
 async def lifespan(api: FastAPI):
     # Startup events
-    api.include_router(PLAYER_DATA_SERVICE_CONTROLLER)
+    api.include_router(default_router)
+    api.include_router(PLAYER_ROUTER)
+    api.include_router(STATISTICS_ROUTER)
     yield
     # Shutdown events
-
-
-async def get_health() -> JSONResponse:
-    return JSONResponse(status_code=200, content={"status": 200, "response": "Running"})
 
 
 app = FastAPI(
@@ -35,9 +64,6 @@ app = FastAPI(
     openapi_tags=tags_metadata,
     servers=servers,
 )
-
-default_router = APIRouter()
-default_router.add_api_route("/health", get_health, methods=["GET"], tags=["default"])
 
 if __name__ == "__main__":
     from uvicorn import run

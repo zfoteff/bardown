@@ -1,4 +1,5 @@
-import pytest
+__version__ = "1.0.0"
+__author__ = "Zac Foteff"
 
 from src.logger import Logger
 from src.player_data_service.players.mappers.player_mapper import (
@@ -7,8 +8,8 @@ from src.player_data_service.players.mappers.player_mapper import (
 )
 from src.player_data_service.players.models.dao.player import Player as PlayerDAO
 from src.player_data_service.players.models.dto.player import Player as PlayerDTO
+from tests.bin.constants import VALID_PLAYER
 from tests.bin.decorators.timed import timed
-from tests.constants import VALID_PLAYER
 
 logger = Logger("test")
 

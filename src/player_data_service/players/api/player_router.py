@@ -1,16 +1,21 @@
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 __author__ = "Zac Foteff"
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
 from src.logger import Logger
-from src.player_data_service.api.validators.players_query_validator import (
-    validate_players,
-)
 from src.player_data_service.errors.player_validation_error import (
+    PlayerAlreadyExists,
     PlayerDoesNotExist,
     PlayerValidationError,
+)
+from src.player_data_service.players.api.validators.players_query_validator import (
+    validate_get_players_query_parameters,
+)
+from src.player_data_service.players.mappers.player_mapper import (
+    player_DAO_to_player_DTO,
 )
 from src.player_data_service.players.models.dto.player import Player
 from src.player_data_service.players.player_db_interface import PlayerDatabaseInterface
@@ -36,6 +41,14 @@ async def create_player(player: Player) -> JSONResponse:
         return JSONResponse(
             status_code=401, content={"status": 400, "error": {"message": f"{err}"}}
         )
+    except PlayerAlreadyExists as err:
+        return JSONResponse(
+            status=409,
+            content={
+                "status": 409,
+                "error": {"message": f"{err}", "player_id": f"{err.player_id}"},
+            },
+        )
 
     if not result:
         return JSONResponse(
@@ -44,13 +57,11 @@ async def create_player(player: Player) -> JSONResponse:
         )
 
     return JSONResponse(
-        status_code=201, content={"status": 200, "data": f"{player.model_dump_json()}"}
+        status_code=201, content={"status": 201, "data": jsonable_encoder(player)}
     )
 
 
-async def get_players(
-    limit: int = None, offset: int = None, order: str = None, orderBy: str = None
-) -> JSONResponse:
+async def get_players(request: Request) -> JSONResponse:
     """Retrieve player data from database with multiple filters and pagination
 
     Args:\n
@@ -70,15 +81,11 @@ async def get_players(
         JSONResponse: Player data
     """
     try:
-        valid_limit, valid_offset, valid_order = validate_players(
-            limit, offset, order, orderBy
-        )
-        result, players = db_interface.get_players(
-            valid_limit, valid_offset, valid_order
-        )
+        filters = validate_get_players_query_parameters(request)
+        result, players = db_interface.get_players(filters)
     except PlayerValidationError as err:
         return JSONResponse(
-            status_code=401, content={"status": 400, "error": {"message": f"{err}"}}
+            status_code=400, content={"status": 400, "error": {"message": f"{err}"}}
         )
 
     if not result:
@@ -93,20 +100,28 @@ async def get_players(
             "status": 200,
             "data": []
             if (players == []) or (players is None)
-            else [player.to_dict() for player in players],
+            else [
+                jsonable_encoder(player_DAO_to_player_DTO(player)) for player in players
+            ],
         },
     )
 
 
-async def update_player(player: Player) -> JSONResponse:
+async def update_player(player_id: str, player: Player) -> JSONResponse:
     """Update a player record in the database
 
     Args:\n
-        player (Player): Player object to update
+        player_id (str): Player_id to retrieve and update
+        player (Player): Player values to update
 
     Returns:\n
         JSONResponse: Updated player object
     """
+    try:
+        success, result = db_interface.update_player(player_id, player)
+    except PlayerDoesNotExist as err:
+        return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
+
     return JSONResponse(
         status_code=200, content={"status": 200, "data": f"{player.model_dump_json()}"}
     )
@@ -122,17 +137,22 @@ async def delete_player(player_id: str) -> JSONResponse:
         JSONResponse: Player ID of deleted record
     """
     try:
-        result, player_id = db_interface.delete_players(player_id)
+        result = db_interface.delete_players(player_id)
     except PlayerDoesNotExist as err:
         return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
 
+    if not result:
+        return JSONResponse(
+            status_code=422, content={"status": 422, "error": f"Database error"}
+        )
+
     return JSONResponse(
-        status_code=204, content={"status": 204, "data": {"player_id": player_id}}
+        status_code=200, content={"status": 204, "data": {"player_id": player_id}}
     )
 
 
-PLAYER_DATA_SERVICE_CONTROLLER = APIRouter(prefix=f"/players/{API_VERSION}")
-PLAYER_DATA_SERVICE_CONTROLLER.add_api_route(
+PLAYER_ROUTER = APIRouter(prefix=f"/players/{API_VERSION}")
+PLAYER_ROUTER.add_api_route(
     path="/players",
     endpoint=get_players,
     description="Retrieve player data from the database",
@@ -162,7 +182,7 @@ PLAYER_DATA_SERVICE_CONTROLLER.add_api_route(
         }
     },
 )
-PLAYER_DATA_SERVICE_CONTROLLER.add_api_route(
+PLAYER_ROUTER.add_api_route(
     path="/player",
     endpoint=create_player,
     description="Create player record in the database",
@@ -192,11 +212,11 @@ PLAYER_DATA_SERVICE_CONTROLLER.add_api_route(
         }
     },
 )
-PLAYER_DATA_SERVICE_CONTROLLER.add_api_route(
+PLAYER_ROUTER.add_api_route(
     path="/player",
     endpoint=update_player,
     description="Update a player record in the database",
-    methods=["PUT"],
+    methods=["PATCH"],
     tags=["players"],
     responses={
         200: {
@@ -222,7 +242,7 @@ PLAYER_DATA_SERVICE_CONTROLLER.add_api_route(
         }
     },
 )
-PLAYER_DATA_SERVICE_CONTROLLER.add_api_route(
+PLAYER_ROUTER.add_api_route(
     path="/player",
     endpoint=delete_player,
     description="Delete a player record from the database",
