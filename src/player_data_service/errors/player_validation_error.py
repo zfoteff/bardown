@@ -5,3 +5,9 @@ class PlayerValidationError(Exception):
     def __init__(self, message=None, invalid_fields: List = None):
         self.__message = message
         super().__init__(self.__message)
+
+
+class PlayerDoesNotExist(Exception):
+    def __init__(self, message=None):
+        self.__message = message
+        super().__init__(self.__message)

@@ -8,7 +8,10 @@ from src.logger import Logger
 from src.player_data_service.api.validators.players_query_validator import (
     validate_players,
 )
-from src.player_data_service.errors.player_validation_error import PlayerValidationError
+from src.player_data_service.errors.player_validation_error import (
+    PlayerDoesNotExist,
+    PlayerValidationError,
+)
 from src.player_data_service.players.models.dto.player import Player
 from src.player_data_service.players.player_db_interface import PlayerDatabaseInterface
 
@@ -118,6 +121,11 @@ async def delete_player(player_id: str) -> JSONResponse:
     Returns:\n
         JSONResponse: Player ID of deleted record
     """
+    try:
+        result, player_id = db_interface.delete_players(player_id)
+    except PlayerDoesNotExist as err:
+        return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
+
     return JSONResponse(
         status_code=204, content={"status": 204, "data": {"player_id": player_id}}
     )
@@ -138,17 +146,15 @@ PLAYER_DATA_SERVICE_CONTROLLER.add_api_route(
                     "example": [
                         {
                             "status": 200,
-                            "data": [
-                                {
-                                    "player_id": "fb344330-0e2a-4348-9665-9061cae42aab",
-                                    "number": 6,
-                                    "first_name": "Zac",
-                                    "last_name": "Foteff",
-                                    "postion": "A",
-                                    "grade": "FR",
-                                    "school": "La Salle Catholic College Preparatory",
-                                }
-                            ],
+                            "data": {
+                                "player_id": "fb344330-0e2a-4348-9665-9061cae42aab",
+                                "number": 6,
+                                "first_name": "Zac",
+                                "last_name": "Foteff",
+                                "postion": "A",
+                                "grade": "FR",
+                                "school": "La Salle Catholic College Preparatory",
+                            },
                         }
                     ],
                 }
@@ -162,8 +168,29 @@ PLAYER_DATA_SERVICE_CONTROLLER.add_api_route(
     description="Create player record in the database",
     methods=["POST"],
     tags=["players"],
-    
-    responses={},
+    responses={
+        201: {
+            "description": "Players successfully created",
+            "content": {
+                "application/json": {
+                    "example": [
+                        {
+                            "status": 201,
+                            "data": {
+                                "player_id": "fb344330-0e2a-4348-9665-9061cae42aab",
+                                "number": 6,
+                                "first_name": "Zac",
+                                "last_name": "Foteff",
+                                "postion": "A",
+                                "grade": "FR",
+                                "school": "La Salle Catholic College Preparatory",
+                            },
+                        }
+                    ],
+                }
+            },
+        }
+    },
 )
 PLAYER_DATA_SERVICE_CONTROLLER.add_api_route(
     path="/player",
@@ -171,7 +198,29 @@ PLAYER_DATA_SERVICE_CONTROLLER.add_api_route(
     description="Update a player record in the database",
     methods=["PUT"],
     tags=["players"],
-    responses={},
+    responses={
+        200: {
+            "description": "Players successfully updated",
+            "content": {
+                "application/json": {
+                    "example": [
+                        {
+                            "status": 200,
+                            "data": {
+                                "player_id": "fb344330-0e2a-4348-9665-9061cae42aab",
+                                "number": 6,
+                                "first_name": "Zac",
+                                "last_name": "Foteff",
+                                "postion": "A",
+                                "grade": "FR",
+                                "school": "La Salle Catholic College Preparatory",
+                            },
+                        }
+                    ],
+                }
+            },
+        }
+    },
 )
 PLAYER_DATA_SERVICE_CONTROLLER.add_api_route(
     path="/player",
@@ -179,5 +228,21 @@ PLAYER_DATA_SERVICE_CONTROLLER.add_api_route(
     description="Delete a player record from the database",
     methods=["DELETE"],
     tags=["players"],
-    responses={},
+    responses={
+        204: {
+            "description": "Players successfully deleted from database",
+            "content": {
+                "application/json": {
+                    "example": [
+                        {
+                            "status": 204,
+                            "data": {
+                                "player_id": "fb344330-0e2a-4348-9665-9061cae42aab",
+                            },
+                        }
+                    ],
+                }
+            },
+        }
+    },
 )
