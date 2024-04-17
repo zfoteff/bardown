@@ -37,3 +37,8 @@ def test_valid_player_DTO_to_player_DAO() -> None:
         and player_dao.created is None
         and player_dao.modified is None
     )
+
+
+@timed(logger)
+def test_invalid_player_DTO_to_player_DAO() -> None:
+    player_dto = PlayerDTO()

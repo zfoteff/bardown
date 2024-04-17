@@ -81,7 +81,7 @@ async def get_players(request: Request) -> JSONResponse:
         JSONResponse: Player data
     """
     try:
-        filters = validate_get_players_query_parameters(request)
+        filters = validate_get_players_query_parameters(request.query_params)
         result, players = db_interface.get_players(filters)
     except PlayerValidationError as err:
         return JSONResponse(

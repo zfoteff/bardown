@@ -7,6 +7,7 @@ class PlayersRequestFilters(BaseModel):
     player_id: Optional[str] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
+    number: Optional[str] = None
     limit: Optional[int] = None
     offset: Optional[int] = None
     order: Optional[str] = None
