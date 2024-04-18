@@ -1,9 +1,6 @@
 import re
-from typing import Tuple
 
-from fastapi import Request
-
-from src.player_data_service.errors.player_validation_error import PlayerValidationError
+from src.player_data_service.errors.players_errors import PlayerValidationError
 from src.player_data_service.players.models.dto.players_request_filters import (
     PlayersRequestFilters,
 )

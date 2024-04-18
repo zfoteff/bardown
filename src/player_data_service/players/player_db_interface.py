@@ -8,11 +8,11 @@ from uuid import uuid4
 from src.logger import Logger
 from src.player_data_service.config.db_config import PLAYER_TABLE_DB_CONFIG
 from src.player_data_service.db_client import MySQLClient
-from src.player_data_service.errors.player_validation_error import (
+from src.player_data_service.errors.players_errors import (
     PlayerAlreadyExists,
     PlayerDoesNotExist,
 )
-from src.player_data_service.players import TABLE_NAME
+from src.player_data_service.players import PLAYERS_TABLE_NAME
 from src.player_data_service.players.models.dao.player import Player as PlayerDAO
 from src.player_data_service.players.models.dto.player import Player as PlayerDTO
 from src.player_data_service.players.models.dto.players_request_filters import (
@@ -65,7 +65,7 @@ class PlayerDatabaseInterface:
         success, _ = self.__client.execute_query(query, commit_candidate=True)
 
         if not success:
-            return False, ""
+            return False
 
         player.player_id = new_player_id
         player.created = create_modify_time
@@ -77,7 +77,7 @@ class PlayerDatabaseInterface:
     ) -> str | PlayerDoesNotExist:
         player_id = self.player_exists(player_id)
         query = f"""
-            UPDATE f{TABLE_NAME}
+            UPDATE {PLAYERS_TABLE_NAME}
             SET number={player.number},
                 first_name="{player.first_name}",
                 last_name="{player.last_name}",
@@ -85,7 +85,7 @@ class PlayerDatabaseInterface:
                 grade="{player.grade}",
                 school="{player.school}",
                 modified="{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}")
-            WHERE player_id={player_id}
+            WHERE playerid={player_id}
         """
 
         success, _ = self.__client.execute_query(query, commit_candidate=True)
@@ -109,7 +109,7 @@ class PlayerDatabaseInterface:
         return True, players
 
     def delete_players(self, player_id: str) -> str | PlayerDoesNotExist:
-        query = f"DELETE FROM {TABLE_NAME} WHERE playerid='{player_id}'"
+        query = f"DELETE FROM {PLAYERS_TABLE_NAME} WHERE playerid='{player_id}'"
         success = self.__client.execute_query(query, commit_candidate=True)
 
         if not success:
@@ -118,9 +118,9 @@ class PlayerDatabaseInterface:
         return True
 
     def player_exists(
-        self, player_id=None, first_name=None, last_name=None
+        self, player_id=None, first_name: str = None, last_name: str = None
     ) -> str | PlayerDoesNotExist:
-        query = f"SELECT playerid FROM {TABLE_NAME} WHERE "
+        query = f"SELECT playerid FROM {PLAYERS_TABLE_NAME} WHERE "
 
         if player_id is None:
             # Perform query with first and last name
@@ -130,17 +130,12 @@ class PlayerDatabaseInterface:
 
         success, player = self.__client.execute_query(query, return_results=True)
 
-        if not success:
+        if not success or (len(player) == 0 or player is None):
             raise PlayerDoesNotExist(
                 f"""
                 Player does not exist with these fields: 
-                    playerid: {player_id}, first_name: {first_name}, last_name: {last_name}
+                    player_id: {player_id}, first_name: {first_name}, last_name: {last_name}
                 """
-            )
-
-        if len(player) == 0 or player is None:
-            raise PlayerDoesNotExist(
-                f"Could not find player with provided fields: {player_id}, {first_name} {last_name}"
             )
 
         return player[0][0]

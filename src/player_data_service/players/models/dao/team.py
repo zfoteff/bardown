@@ -13,7 +13,7 @@ class Team:
         self.team_id = team_id
         self.name = name
         self.created = created
-        self.modfied = modified
+        self.modified = modified
 
     @classmethod
     def from_tuple(cls, team_tuple: Tuple) -> None:
@@ -29,8 +29,8 @@ class Team:
 
     def to_dict(self) -> str:
         return {
-            "team_id": f"{self.coach_id}",
-            "name": f"{self.first_name}",
+            "team_id": f"{self.team_id}",
+            "name": f"{self.name}",
             "created": f"{self.created}",
             "modified": f"{self.modified}",
         }

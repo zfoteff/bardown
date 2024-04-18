@@ -4,7 +4,7 @@ __author__ = "Zac Foteff"
 import pytest
 
 from src.logger import Logger
-from src.player_data_service.errors.player_validation_error import PlayerValidationError
+from src.player_data_service.errors.players_errors import PlayerValidationError
 from src.player_data_service.players.api.validators.players_query_validator import (
     validate_get_players_query_parameters as validate,
 )
