@@ -118,9 +118,14 @@ async def update_player(player_id: str, player: Player) -> JSONResponse:
         JSONResponse: Updated player object
     """
     try:
-        success, result = db_interface.update_player(player_id, player)
+        success = db_interface.update_player(player_id, player)
     except PlayerDoesNotExist as err:
         return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
+
+    if not success:
+        return JSONResponse(
+            status_code=200, content={"status": 400, "data": "Database error"}
+        )
 
     return JSONResponse(
         status_code=200, content={"status": 200, "data": f"{player.model_dump_json()}"}

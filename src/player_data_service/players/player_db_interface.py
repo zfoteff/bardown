@@ -30,6 +30,20 @@ class PlayerDatabaseInterface:
     def close_connection(self):
         self.__client.close_connection()
 
+    def _build_query_from_filters(self, filters: PlayersRequestFilters) -> str:
+        query = f"SELECT * FROM players"
+
+        if filters.order is not None:
+            query += f" ORDER BY {filters.order_by} {filters.order}"
+
+        if filters.limit is not None:
+            query += f" LIMIT {filters.limit}"
+
+        if filters.offset is not None:
+            query += f" OFFSET {filters.offset}"
+
+        return query
+
     def create_player(self, player: PlayerDTO) -> bool | PlayerAlreadyExists:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         new_player_id = str(uuid4())
@@ -60,11 +74,8 @@ class PlayerDatabaseInterface:
 
     def update_player(
         self, player_id: str, player: PlayerDTO
-    ) -> Tuple[bool, str] | PlayerDoesNotExist:
+    ) -> str | PlayerDoesNotExist:
         player_id = self.player_exists(player_id)
-
-        modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
         query = f"""
             UPDATE f{TABLE_NAME}
             SET number={player.number},
@@ -73,36 +84,23 @@ class PlayerDatabaseInterface:
                 position="{player.position}",
                 grade="{player.grade}",
                 school="{player.school}",
-                modified="{modify_time}")
+                modified="{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}")
             WHERE player_id={player_id}
         """
 
-        success, result = self.__client.execute_query(query, commit_candidate=True)
+        success, _ = self.__client.execute_query(query, commit_candidate=True)
 
         if not success:
-            return False, result
+            return False
 
-        logger.info(result)
-        return True, result
+        return True
 
     def get_players(self, filters: PlayersRequestFilters) -> Tuple[bool, List]:
-        query = f"SELECT * FROM players"
-
-        if filters.order is not None:
-            query += f" ORDER BY {filters.order_by} {filters.order}"
-
-        if filters.limit is not None:
-            query += f" LIMIT {filters.limit}"
-
-        if filters.offset is not None:
-            query += f" OFFSET {filters.offset}"
-
+        query = self._build_query_from_filters(filters)
         success, result = self.__client.execute_query(query, return_results=True)
 
         if not success:
             return False, []
-
-        logger.info(result)
 
         players = [
             PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result
@@ -112,7 +110,6 @@ class PlayerDatabaseInterface:
 
     def delete_players(self, player_id: str) -> str | PlayerDoesNotExist:
         query = f"DELETE FROM {TABLE_NAME} WHERE playerid='{player_id}'"
-
         success = self.__client.execute_query(query, commit_candidate=True)
 
         if not success:
@@ -134,7 +131,12 @@ class PlayerDatabaseInterface:
         success, player = self.__client.execute_query(query, return_results=True)
 
         if not success:
-            raise
+            raise PlayerDoesNotExist(
+                f"""
+                Player does not exist with these fields: 
+                    playerid: {player_id}, first_name: {first_name}, last_name: {last_name}
+                """
+            )
 
         if len(player) == 0 or player is None:
             raise PlayerDoesNotExist(

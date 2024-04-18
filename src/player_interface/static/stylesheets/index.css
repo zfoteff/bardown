@@ -1,0 +1,16 @@
+body {
+    background-color: #293132;
+}
+
+.Home-link {
+    color: #507DBC;
+}
+
+.Home-content {
+    padding: 1%;
+    background-color: #F1DABF;
+    min-width: 80vw;
+    max-width: 80vw;
+    border: 5px solid #474044;
+    border-radius: 5px;
+}

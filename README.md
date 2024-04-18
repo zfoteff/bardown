@@ -6,6 +6,7 @@ Player management and stat tracking application designed for the Clackamas Lacro
 ## Player Interface
 
 ### Development Notes
+https://jinja.palletsprojects.com/en/3.1.x/templates/#template-inheritance
 
 ### Player enum
 | Position | Value |
