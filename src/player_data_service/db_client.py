@@ -32,14 +32,14 @@ class MySQLClient:
 
             if self.__cursor == None:
                 self.__cursor = self.__connection.cursor(buffered=True)
-                logger.log("Successfully connected to database")
+                logger.log(f"Successfully connected to {self.__table}")
                 return True
 
-            logger.log("Found existing connection to the database")
+            logger.log(f"Found existing connection to {self.__table}")
             return True
         except mysql.Error as err:
             logger.error(
-                f"Database error when establishing connection: {err} . . . Quitting"
+                f"Database error when establishing connection to {self.__table}: {err} . . . Quitting"
             )
             return False
 
