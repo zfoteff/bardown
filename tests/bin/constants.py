@@ -27,3 +27,23 @@ VALID_PLAYER_TUPLE = (
     "2024-04-16 09:25:37",
     "2024-04-16 09:25:37",
 )
+VALID_COACH = {
+    "coach_id": VALID_UUID,
+    "first_name": "new",
+    "last_name": "coach",
+    "role": "Head Coach",
+    "phone_number": "5037810087",
+    "email": "email@home.com",
+    "created": "2024-04-16 09:25:37",
+    "modified": "2024-04-16 09:25:37",
+}
+VALID_COACH_TUPLE = (
+    VALID_UUID,
+    "new",
+    "coach",
+    "Head Coach",
+    "5037810087",
+    "email@home.com",
+    "2024-04-16 09:25:37",
+    "2024-04-16 09:25:37",
+)
