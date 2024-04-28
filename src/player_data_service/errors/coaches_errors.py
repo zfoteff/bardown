@@ -17,5 +17,5 @@ class CoachDoesNotExist(Exception):
 class CoachAlreadyExists(Exception):
     def __init__(self, message=None, existing_coach_id: str = None) -> None:
         self.__message = message
-        self.existing_player_id = existing_coach_id
+        self.existing_coach_id = existing_coach_id
         super().__init__(self.__message)

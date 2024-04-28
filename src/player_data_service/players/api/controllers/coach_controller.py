@@ -23,12 +23,62 @@ db_interface = CoachesDatabaseInterface()
 class CoachController:
     @classmethod
     async def create_coach(coach: Coach) -> JSONResponse:
+        """Create a coach record in the database
+
+        Args:\n
+            coach (Coach): Coach data to persist to the database
+
+        Returns:\n
+            JSONResponse: Created coach record
+        """
+        try:
+            result = db_interface.create_coach(coach)
+        except CoachValidationError as err:
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": f"{err}"}
+            )
+        except CoachAlreadyExists as err:
+            return JSONResponse(
+                status_code=409,
+                content={
+                    "status": 409,
+                    "error": {
+                        "message": f"{err}",
+                        "coach_id": f"{err.existing_coach_id}",
+                    },
+                },
+            )
+
+        if not result:
+            return JSONResponse(
+                status_code=403, content={"status": 403, "error": "Database error"}
+            )
+
         return JSONResponse(
             status_code=201, content={"status": 201, "data": jsonable_encoder(coach)}
         )
 
     @classmethod
     async def get_coaches(request: Request) -> JSONResponse:
+        """Retrieve coaches data from database with multiple filters and pagination
+
+        Args:\n
+            request (Request): Request for coaches data, containing fields for filtering and
+            ordering responses:
+                limit (int, optional): Limit the number of retrieved entries. Defaults to None.
+                offset (int, optional): Offset to apply to retrieved entries. Defaults to None.
+                order (str, optional): Ordering rules for retrieved values. Defaults to None.
+                    - ASC
+                    - DESC
+                orderBy (str, optional): Field to order retrieved entries by. Acceptable values include:
+                    - number
+                    - first_name
+                    - last_name
+                    - position
+
+        Returns:\n
+            JSONResponse: Coaches data
+        """
         return JSONResponse(status_code=200, content={"status": 200, "data": []})
 
     @classmethod

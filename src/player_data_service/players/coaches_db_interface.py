@@ -31,7 +31,7 @@ class CoachesDatabaseInterface:
         self.__client.close_connection()
 
     def _build_query_from_filters(self, filters: CoachesRequestFilters) -> str:
-        query = f"SELECT * FROM players"
+        query = f"SELECT * FROM {COACHES_TABLE_NAME}"
 
         if filters.order is not None:
             query += f" ORDER BY {filters.order_by} {filters.order}"
@@ -92,7 +92,7 @@ class CoachesDatabaseInterface:
                 email="{coach.email}",
                 phonenumber="{coach.phone_number}",
                 modified="{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}"
-            WHERE teamid={coach_id}
+            WHERE coachid={coach_id}
         """
         success, _ = self.__client.execute_query(query, commit_candidate=True)
 
@@ -102,7 +102,7 @@ class CoachesDatabaseInterface:
         return True
 
     def delete_coach(self, coach_id: str) -> str | CoachDoesNotExist:
-        query = f"DELETE FROM {COACHES_TABLE_NAME} WHERE teamid='{coach_id}'"
+        query = f"DELETE FROM {COACHES_TABLE_NAME} WHERE coachid='{coach_id}'"
         success = self.__client.execute_query(query, commit_candidate=True)
 
         if not success:
@@ -113,13 +113,13 @@ class CoachesDatabaseInterface:
     def coach_exists(
         self, coach_id: str = None, first_name: str = None, last_name: str = None
     ) -> str | CoachDoesNotExist:
-        query = f"SELECT teamid FROM {COACHES_TABLE_NAME} WHERE "
+        query = f"SELECT coachid FROM {COACHES_TABLE_NAME} WHERE "
 
         if coach_id is None:
             query += f"firstname='{first_name}' AND lastname='{last_name}'"
 
         else:
-            query += f"teamid='{coach_id}'"
+            query += f"coachid='{coach_id}'"
 
         success, team = self.__client.execute_query(query, return_results=True)
 

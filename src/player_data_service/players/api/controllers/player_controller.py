@@ -39,14 +39,17 @@ class PlayerController:
             result = db_interface.create_player(player)
         except PlayerValidationError as err:
             return JSONResponse(
-                status_code=401, content={"status": 400, "error": {"message": f"{err}"}}
+                status_code=400, content={"status": 400, "error": f"{err}"}
             )
         except PlayerAlreadyExists as err:
             return JSONResponse(
-                status=409,
+                status_code=409,
                 content={
                     "status": 409,
-                    "error": {"message": f"{err}", "player_id": f"{err.player_id}"},
+                    "error": {
+                        "message": f"{err}",
+                        "player_id": f"{err.existing_player_id}",
+                    },
                 },
             )
 
