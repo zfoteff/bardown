@@ -14,6 +14,7 @@ from src.player_data_service.errors.coaches_errors import (
 from src.player_data_service.players.coaches_db_interface import (
     CoachesDatabaseInterface,
 )
+from src.player_data_service.players.mappers.coach_mapper import coach_DAO_to_coach_DTO
 from src.player_data_service.players.models.dto.coach import Coach
 
 logger = Logger("coach-controller")
@@ -79,7 +80,28 @@ class CoachController:
         Returns:\n
             JSONResponse: Coaches data
         """
-        return JSONResponse(status_code=200, content={"status": 200, "data": []})
+        try:
+            filters = validate_get_coaches_query_parameters(request.query_params)
+            result, coaches = db_interface.get_coaches(filters)
+        except CoachValidationError as err:
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": f"{err}"}
+            )
+
+        if not result:
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": "Database error"}
+            )
+
+        return JSONResponse(
+            status_code=200,
+            content={
+                "status": 200,
+                "data": []
+                if (coaches == []) or (coaches is None)
+                else [json_encoder(coach_DAO_to_coach_DTO(coach)) for coach in coaches],
+            },
+        )
 
     @classmethod
     async def update_coach(coach_id: str, coach: Coach) -> JSONResponse:
