@@ -105,12 +105,53 @@ class CoachController:
 
     @classmethod
     async def update_coach(coach_id: str, coach: Coach) -> JSONResponse:
+        """Update a coach record in the database
+
+        Args:\n
+            coach_id (str): Coach id to retrieve and update
+            coach (Coach): Coach values to update
+
+        Returns:\n
+            JSONResponse: Updated coach object
+        """
+        try:
+            success = db_interface.update_coach(coach_id, coach)
+        except CoachDoesNotExist as err:
+            return JSONResponse(
+                status_code=404, content={"status": 404, "error": f"{err}"}
+            )
+
+        if not success:
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": "Database error"}
+            )
+
         return JSONResponse(
-            status_code=201, content={"status": 201, "data": jsonable_encoder(coach)}
+            status_code=200, content={"status": 200, "data": jsonable_encoder(coach)}
         )
 
     @classmethod
     async def delete_coach(coach_id: str) -> JSONResponse:
+        """Delete a coach record from the database
+
+        Args:\n
+            coach_id (str): Coach ID of the coach record to delete from the database
+
+        Returns:\n
+            JSONResponse: Coach ID of deleted record
+        """
+        try:
+            result = db_interface.delete_coach(coach_id)
+        except CoachDoesNotExist as err:
+            return JSONResponse(
+                status_code=404, content={"status": 404, "error": f"{err}"}
+            )
+
+        if not result:
+            return JSONResponse(
+                status_code=422, content={"status": 422, "error": "Database error"}
+            )
+
         return JSONResponse(
             status_code=200, content={"status": 200, "data": {"coach_id": coach_id}}
         )

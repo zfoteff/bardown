@@ -130,7 +130,7 @@ class PlayerController:
 
         if not success:
             return JSONResponse(
-                status_code=200, content={"status": 400, "data": "Database error"}
+                status_code=400, content={"status": 400, "error": "Database error"}
             )
 
         return JSONResponse(
