@@ -1,14 +1,14 @@
 import re
 
 from src.player_data_service.errors.players_errors import PlayerValidationError
+from src.player_data_service.players.api.validators import (
+    NAME_REGEX_PATTERN,
+    UUID_REGEX_PATTERN,
+)
 from src.player_data_service.players.models.dto.players_request_filters import (
     PlayersRequestFilters,
 )
-
-UUID_REGEX_PATTERN = (
-    r"^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}"
-)
-NAME_REGEX_PATTERN = r"^[A-Z]'?[- a-zA-Z]+$"
+from src.player_data_service.players.models.enums.grade import Grade
 
 
 def _order_equals_allowed_value(order: str) -> bool:
@@ -22,8 +22,7 @@ def _order_by_equals_allowed_value(order_by: str) -> bool:
 
 def _order_missing_pair(order: str, order_by: str) -> bool:
     return not (
-        (order is None and order_by is None)
-        or (order is not None and order_by is not None)
+        (order is None and order_by is None) or (order is not None and order_by is not None)
     )
 
 
@@ -37,19 +36,17 @@ def _name_missing_pair(first_name: str, last_name: str) -> bool:
 def _validate_player_id_filter(filters: PlayersRequestFilters, player_id: str) -> None:
     # PlayerID validation, if provided. Must be Non-null str and match UUI4 format
     if type(player_id) != str:
-        raise PlayerValidationError("PlayerId must be a string in UUIDv4 format")
+        raise PlayerValidationError("PlayerId must be a string in UUIDv5 format")
 
     regex = re.compile(UUID_REGEX_PATTERN)
     player_id_matches = regex.match(player_id)
     if player_id_matches is None:
-        raise PlayerValidationError("PlayerId must be a string in UUIDv4 format")
+        raise PlayerValidationError("PlayerId must be a string in UUIDv5 format")
 
     filters.player_id = player_id
 
 
-def _validate_name_filter(
-    filters: PlayersRequestFilters, first_name: str, last_name: str
-) -> None:
+def _validate_name_filter(filters: PlayersRequestFilters, first_name: str, last_name: str) -> None:
     # Name filter validation. Both first and last name must be provided, and match regex filter
     if _name_missing_pair(first_name, last_name):
         if first_name is None:
@@ -83,6 +80,14 @@ def _validate_number_filter(filters: PlayersRequestFilters, number: int) -> None
     filters.number = number
 
 
+def _validate_grade_filter(filters: PlayersRequestFilters, grade: str) -> None:
+    pass
+
+
+def _validate_position_filter(filters: PlayersRequestFilters, position: str) -> None:
+    pass
+
+
 def _validate_limit(filters: PlayersRequestFilters, limit: int) -> None:
     if int(limit) < 0:
         # Limit validation, if provided. Must be a non-null, positive integer
@@ -98,9 +103,7 @@ def _validate_offset(filters: PlayersRequestFilters, offset: int) -> None:
     filters.offset = offset
 
 
-def _validate_ordering_rules(
-    filters: PlayersRequestFilters, order: str, order_by: str
-) -> None:
+def _validate_ordering_rules(filters: PlayersRequestFilters, order: str, order_by: str) -> None:
     # Ordering rules. Both order direction and order by field must be provided, and match set of accepted values
     if _order_missing_pair(order, order_by):
         if order is None:
@@ -112,9 +115,7 @@ def _validate_ordering_rules(
                 "orderBy parameter cannot be null when order parameter exists"
             )
     elif not _order_equals_allowed_value(order):
-        raise PlayerValidationError(
-            'order value must be one of the allowed values ["ASC", "DESC"]'
-        )
+        raise PlayerValidationError('order value must be one of the allowed values ["ASC", "DESC"]')
 
     filters.order = str.upper(order)
 
@@ -157,6 +158,12 @@ def validate_get_players_query_parameters(
 
     if offset is not None:
         _validate_offset(filters, offset)
+
+    if grade is not None:
+        _validate_grade_filter(filters, grade)
+
+    if position is not None:
+        _validate_position_filter(filters, position)
 
     if order is not None or order_by is not None:
         _validate_ordering_rules(filters, order, order_by)

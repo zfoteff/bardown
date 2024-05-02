@@ -3,9 +3,9 @@ __author__ = "Zac Foteff"
 
 from datetime import datetime
 from typing import List, Tuple
-from uuid import uuid4
+from uuid import NAMESPACE_OID, uuid5
 
-from src.logger import Logger
+from src.player_data_service.bin.logger import Logger
 from src.player_data_service.config.db_config import COACHES_TABLE_DB_CONFIG
 from src.player_data_service.db_client import MySQLClient
 from src.player_data_service.errors.coaches_errors import (
@@ -46,7 +46,7 @@ class CoachesDatabaseInterface:
 
     def create_coach(self, coach: CoachDTO) -> bool | CoachAlreadyExists:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        new_coach_id = str(uuid4())
+        new_coach_id = str(uuid5(namespace=NAMESPACE_OID, name=coach.first_name + coach.last_name))
         query = f"""
             INSERT INTO {COACHES_TABLE_NAME} 
             VALUES (
@@ -54,8 +54,9 @@ class CoachesDatabaseInterface:
                 "{coach.first_name}",
                 "{coach.last_name}",
                 "{coach.role}",
-                "{coach.phone_number}",
+                "{coach.since}",
                 "{coach.email}",
+                "{coach.phone_number}",
                 "{create_modify_time}",
                 "{create_modify_time}"
             )
@@ -66,29 +67,31 @@ class CoachesDatabaseInterface:
         if not success:
             return False
 
-        coach.team_id = new_coach_id
+        coach.coach_id = new_coach_id
         coach.created = create_modify_time
         coach.modified = create_modify_time
         return True
 
-    def get_coach(self, filters: CoachesRequestFilters) -> Tuple[bool, List]:
+    def get_coaches(self, filters: CoachesRequestFilters) -> Tuple[bool, List]:
         query = self._build_query_from_filters(filters)
         success, result = self.__client.execute_query(query, return_results=True)
 
         if not success:
             return False, []
 
-        coaches = [CoachDAO.from_tuple(team_tuple=team_data) for team_data in result]
+        coaches = [CoachDAO.from_tuple(coach_tuple=coach_data) for coach_data in result]
 
         return True, coaches
 
     def update_coach(self, coach_id: str, coach: CoachDTO) -> str | CoachDoesNotExist:
+        # TODO: Make update evalute only fields that exist in DTO, other fields may be set as null otherwise
         coach_id = self.coach_exists(coach_id)
         query = f"""
             UPDATE {COACHES_TABLE_NAME}
             SET firstname="{coach.first_name}",
                 lastname="{coach.last_name}",
                 role="{coach.role}",
+                since="{coach.since}",
                 email="{coach.email}",
                 phonenumber="{coach.phone_number}",
                 modified="{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}"

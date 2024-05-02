@@ -3,9 +3,9 @@ __author__ = "Zac Foteff"
 
 from datetime import datetime
 from typing import List, Tuple
-from uuid import uuid4
+from uuid import uuid5
 
-from src.logger import Logger
+from src.player_data_service.bin.logger import Logger
 from src.player_data_service.config.db_config import STATISTICS_TABLE_DB_CONFIG
 from src.player_data_service.db_client import MySQLClient
 from src.player_data_service.statistics import TABLE_NAME

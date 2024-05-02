@@ -5,7 +5,7 @@ from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-from src.logger import Logger
+from src.player_data_service.bin.logger import Logger
 from src.player_data_service.errors.teams_errors import (
     TeamAlreadyExists,
     TeamDoesNotExist,
@@ -37,6 +37,4 @@ class TeamController:
 
     @classmethod
     async def delete_team(team_id: str) -> JSONResponse:
-        return JSONResponse(
-            status_code=200, content={"status": 200, "data": {"team_id": team_id}}
-        )
+        return JSONResponse(status_code=200, content={"status": 200, "data": {"team_id": team_id}})

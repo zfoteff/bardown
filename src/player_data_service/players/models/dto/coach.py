@@ -9,7 +9,8 @@ class Coach(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     role: Optional[str] = None
-    phone_number: Optional[str] = None
+    since: Optional[int] = None
     email: Optional[str] = None
+    phone_number: Optional[str] = None
     created: Optional[datetime] = None
     modified: Optional[datetime] = None

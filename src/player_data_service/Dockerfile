@@ -3,16 +3,11 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /player-data-service
+COPY . /app/player_data_service
 
-COPY ../src .
-COPY ../requirements.txt .
+WORKDIR /app/player_data_service
 
-RUN apt-get update -y \
-    && apt-get upgrade -y \
-    && mkdir ./logs/ \
-    && pip install --upgrade pip \
-    && pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 EXPOSE 3001
-CMD [""]
+CMD ["python", "-m", "player_data_service.py"]

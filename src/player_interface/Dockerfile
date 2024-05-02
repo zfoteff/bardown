@@ -3,16 +3,11 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /player-interface
+COPY . /app/player_interface
 
-COPY ../src .
-COPY ../requirements.txt .
+WORKDIR /app/player_interface
 
-RUN apt-get update -y \
-    && apt-get upgrade -y \
-    && mkdir ./logs/ \
-    && pip install --upgrade pip \
-    && pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 EXPOSE 3000
-CMD [""]
+CMD ["python", "-m", "player_interface.py"]

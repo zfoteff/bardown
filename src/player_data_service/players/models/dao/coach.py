@@ -9,8 +9,9 @@ class Coach:
         first_name: str = None,
         last_name: str = None,
         role: str = None,
-        phone_number: str = None,
+        since: str = None,
         email: str = None,
+        phone_number: str = None,
         created: datetime = None,
         modified: datetime = None,
     ) -> Self:
@@ -18,8 +19,9 @@ class Coach:
         self.first_name = first_name
         self.last_name = last_name
         self.role = role
-        self.phone_number = phone_number
+        self.since = since
         self.email = email
+        self.phone_number = phone_number
         self.created = created
         self.modified = modified
 
@@ -33,7 +35,7 @@ class Coach:
         return cls(**{k: v for k, v in zip(cls().to_dict().keys(), coach_tuple)})
 
     def __str__(self) -> str:
-        return f"{self.last_name}, {self.first_name} [{self.role}] | phone: {self.phone_number}, email: {self.email}"
+        return f"{self.last_name}, {self.first_name} [{self.role} since {self.since}] | phone: {self.phone_number}, email: {self.email}"
 
     def to_dict(self) -> str:
         return {
@@ -41,8 +43,9 @@ class Coach:
             "first_name": f"{self.first_name}",
             "last_name": f"{self.last_name}",
             "role": f"{self.role}",
-            "phone_number": f"{self.phone_number}",
+            "since": f"{self.since}",
             "email": f"{self.email}",
+            "phone_number": f"{self.phone_number}",
             "created": f"{self.created}",
             "modified": f"{self.modified}",
         }

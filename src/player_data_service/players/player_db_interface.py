@@ -3,9 +3,9 @@ __author__ = "Zac Foteff"
 
 from datetime import datetime
 from typing import List, Tuple
-from uuid import uuid4
+from uuid import NAMESPACE_OID, uuid5
 
-from src.logger import Logger
+from src.player_data_service.bin.logger import Logger
 from src.player_data_service.config.db_config import PLAYER_TABLE_DB_CONFIG
 from src.player_data_service.db_client import MySQLClient
 from src.player_data_service.errors.players_errors import (
@@ -46,7 +46,9 @@ class PlayerDatabaseInterface:
 
     def create_player(self, player: PlayerDTO) -> bool | PlayerAlreadyExists:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        new_player_id = str(uuid4())
+        new_player_id = str(
+            uuid5(namespace=NAMESPACE_OID, name=player.first_name + player.last_name)
+        )
         query = f"""
             INSERT INTO players 
             VALUES (
@@ -72,9 +74,7 @@ class PlayerDatabaseInterface:
         player.modified = create_modify_time
         return True
 
-    def update_player(
-        self, player_id: str, player: PlayerDTO
-    ) -> str | PlayerDoesNotExist:
+    def update_player(self, player_id: str, player: PlayerDTO) -> str | PlayerDoesNotExist:
         player_id = self.player_exists(player_id)
         query = f"""
             UPDATE {PLAYERS_TABLE_NAME}
@@ -102,9 +102,7 @@ class PlayerDatabaseInterface:
         if not success:
             return False, []
 
-        players = [
-            PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result
-        ]
+        players = [PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result]
 
         return True, players
 

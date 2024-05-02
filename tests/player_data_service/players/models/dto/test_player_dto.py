@@ -1,7 +1,8 @@
 __version__ = "1.0.0"
 __author__ = "Zac Foteff"
 
-from src.logger import Logger
+from bin.logger import Logger
+
 from src.player_data_service.players.models.dto.player import Player
 from tests.bin.constants import VALID_PLAYER
 from tests.bin.decorators.timed import timed

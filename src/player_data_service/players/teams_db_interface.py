@@ -3,9 +3,9 @@ __author__ = "Zac Foteff"
 
 from datetime import datetime
 from typing import List, Tuple
-from uuid import uuid4
+from uuid import NAMESPACE_OID, uuid5
 
-from src.logger import Logger
+from src.player_data_service.bin.logger import Logger
 from src.player_data_service.config.db_config import TEAMS_TABLE_DB_CONFIG
 from src.player_data_service.db_client import MySQLClient
 from src.player_data_service.errors.teams_errors import (
@@ -47,7 +47,7 @@ class TeamsDatabaseInterface:
 
     def create_team(self, team: TeamDTO) -> bool | TeamAlreadyExists:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        new_team_id = str(uuid4())
+        new_team_id = str(uuid5(namespace=NAMESPACE_OID, name=team.name))
         query = f"""
             INSERT INTO {TEAMS_TABLE_NAME} 
             VALUES (
@@ -103,9 +103,7 @@ class TeamsDatabaseInterface:
 
         return True
 
-    def team_exists(
-        self, team_id: str = None, name: str = None
-    ) -> str | TeamDoesNotExist:
+    def team_exists(self, team_id: str = None, name: str = None) -> str | TeamDoesNotExist:
         query = f"SELECT teamid FROM {TEAMS_TABLE_NAME} WHERE "
 
         if team_id is None:

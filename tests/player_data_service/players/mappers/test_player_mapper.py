@@ -1,7 +1,8 @@
 __version__ = "1.0.0"
 __author__ = "Zac Foteff"
 
-from src.logger import Logger
+from bin.logger import Logger
+
 from src.player_data_service.players.mappers.player_mapper import (
     player_DAO_to_player_DTO,
     player_DTO_to_player_DAO,
@@ -32,11 +33,7 @@ def test_valid_player_DTO_to_player_DAO() -> None:
         school=VALID_PLAYER["school"],
     )
     player_dao = player_DTO_to_player_DAO(player_dto=player_dto)
-    assert (
-        player_dao is not None
-        and player_dao.created is None
-        and player_dao.modified is None
-    )
+    assert player_dao is not None and player_dao.created is None and player_dao.modified is None
 
 
 @timed(logger)

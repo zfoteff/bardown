@@ -5,7 +5,7 @@ from typing import List, Self, Tuple
 
 import mysql.connector as mysql
 
-from src.logger import Logger
+from src.player_data_service.bin.logger import Logger
 
 logger = Logger("mysql-client")
 
@@ -52,9 +52,7 @@ class MySQLClient:
             logger.info(f"Connection closed")
             return True
         except mysql.Error as err:
-            logger.error(
-                f"Database error when closing connection: {err} . . . Quitting"
-            )
+            logger.error(f"Database error when closing connection: {err} . . . Quitting")
 
     def execute_query(
         self, query: str, commit_candidate: bool = False, return_results: bool = False
