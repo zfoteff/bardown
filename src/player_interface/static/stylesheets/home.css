@@ -1,0 +1,19 @@
+h2 {
+    text-align: center;
+}
+
+#login {
+    margin: auto;
+    width: 90%;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    vertical-align: center;
+}
+
+.login-form button {
+margin: auto;
+    width: 50%;
+}

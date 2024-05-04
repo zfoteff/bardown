@@ -7,10 +7,12 @@ from contextlib import asynccontextmanager
 from api.player_interface_router import PLAYER_INTERFACE_ROUTER
 from bin.logger import Logger
 from fastapi import APIRouter, FastAPI
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 logger = Logger("player-interface")
+
+FAVICON_PATH = "static/favicon.ico"
 
 
 async def get_health() -> JSONResponse:
@@ -21,6 +23,10 @@ async def get_health() -> JSONResponse:
         JSONResponse: Healthcheck response
     """
     return JSONResponse(status_code=200, content={"status": 200, "response": "Running"})
+
+
+async def get_favicon():
+    return FileResponse(FAVICON_PATH)
 
 
 default_router = APIRouter()
@@ -40,6 +46,14 @@ default_router.add_api_route(
             },
         }
     },
+)
+default_router.add_api_route(
+    path="/favicon.ico",
+    endpoint=get_favicon,
+    description="Retrieve favicon",
+    methods=["GET"],
+    response_class=FileResponse,
+    include_in_schema=False,
 )
 
 

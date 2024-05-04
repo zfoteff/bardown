@@ -1,10 +1,11 @@
 __version__ = "0.1.0"
 __author__ = "Zac Foteff"
-from fastapi.responses import HTMLResponse
 from api.controllers.default_controller import DefaultController
 from fastapi import APIRouter
+from fastapi.responses import HTMLResponse
 
 PLAYER_INTERFACE_ROUTER = APIRouter()
+
 
 PLAYER_INTERFACE_ROUTER.add_api_route(
     path="/",
@@ -12,5 +13,12 @@ PLAYER_INTERFACE_ROUTER.add_api_route(
     description="Render application homepage",
     methods=["GET"],
     response_class=HTMLResponse,
-    tags=["home"],
+)
+
+PLAYER_INTERFACE_ROUTER.add_api_route(
+    path="/statistics",
+    endpoint=DefaultController.render_stats_page,
+    description="Render statistics page",
+    methods=["GET"],
+    response_class=HTMLResponse,
 )

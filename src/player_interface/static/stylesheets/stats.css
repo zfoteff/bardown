@@ -1,0 +1,27 @@
+h2 {
+    text-align: center;
+}
+
+#stats-table {
+    margin: auto;
+    width: 90%;
+    border: 1px solid black;
+}
+.text-field {
+    width: 10em;
+}
+.num-field {
+    text-align: right;
+    width: 5em;
+}
+
+.num-field p { 
+    margin: 2px;
+}
+
+tr {
+    border-bottom: 1px solid black;
+}
+tr:nth-child(even) {
+    background-color: whitesmoke;
+}
