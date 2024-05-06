@@ -14,3 +14,6 @@ class DefaultController:
 
     async def render_stats_page(request: Request) -> HTMLResponse:
         return templates.TemplateResponse("statistics.html", context={"request": request})
+    
+    async def render_player_page(request: Request) -> HTMLResponse:
+        return templates.TemplateResponse("players.html", context={"request": request})
