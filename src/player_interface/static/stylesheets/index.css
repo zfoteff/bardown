@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    padding: 1%;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     max-width: fit-content - 1em;
@@ -15,10 +15,13 @@ body {
 }
 
 .content {
-    padding: 1%;
+    padding: 1em;
+    padding-top: 5em;
+    padding-bottom: 5em;
     margin: auto;
     background-color: #F1DABF;
-    min-width: 95vw;
+    min-width: 90vw;
+    max-width: 90vw;
     border: 5px solid #8a1f1f;
     border-radius: 1em;
 }
@@ -28,13 +31,23 @@ body h1 {
     font-size: 10vw;
     font-style: italic;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    transition-property: background, margin-bottom;
-    transition-duration: 2s, 4s;
-    transition-delay: 0s, 2s;
+    transform-origin: bottom left;
+    animation: title-slide 2s 0s cubic-bezier(.36, 0, .06, 1);
 }
 
-@keyframes header-transition
-
+@keyframes title-slide {
+    50%, 100% {
+        transform: translateY(0em)
+    }
+    0%: {
+        opacity: 0;
+        filter: blur(10px);
+    }
+    100%: {
+        opacity: 1;
+        filter: blur(0px);
+    }
+}
 
 body h2 {
     text-align: center;
