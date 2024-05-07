@@ -1,7 +1,7 @@
 import functools
 import time
 
-from src.player_data_service.bin.logger import Logger
+from bin.logger import Logger
 
 
 def timed(logger: Logger = None):

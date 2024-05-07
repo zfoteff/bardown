@@ -1,7 +1,7 @@
 import datetime
 
-from src.player_data_service.players.models.enums.grade import Grade
-from src.player_data_service.players.models.enums.position import Position
+from players.models.enums.grade import Grade
+from players.models.enums.position import Position
 
 VALID_UUID = "fb344330-0e2a-4348-9665-9061cae42aab"
 

@@ -5,20 +5,18 @@ from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-from src.player_data_service.bin.logger import Logger
-from src.player_data_service.errors.players_errors import (
+from bin.logger import Logger
+from errors.players_errors import (
     PlayerAlreadyExists,
     PlayerDoesNotExist,
     PlayerValidationError,
 )
-from src.player_data_service.players.api.validators.players_query_validator import (
+from players.api.validators.players_query_validator import (
     validate_get_players_query_parameters,
 )
-from src.player_data_service.players.mappers.player_mapper import (
-    player_DAO_to_player_DTO,
-)
-from src.player_data_service.players.models.dto.player import Player
-from src.player_data_service.players.player_db_interface import PlayerDatabaseInterface
+from players.mappers.player_mapper import player_DAO_to_player_DTO
+from players.models.dto.player import Player
+from players.player_db_interface import PlayerDatabaseInterface
 
 logger = Logger("player-data-service-controller")
 db_interface = PlayerDatabaseInterface()
@@ -37,7 +35,9 @@ class PlayerController:
         try:
             result = db_interface.create_player(player)
         except PlayerValidationError as err:
-            return JSONResponse(status_code=400, content={"status": 400, "error": f"{err}"})
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": f"{err}"}
+            )
         except PlayerAlreadyExists as err:
             return JSONResponse(
                 status_code=409,
@@ -99,7 +99,10 @@ class PlayerController:
                 "status": 200,
                 "data": []
                 if (players == []) or (players is None)
-                else [jsonable_encoder(player_DAO_to_player_DTO(player)) for player in players],
+                else [
+                    jsonable_encoder(player_DAO_to_player_DTO(player))
+                    for player in players
+                ],
             },
         )
 
@@ -116,10 +119,14 @@ class PlayerController:
         try:
             success = db_interface.update_player(player_id, player)
         except PlayerDoesNotExist as err:
-            return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
+            return JSONResponse(
+                status_code=404, content={"status": 404, "error": f"{err}"}
+            )
 
         if not success:
-            return JSONResponse(status_code=400, content={"status": 400, "error": "Database error"})
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": "Database error"}
+            )
 
         return JSONResponse(
             status_code=200,
@@ -138,7 +145,9 @@ class PlayerController:
         try:
             result = db_interface.delete_players(player_id)
         except PlayerDoesNotExist as err:
-            return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
+            return JSONResponse(
+                status_code=404, content={"status": 404, "error": f"{err}"}
+            )
 
         if not result:
             return JSONResponse(

@@ -5,19 +5,14 @@ from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
-from src.player_data_service.bin.logger import Logger
-from src.player_data_service.config.db_config import COACHES_TABLE_DB_CONFIG
-from src.player_data_service.db_client import MySQLClient
-from src.player_data_service.errors.coaches_errors import (
-    CoachAlreadyExists,
-    CoachDoesNotExist,
-)
-from src.player_data_service.players import COACHES_TABLE_NAME
-from src.player_data_service.players.models.dao.coach import Coach as CoachDAO
-from src.player_data_service.players.models.dto.coach import Coach as CoachDTO
-from src.player_data_service.players.models.dto.coaches_request_filters import (
-    CoachesRequestFilters,
-)
+from bin.logger import Logger
+from config.db_config import COACHES_TABLE_DB_CONFIG
+from connectors.mysql import MySQLClient
+from errors.coaches_errors import CoachAlreadyExists, CoachDoesNotExist
+from players import COACHES_TABLE_NAME
+from players.models.dao.coach import Coach as CoachDAO
+from players.models.dto.coach import Coach as CoachDTO
+from players.models.dto.coaches_request_filters import CoachesRequestFilters
 
 logger = Logger("teams-db-interface")
 
@@ -46,7 +41,9 @@ class CoachesDatabaseInterface:
 
     def create_coach(self, coach: CoachDTO) -> bool | CoachAlreadyExists:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        new_coach_id = str(uuid5(namespace=NAMESPACE_OID, name=coach.first_name + coach.last_name))
+        new_coach_id = str(
+            uuid5(namespace=NAMESPACE_OID, name=coach.first_name + coach.last_name)
+        )
         query = f"""
             INSERT INTO {COACHES_TABLE_NAME} 
             VALUES (

@@ -1,13 +1,8 @@
 import re
 
-from src.player_data_service.errors.coaches_errors import CoachValidationError
-from src.player_data_service.players.api.validators import (
-    NAME_REGEX_PATTERN,
-    UUID_REGEX_PATTERN,
-)
-from src.player_data_service.players.models.dto.coaches_request_filters import (
-    CoachesRequestFilters,
-)
+from errors.coaches_errors import CoachValidationError
+from players.api.validators import NAME_REGEX_PATTERN, UUID_REGEX_PATTERN
+from players.models.dto.coaches_request_filters import CoachesRequestFilters
 
 
 def _order_equals_allowed_value(order: str) -> bool:
@@ -21,7 +16,8 @@ def _order_by_equals_allowed_value(order_by: str) -> bool:
 
 def _order_missing_pair(order: str, order_by: str) -> bool:
     return not (
-        (order is None and order_by is None) or (order is not None and order_by is not None)
+        (order is None and order_by is None)
+        or (order is not None and order_by is not None)
     )
 
 
@@ -48,7 +44,9 @@ def _validate_coach_id_filter(filters: CoachesRequestFilters, coach_id: str) -> 
         )
 
 
-def _validate_name_filter(filters: CoachesRequestFilters, first_name: str, last_name: str) -> None:
+def _validate_name_filter(
+    filters: CoachesRequestFilters, first_name: str, last_name: str
+) -> None:
     # Name filter validation. Both first and last name must be provided, and match regex filter
     if _name_missing_pair(first_name, last_name):
         if first_name is None:
@@ -79,7 +77,9 @@ def _validate_role_filter(filters: CoachesRequestFilters, role: str) -> None:
     filters.role = role
 
 
-def _validate_ordering_rules(filters: CoachesRequestFilters, order: str, order_by: str) -> None:
+def _validate_ordering_rules(
+    filters: CoachesRequestFilters, order: str, order_by: str
+) -> None:
     # Ordering rules. Both order direction and order by field must be provided, and match set of accepted values
     if _order_missing_pair(order, order_by):
         if order is None:
@@ -91,7 +91,9 @@ def _validate_ordering_rules(filters: CoachesRequestFilters, order: str, order_b
                 "orderBy parameter cannot be null when order parameter exists"
             )
     elif not _order_equals_allowed_value(order):
-        raise CoachValidationError('order value must be one of the allowed values ["ASC", "DESC"]')
+        raise CoachValidationError(
+            'order value must be one of the allowed values ["ASC", "DESC"]'
+        )
 
     filters.order = str.upper(order)
 

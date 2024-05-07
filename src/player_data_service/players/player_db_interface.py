@@ -5,19 +5,14 @@ from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
-from src.player_data_service.bin.logger import Logger
-from src.player_data_service.config.db_config import PLAYER_TABLE_DB_CONFIG
-from src.player_data_service.db_client import MySQLClient
-from src.player_data_service.errors.players_errors import (
-    PlayerAlreadyExists,
-    PlayerDoesNotExist,
-)
-from src.player_data_service.players import PLAYERS_TABLE_NAME
-from src.player_data_service.players.models.dao.player import Player as PlayerDAO
-from src.player_data_service.players.models.dto.player import Player as PlayerDTO
-from src.player_data_service.players.models.dto.players_request_filters import (
-    PlayersRequestFilters,
-)
+from bin.logger import Logger
+from config.db_config import PLAYER_TABLE_DB_CONFIG
+from connectors.mysql import MySQLClient
+from errors.players_errors import PlayerAlreadyExists, PlayerDoesNotExist
+from players import PLAYERS_TABLE_NAME
+from players.models.dao.player import Player as PlayerDAO
+from players.models.dto.player import Player as PlayerDTO
+from players.models.dto.players_request_filters import PlayersRequestFilters
 
 logger = Logger("player-db-interface")
 
@@ -74,7 +69,9 @@ class PlayerDatabaseInterface:
         player.modified = create_modify_time
         return True
 
-    def update_player(self, player_id: str, player: PlayerDTO) -> str | PlayerDoesNotExist:
+    def update_player(
+        self, player_id: str, player: PlayerDTO
+    ) -> str | PlayerDoesNotExist:
         player_id = self.player_exists(player_id)
         query = f"""
             UPDATE {PLAYERS_TABLE_NAME}
@@ -102,7 +99,9 @@ class PlayerDatabaseInterface:
         if not success:
             return False, []
 
-        players = [PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result]
+        players = [
+            PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result
+        ]
 
         return True, players
 

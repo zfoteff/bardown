@@ -2,11 +2,7 @@ import os
 
 from dotenv import load_dotenv
 
-from src.player_data_service.players import (
-    COACHES_TABLE_NAME,
-    PLAYERS_TABLE_NAME,
-    TEAMS_TABLE_NAME,
-)
+from players import COACHES_TABLE_NAME, PLAYERS_TABLE_NAME, TEAMS_TABLE_NAME
 
 load_dotenv()
 

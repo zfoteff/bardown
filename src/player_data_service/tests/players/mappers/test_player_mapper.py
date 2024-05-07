@@ -3,13 +3,13 @@ __author__ = "Zac Foteff"
 
 from bin.logger import Logger
 
-from src.player_data_service.players.mappers.player_mapper import (
+from players.mappers.player_mapper import (
     player_DAO_to_player_DTO,
     player_DTO_to_player_DAO,
 )
-from src.player_data_service.players.models.dao.player import Player as PlayerDAO
-from src.player_data_service.players.models.dto.player import Player as PlayerDTO
-from tests.bin.constants import VALID_PLAYER
+from players.models.dao.player import Player as PlayerDAO
+from players.models.dto.player import Player as PlayerDTO
+from tests.constants import VALID_PLAYER
 from tests.bin.decorators.timed import timed
 
 logger = Logger("test")

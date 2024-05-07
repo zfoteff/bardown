@@ -4,11 +4,11 @@ __author__ = "Zac Foteff"
 import pytest
 from bin.logger import Logger
 
-from src.player_data_service.errors.players_errors import PlayerValidationError
-from src.player_data_service.players.api.validators.players_query_validator import (
+from errors.players_errors import PlayerValidationError
+from players.api.validators.players_query_validator import (
     validate_get_players_query_parameters as validate,
 )
-from tests.bin.constants import VALID_PLAYER
+from tests.constants import VALID_PLAYER
 from tests.bin.decorators.timed import timed
 
 logger = Logger("test")

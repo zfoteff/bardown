@@ -3,8 +3,8 @@ __author__ = "Zac Foteff"
 
 from bin.logger import Logger
 
-from src.player_data_service.players.models.dto.player import Player
-from tests.bin.constants import VALID_PLAYER
+from players.models.dto.player import Player
+from tests.constants import VALID_PLAYER
 from tests.bin.decorators.timed import timed
 
 logger = Logger("test")

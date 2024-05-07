@@ -5,20 +5,15 @@ from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
-from src.player_data_service.bin.logger import Logger
-from src.player_data_service.config.db_config import TEAMS_TABLE_DB_CONFIG
-from src.player_data_service.db_client import MySQLClient
-from src.player_data_service.errors.teams_errors import (
-    TeamAlreadyExists,
-    TeamDoesNotExist,
-)
-from src.player_data_service.players import TEAMS_TABLE_NAME
-from src.player_data_service.players.models.dao.team import Team
-from src.player_data_service.players.models.dao.team import Team as TeamDAO
-from src.player_data_service.players.models.dto.team import Team as TeamDTO
-from src.player_data_service.players.models.dto.teams_request_filters import (
-    TeamsRequestFilters,
-)
+from bin.logger import Logger
+from config.db_config import TEAMS_TABLE_DB_CONFIG
+from connectors.mysql import MySQLClient
+from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
+from players import TEAMS_TABLE_NAME
+from players.models.dao.team import Team
+from players.models.dao.team import Team as TeamDAO
+from players.models.dto.team import Team as TeamDTO
+from players.models.dto.teams_request_filters import TeamsRequestFilters
 
 logger = Logger("teams-db-interface")
 
@@ -103,7 +98,9 @@ class TeamsDatabaseInterface:
 
         return True
 
-    def team_exists(self, team_id: str = None, name: str = None) -> str | TeamDoesNotExist:
+    def team_exists(
+        self, team_id: str = None, name: str = None
+    ) -> str | TeamDoesNotExist:
         query = f"SELECT teamid FROM {TEAMS_TABLE_NAME} WHERE "
 
         if team_id is None:
