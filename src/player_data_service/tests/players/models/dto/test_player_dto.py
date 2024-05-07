@@ -2,10 +2,9 @@ __version__ = "1.0.0"
 __author__ = "Zac Foteff"
 
 from bin.logger import Logger
-
 from players.models.dto.player import Player
-from tests.constants import VALID_PLAYER
 from tests.bin.decorators.timed import timed
+from tests.constants import VALID_PLAYER
 
 logger = Logger("test")
 
