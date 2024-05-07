@@ -10,6 +10,7 @@ templates = Jinja2Templates(directory="api/templates")
 
 class DefaultController:
     async def render_homepage(request: Request) -> HTMLResponse:
+        
         return templates.TemplateResponse("home.html", context={"request": request})
 
     async def render_stats_page(request: Request) -> HTMLResponse:
