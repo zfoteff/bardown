@@ -44,4 +44,28 @@ class EndpointConfig:
 
     @api_version.setter
     def api_version(self, new_api_version: str) -> None:
-        self._base_path = new_api_version
+        self._api_version = new_api_version
+    
+    @property
+    def app_pathname(self) -> str:
+        return self._app_pathname
+
+    @app_pathname.setter
+    def app_pathname(self, new_app_pathname: str) -> None:
+        self._app_pathname = new_app_pathname
+
+    @property
+    def connect_timeout_ms(self) -> int:
+        return self._connect_timeout_ms
+    
+    @connect_timeout_ms
+    def connect_timeout_ms(self, new_connect_timeout_ms: int) -> None:
+        self._connect_timeout_ms = new_connect_timeout_ms
+
+    @property
+    def read_timeout_ms(self) -> int:
+        return self._read_timeout_ms
+    
+    @read_timeout_ms
+    def read_timeout_ms(self, new_read_timeout_ms: int) -> None:
+        self._read_timeout_ms = new_read_timeout_ms

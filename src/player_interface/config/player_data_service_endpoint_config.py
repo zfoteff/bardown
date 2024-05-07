@@ -7,5 +7,5 @@ class PlayerDataServiceEndpointConfig(EndpointConfig):
             base_url="127.0.0.1:3001", 
             base_path="/", 
             api_version="v0", 
-            app_pathname=""
+            app_pathname="/players"
         )

@@ -3,7 +3,7 @@ __author__ = "Zac Foteff"
 
 from bin.logger import Logger
 from config.endpoint_config import EndpointConfig
-from config.player_data_service import PlayerDataServiceEndpointConfig
+from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
 from tests.bin.decorators.timed import timed
 
 logger = Logger("test")
