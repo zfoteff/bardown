@@ -1,0 +1,54 @@
+{% extends "index.html" %}
+{% block title %}Statistics{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="../static/stylesheets/stats.css"/>
+{% endblock %}
+{% block content%} 
+    <h2>Statistics</h2>
+    <div id="statistics">
+        <table id="stats-table">
+            <tbody>
+                <tr>
+                    <th>Name</th>
+                    <th>Number</th>
+                    <th>Position</th>
+                    <th>S</th>
+                    <th>G</th>
+                    <th>A</th>
+                    <th>CT</th>
+                    <th>GB</th>
+                    <th>PK</th>
+                    <th>T</th>
+                    <th>P</th>
+                </tr>
+                <tr>
+                    <td class="text-field">Zac Foteff</td>
+                    <td class="num-field">6</td>
+                    <td class="text-field">Attack</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                </tr>
+                <tr>
+                    <td class="text-field">John Salisbury</td>
+                    <td class="num-field">1</td>
+                    <td class="text-field">Midfield</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                    <td class="num-field">0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

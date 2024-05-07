@@ -1,7 +1,12 @@
 # Clackamas Lacrosse Application (Name W.I.P.)
 Player management and stat tracking application designed for the Clackamas Lacrosse program.
 
-## Development Notes
+## Player Data Service
+
+## Player Interface
+
+### Development Notes
+https://jinja.palletsprojects.com/en/3.1.x/templates/#template-inheritance
 
 ### Player enum
 | Position | Value |
@@ -27,8 +32,8 @@ Player management and stat tracking application designed for the Clackamas Lacro
 | T | Turnovers | |
 | CT | Caused turnovers | |
 | P | Penalty minutes | |
-| K | | |
-| MS | | |
+| K | Knockdowns | |
+| MS | Missed slides| |
 | HGA | High goal allowed | |
 | MGA | Mid goal allowed | |
 | LGA | Low goal allowed | |

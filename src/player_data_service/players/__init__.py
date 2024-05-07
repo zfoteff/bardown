@@ -1,0 +1,3 @@
+PLAYERS_TABLE_NAME = "players"
+COACHES_TABLE_NAME = "coaches"
+TEAMS_TABLE_NAME = "teams"

@@ -1,0 +1,32 @@
+name: clackamas-lacrosse-application
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: LaxDB
+    ports:
+      - "3306:3306"
+      - "33060:33060"
+    expose:
+      - "3306"
+
+  player-data-service:
+    image: player-data-service
+    build: ./player-data-service/Dockerfile
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+
+  player-interface:
+    image: player-interface
+    build: ./player-interface/Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - player_data_service
