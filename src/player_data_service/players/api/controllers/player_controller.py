@@ -1,15 +1,16 @@
 __version__ = "0.1.0"
 __author__ = "Zac Foteff"
 
+from fastapi import Request
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+
 from bin.logger import Logger
 from errors.players_errors import (
     PlayerAlreadyExists,
     PlayerDoesNotExist,
     PlayerValidationError,
 )
-from fastapi import Request
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
 from players.api.validators.players_query_validator import (
     validate_get_players_query_parameters,
 )

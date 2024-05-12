@@ -2,6 +2,7 @@ __version__ = "0.1.0"
 __author__ = "Zac Foteff"
 
 from fastapi import APIRouter
+
 from players.api.controllers.coach_controller import CoachController
 from players.api.controllers.player_controller import PlayerController
 from players.api.controllers.team_controller import TeamController
@@ -11,7 +12,7 @@ PLAYER_ROUTER = APIRouter(prefix=f"/players/{API_VERSION}")
 
 # PLAYERS ROUTES
 PLAYER_ROUTER.add_api_route(
-    path="/players",
+    path="/player",
     endpoint=PlayerController.get_players,
     description="Retrieve player data from the database",
     methods=["GET"],
@@ -133,7 +134,7 @@ PLAYER_ROUTER.add_api_route(
     tags=["coaches"],
 )
 PLAYER_ROUTER.add_api_route(
-    path="/coaches",
+    path="/coach",
     endpoint=CoachController.get_coaches,
     methods=["GET"],
     tags=["coaches"],
@@ -156,7 +157,7 @@ PLAYER_ROUTER.add_api_route(
     path="/team", endpoint=TeamController.create_team, methods=["POST"], tags=["teams"]
 )
 PLAYER_ROUTER.add_api_route(
-    path="/teams", endpoint=TeamController.get_teams, methods=["GET"], tags=["teams"]
+    path="/team", endpoint=TeamController.get_teams, methods=["GET"], tags=["teams"]
 )
 PLAYER_ROUTER.add_api_route(
     path="/team", endpoint=TeamController.update_team, methods=["PATCH"], tags=["teams"]
