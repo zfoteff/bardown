@@ -5,16 +5,16 @@ from typing import Self
 from fastapi import Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from client.playerdataservice import PlayerDataServiceClient
+from providers.player_data_service_provider import PlayerDataServiceProvider
 
 templates = Jinja2Templates(directory="api/templates")
 
 
 class DefaultController:
-    _client: PlayerDataServiceClient
+    _player_data_service_provider: PlayerDataServiceProvider
 
     def __init__(self) -> Self:
-        self._client = PlayerDataServiceClient()
+        self._player_data_service_provider = PlayerDataServiceProvider()
 
     async def render_homepage(request: Request) -> HTMLResponse:
         return templates.TemplateResponse("home.html", context={"request": request})
