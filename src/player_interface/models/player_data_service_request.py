@@ -84,3 +84,6 @@ class PlayerDataServiceRequest:
     @order_by.setter
     def order_by(self, new_order_by: str) -> None:
         self._ordering.order_by = new_order_by
+
+    def to_dict() -> dict:
+        pass
