@@ -1,7 +1,7 @@
-from typing import Self, Dict, Optional
+from typing import Dict, Optional, Self
 
-from .pagination import Pagination
 from .ordering import OrderingRules
+from .pagination import Pagination
 
 
 class PlayerDataServiceRequest:

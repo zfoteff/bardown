@@ -4,7 +4,6 @@ __author__ = "Zac Foteff"
 from typing import List, Self, Tuple
 
 import mysql.connector as mysql
-
 from bin.logger import Logger
 
 logger = Logger("mysql-client")

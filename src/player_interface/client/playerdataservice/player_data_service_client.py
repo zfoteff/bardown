@@ -1,11 +1,13 @@
 from typing import Self
-from bin.logger import Logger
+
 import httpx
-from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
-from models.player_data_service_response import PlayerDataServiceResponse
-from models.player_data_service_request import PlayerDataServiceRequest
-from client.client_url import ClientUrl
 from requests import request
+
+from bin.logger import Logger
+from client.client_url import ClientUrl
+from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
+from models.player_data_service_request import PlayerDataServiceRequest
+from models.player_data_service_response import PlayerDataServiceResponse
 
 logger = Logger("player-data-service-client")
 
@@ -19,7 +21,7 @@ class PlayerDataServiceClient:
 
     def __init__(self) -> Self:
         self._config = PlayerDataServiceEndpointConfig()
-        self._base_path = self._compose_base_path(self.config)
+        self._base_path = self._compose_base_path(self._config)
 
     async def get_players_by_filters(
         self, filters_request: PlayerDataServiceRequest, url: ClientUrl

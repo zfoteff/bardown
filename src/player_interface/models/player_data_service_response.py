@@ -1,26 +1,26 @@
-from typing import Self, Dict
+from typing import Iterable, Self
 
 
 class PlayerDataServiceResponse:
     _status: int
-    _data: Dict
+    _data: Iterable
 
-    def __init__(self, status: int) -> Self:
+    def __init__(self, status: int, data: dict) -> Self:
         self._status = status
-        self._data
+        self._data = data
 
     @property
     def status(self) -> int:
         return self._status
 
-    @property
-    def data(self) -> Dict:
-        return self._dict
-
-    @data.setter
-    def data(self, new_data: Dict) -> None:
-        self._data = new_data
-
     @status.setter
     def status(self, new_status: int) -> None:
         self._status = new_status
+
+    @property
+    def data(self) -> Iterable:
+        return self._dict
+
+    @data.setter
+    def data(self, new_data: Iterable) -> None:
+        self._data = new_data

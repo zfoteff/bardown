@@ -58,7 +58,7 @@ class EndpointConfig:
     def connect_timeout_ms(self) -> int:
         return self._connect_timeout_ms
 
-    @connect_timeout_ms
+    @connect_timeout_ms.setter
     def connect_timeout_ms(self, new_connect_timeout_ms: int) -> None:
         self._connect_timeout_ms = new_connect_timeout_ms
 
@@ -66,6 +66,6 @@ class EndpointConfig:
     def read_timeout_ms(self) -> int:
         return self._read_timeout_ms
 
-    @read_timeout_ms
+    @read_timeout_ms.setter
     def read_timeout_ms(self, new_read_timeout_ms: int) -> None:
         self._read_timeout_ms = new_read_timeout_ms
