@@ -1,4 +1,4 @@
-from typing import List, Optional, Self
+from typing import List, Dict, Optional, Self
 
 
 class Pagination:
@@ -9,13 +9,13 @@ class Pagination:
         self._limit = self._limit_value(limit)
         self._offset = self._offset_value(offset)
 
-    def _limit_value(limit: int) -> int | None:
-        if limit < 0 or limit > 10000:
+    def _limit_value(self, limit: int) -> int | None:
+        if limit is None or limit < 0 or limit > 10000:
             return None
         return limit
 
-    def _offset_value(offset: int) -> int | None:
-        if offset < 0 or offset > 10000:
+    def _offset_value(self, offset: int) -> int | None:
+        if offset is None or offset < 0 or offset > 10000:
             return None
         return offset
 
@@ -34,3 +34,13 @@ class Pagination:
     @offset.setter
     def offset(self) -> None:
         self._offset = self._offset_value(offset)
+
+    def to_dict(self) -> Dict:
+        data = {}
+
+        if self._limit is not None:
+            data["limit"] = self._limit
+        if self._offset is not None:
+            data["offset"] = self._offset
+
+        return data

@@ -13,7 +13,7 @@ class PlayerDataServiceProvider:
     def __init__(self) -> Self:
         self._client = PlayerDataServiceClient()
 
-    def get_players_by_filters(
+    async def get_players_by_filters(
         self, filters: PlayerFilters
     ) -> PlayerDataServiceResponse:
         """
@@ -21,5 +21,9 @@ class PlayerDataServiceProvider:
         """
         url = ClientUrl("/player", "GET")
         request = PlayerDataServiceRequest()
-        response = self._client.get_players_by_filters(request, url)
-        return response
+        request.query_parameters = filters.to_dict()
+        request.limit = 10
+        request.order = "ASC"
+        request.order_by = "number"
+        players = await self._client.get_players_by_filters(request, url)
+        return players

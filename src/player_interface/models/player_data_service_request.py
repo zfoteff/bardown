@@ -26,8 +26,8 @@ class PlayerDataServiceRequest:
             query_parameters if query_parameters is not None else dict()
         )
         self._request_body = request_body if request_body is not None else dict()
-        self._pagination = pagination
-        self._ordering = ordering
+        self._pagination = pagination if pagination is not None else Pagination()
+        self._ordering = ordering if ordering is not None else OrderingRules()
 
     @property
     def path_parameters(self) -> Dict:
