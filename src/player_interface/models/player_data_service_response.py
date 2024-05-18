@@ -19,7 +19,7 @@ class PlayerDataServiceResponse:
 
     @property
     def data(self) -> Iterable:
-        return self._dict
+        return self._data
 
     @data.setter
     def data(self, new_data: Iterable) -> None:

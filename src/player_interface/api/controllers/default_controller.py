@@ -29,6 +29,7 @@ class DefaultController:
     async def render_player_page(request: Request) -> HTMLResponse:
         filters = PlayerFiltersMapper.form_to_player_filters({})
         players = await player_data_service_provider.get_players_by_filters(filters)
+        print(players.data)
         return templates.TemplateResponse(
             "players.html", context={"request": request, "players": players}
         )

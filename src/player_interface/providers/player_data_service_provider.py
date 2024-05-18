@@ -25,5 +25,6 @@ class PlayerDataServiceProvider:
         request.limit = 10
         request.order = "ASC"
         request.order_by = "number"
-        players = await self._client.get_players_by_filters(request, url)
+        response = await self._client.get_players_by_filters(request, url)
+        players =
         return players
