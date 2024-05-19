@@ -85,5 +85,10 @@ class PlayerDataServiceRequest:
     def order_by(self, new_order_by: str) -> None:
         self._ordering.order_by = new_order_by
 
-    def to_dict() -> dict:
-        pass
+    @property
+    def pagination(self) -> Pagination:
+        return self._pagination
+
+    @property
+    def ordering(self) -> OrderingRules:
+        return self._ordering

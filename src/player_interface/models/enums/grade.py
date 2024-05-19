@@ -6,3 +6,6 @@ class Grade(Enum):
     SOPHOMORE = "SO"
     JUNIOR = "JR"
     SENIOR = "SR"
+
+    def __str__(self) -> str:
+        return str.capitalize(self.name)

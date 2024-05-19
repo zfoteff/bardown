@@ -1,4 +1,4 @@
-from typing import List, Dict, Optional, Self
+from typing import Dict, List, Optional, Self
 
 
 class Pagination:

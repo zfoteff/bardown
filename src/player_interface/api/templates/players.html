@@ -41,27 +41,15 @@
                     <th>Position</th>
                     <th>School</th>
                 </tr>
-                <tr>
-                    <td class="num-field">6</td>
-                    <td class="text-field">Zac Foteff</td>
-                    <td class="text-field">Senior</td>
-                    <td class="text-field">Attack</td>
-                    <td class="text-field">La Salle Catholic College Prepatory</td>
-                </tr>
-                <tr>
-                    <td class="num-field">2</td>
-                    <td class="text-field">Matthew Salisbury</td>
-                    <td class="text-field">Senior</td>
-                    <td class="text-field">Midfield</td>
-                    <td class="text-field">La Salle Catholic College Prepatory</td>
-                </tr>
-                <tr>
-                    <td class="num-field">1</td>
-                    <td class="text-field">John Salisbury</td>
-                    <td class="text-field">Senior</td>
-                    <td class="text-field">Midfield</td>
-                    <td class="text-field">La Salle Catholic College Prepatory</td>
-                </tr>
+                {% for player in players %}
+                    <tr>
+                        <td class="num-field">{{ player.number }}</td>
+                        <td class="text-field">{{ player.first_name + " " + player.last_name }}</td>
+                        <td class="text-field">{{ player.grade }}</td>
+                        <td class="text-field">{{ player.position }}</td>
+                        <td class="text-field">{{ player.school }}</td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

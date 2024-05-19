@@ -1,4 +1,4 @@
-from typing import Self, Dict
+from typing import Dict, Self
 
 
 class OrderingRules:

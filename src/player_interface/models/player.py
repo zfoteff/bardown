@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Self
 
-from enums.grade import Grade
-from enums.position import Position
+from .enums.grade import Grade
+from .enums.position import Position
 
 
 class Player:
@@ -35,8 +35,8 @@ class Player:
         self._position = Position(position)
         self._grade = Grade(grade)
         self._school = school
-        self._created = datetime(created)
-        self._modified = datetime(modified)
+        self._created = datetime.fromisoformat(created)
+        self._modified = datetime.fromisoformat(modified)
 
     @property
     def player_id(self) -> str:
