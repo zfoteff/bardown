@@ -1,3 +1,6 @@
+__version__ = "0.1.0"
+__author__ = "Zac Foteff"
+
 from datetime import datetime
 from typing import Self
 

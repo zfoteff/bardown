@@ -34,6 +34,10 @@ class PlayerDataServiceProvider:
         if response is None or response.status != 200:
             players = []
         else:
-            players = PlayerDataServiceResponseMapper.response_to_players(response.data)
+            players = (
+                PlayerDataServiceResponseMapper.player_data_service_response_to_players(
+                    response.data
+                )
+            )
 
         return players
