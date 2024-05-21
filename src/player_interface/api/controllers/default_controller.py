@@ -6,7 +6,6 @@ from typing import Self
 from fastapi import Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-
 from mappers.player_filters_mapper import PlayerFiltersMapper
 from providers.player_data_service_provider import PlayerDataServiceProvider
 
@@ -24,6 +23,12 @@ class DefaultController:
     async def render_stats_page(request: Request) -> HTMLResponse:
         return templates.TemplateResponse(
             "statistics.html", context={"request": request}
+        )
+
+    async def render_teams_page(request: Request) -> HTMLResponse:
+        teams = []
+        return templates.TemplateResponse(
+            "teams.html", context={"request": request, "teams": teams}
         )
 
     async def render_player_page(request: Request) -> HTMLResponse:

@@ -1,24 +1,29 @@
 from typing import Dict, Optional, Self
+from urllib.parse import urlencode
+from client.client_url import ClientUrl
 
 from .ordering import OrderingRules
 from .pagination import Pagination
 
 
 class PlayerDataServiceRequest:
-    _path_parameters: Dict
-    _query_parameters: Dict
-    _request_body: Dict
+    _url: ClientUrl
+    _path_parameters: Optional[Dict]
+    _query_parameters: Optional[Dict]
+    _request_body: Optional[Dict]
     _pagination: Optional[Pagination]
     _ordering: Optional[OrderingRules]
 
     def __init__(
         self,
+        url: ClientUrl,
         path_parameters: Dict = None,
         query_parameters: Dict = None,
         request_body: Dict = None,
         pagination: Pagination = None,
         ordering: OrderingRules = None,
     ) -> Self:
+        self._url = url
         self._path_parameters = (
             path_parameters if path_parameters is not None else dict()
         )
@@ -26,8 +31,20 @@ class PlayerDataServiceRequest:
             query_parameters if query_parameters is not None else dict()
         )
         self._request_body = request_body if request_body is not None else dict()
-        self._pagination = pagination if pagination is not None else Pagination()
-        self._ordering = ordering if ordering is not None else OrderingRules()
+        self._pagination = (
+            pagination if pagination is not None else Pagination(limit=40)
+        )
+        self._ordering = (
+            ordering if ordering is not None else OrderingRules("ASC", "number")
+        )
+
+    def construct_query_parameters(self) -> Dict:
+        return (
+            self.query_parameters | self.pagination.to_dict() | self.ordering.to_dict()
+        )
+
+    def query_string(self) -> str:
+        return "?" + urlencode(self.construct_query_parameters())
 
     @property
     def path_parameters(self) -> Dict:
@@ -92,3 +109,27 @@ class PlayerDataServiceRequest:
     @property
     def ordering(self) -> OrderingRules:
         return self._ordering
+
+    @property
+    def url(self) -> ClientUrl:
+        return self._url
+
+    @url.setter
+    def url(self, new_url: ClientUrl) -> None:
+        self._url = new_url
+
+    @property
+    def url_path(self) -> str:
+        return self._url.path
+
+    @url_path.setter
+    def url_path(self, new_url_path) -> None:
+        self._url.path = new_url_path
+
+    @property
+    def method(self) -> str:
+        return self._url.method
+
+    @method.setter
+    def method(self, new_method: str) -> None:
+        self._url.method = new_method

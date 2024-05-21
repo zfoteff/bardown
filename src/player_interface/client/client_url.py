@@ -1,4 +1,6 @@
-from typing import Dict, List, Optional, Self
+from typing import Self
+
+from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
 
 
 class ClientUrl:
@@ -7,8 +9,9 @@ class ClientUrl:
         path: str,
         method: str,
     ) -> Self:
-        self.__path: str = path
-        self.__method: str = method
+        self.__path = path
+        self.__method = method
+        self.__config = PlayerDataServiceEndpointConfig()
 
     @property
     def path(self) -> str:
@@ -17,3 +20,11 @@ class ClientUrl:
     @property
     def method(self) -> str:
         return self.__method
+
+    @property
+    def connect_timeout_in_ms(self) -> int:
+        return self.__config.connect_timeout_ms
+
+    @property
+    def url(self) -> str:
+        return self.__config.compose_path() + self.__path

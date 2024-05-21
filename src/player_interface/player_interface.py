@@ -4,12 +4,11 @@ __version__ = "v0.0.2"
 
 from contextlib import asynccontextmanager
 
+from api.player_interface_router import PLAYER_INTERFACE_ROUTER
+from bin.logger import Logger
 from fastapi import APIRouter, FastAPI
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
-
-from api.player_interface_router import PLAYER_INTERFACE_ROUTER
-from bin.logger import Logger
 
 logger = Logger("player-interface")
 
