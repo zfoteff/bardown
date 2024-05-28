@@ -13,7 +13,7 @@ from src.player_data_service.statistics import TABLE_NAME
 logger = Logger("player-db-interface")
 
 
-class PlayerDatabaseInterface:
+class StatisticsDatabaseInterface:
     def __init__(self):
         self.__client = MySQLClient(**STATISTICS_TABLE_DB_CONFIG)
         self.__client.open_connection()

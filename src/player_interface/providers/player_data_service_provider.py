@@ -9,7 +9,7 @@ from models.player_data_service_request import PlayerDataServiceRequest
 from models.player_filters import PlayerFilters
 from client.cache.cache_client import CacheClient
 
-logger = Logger("player_data_service_provider")
+logger = Logger("player-data-service-provider")
 
 
 class PlayerDataServiceProvider:
@@ -26,7 +26,7 @@ class PlayerDataServiceProvider:
         """
         url = ClientUrl("player", "GET")
         request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
-        full_request_url = url.url +request.query_string()
+        full_request_url = url.url + request.query_string()
 
         result, response = self._cache_client.retrieve_response(full_request_url)
 
@@ -48,8 +48,7 @@ class PlayerDataServiceProvider:
             if not result:
                 # If a there was a cache miss then cache the url and response
                 self._cache_client.cache_response(
-                    url=full_request_url,
-                    response=response
+                    url=full_request_url, response=response
                 )
 
         return players

@@ -1,5 +1,5 @@
 from typing import Self, Tuple
-
+import json
 from redis import Redis
 from redis.exceptions import ConnectionError, DataError
 from bin.logger import Logger
@@ -24,11 +24,14 @@ class CacheClient:
         )
         logger.info(f"Connected to cache instance")
 
-    def cache_response(
-        self, url: str, response: PlayerDataServiceResponse
-    ) -> bool:
+    def cache_response(self, url: str, response: PlayerDataServiceResponse) -> bool:
+        response_bytes = json.dumps(response.data).encode("utf-8")
         try:
-            self._client.set(name=url, value=response.data, ex=self._config.ttl)
+            self._client.set(
+                name=url,
+                value=response_bytes,
+                ex=self._config.ttl,
+            )
             logger.info(f"Cached value for {url}: {response.data}")
             return True
         except ConnectionError as e:
@@ -39,17 +42,21 @@ class CacheClient:
             return False
 
     def retrieve_response(
-        self, url: str
+        self, key: str
     ) -> Tuple[bool, PlayerDataServiceResponse | None]:
         try:
-            cached_response = self._client.get(url)
-
+            cached_response = self._client.get(key)
             if cached_response is None:
-                logger.info(f"Cache miss: {url}")
+                logger.info(f"Cache miss: {key}")
                 return (False, None)
 
-            logger.info(f"Cache hit: {url}")
-            return (True, PlayerDataServiceResponse(200, data=cached_response))
+            logger.info(f"Cache hit for {key}: {cached_response}")
+            return (
+                True,
+                PlayerDataServiceResponse(
+                    200, data=json.loads(cached_response.decode("utf-8"))
+                ),
+            )
         except ConnectionError as e:
             logger.error(f"Connection error to cache: {e}")
             return (False, PlayerDataServiceResponse(500, data={"message": f"{e}"}))

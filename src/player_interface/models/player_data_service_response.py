@@ -24,3 +24,7 @@ class PlayerDataServiceResponse:
     @data.setter
     def data(self, new_data: Iterable) -> None:
         self._data = new_data
+
+    @data.setter
+    def data(self, new_data: str) -> None:
+        self._data = self.data_from_string(new_data)

@@ -21,6 +21,10 @@ class PlayerDataServiceClient:
                 params=filters_request.construct_query_parameters(),
                 timeout=filters_request.url.connect_timeout_in_ms,
             )
+
+            if res.status_code != 200:
+                return PlayerDataServiceResponse(res.status_code, {})
+
             return PlayerDataServiceResponse(res.status_code, res.json()["data"])
         except InvalidSchema as e:
             logger.error(e)

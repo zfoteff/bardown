@@ -6,3 +6,9 @@ from fastapi.responses import JSONResponse
 API_VERSION = "v0"
 logger = Logger("statistics-router")
 STATISTICS_ROUTER = APIRouter(prefix=f"/statistics/{API_VERSION}")
+
+# STATISTICS ROUTES
+STATISTICS_ROUTER.add_api_route(
+    path="/statistics",
+    endpoint=
+)
