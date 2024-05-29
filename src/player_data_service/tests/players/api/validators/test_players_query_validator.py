@@ -2,6 +2,7 @@ __version__ = "1.0.0"
 __author__ = "Zac Foteff"
 
 import pytest
+
 from bin.logger import Logger
 from errors.players_errors import PlayerValidationError
 from players.api.validators.players_query_validator import (

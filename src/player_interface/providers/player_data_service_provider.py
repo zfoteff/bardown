@@ -1,13 +1,13 @@
 from logging import Logger
 from typing import List, Self
 
+from client.cache.cache_client import CacheClient
 from client.client_url import ClientUrl
 from client.playerdataservice.player_data_service_client import PlayerDataServiceClient
 from mappers.player_response_mapper import PlayerDataServiceResponseMapper
 from models.player import Player
 from models.player_data_service_request import PlayerDataServiceRequest
 from models.player_filters import PlayerFilters
-from client.cache.cache_client import CacheClient
 
 logger = Logger("player-data-service-provider")
 

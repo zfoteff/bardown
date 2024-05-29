@@ -1,15 +1,16 @@
 __version__ = "0.1.0"
 __author__ = "Zac Foteff"
 
+from fastapi import Request
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+
 from bin.logger import Logger
 from errors.players_errors import (
     PlayerAlreadyExists,
     PlayerDoesNotExist,
     PlayerValidationError,
 )
-from fastapi import Request
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
 from players.api.validators.players_query_validator import (
     validate_get_players_query_parameters,
 )
@@ -33,10 +34,6 @@ class PlayerController:
         """
         try:
             result = db_interface.create_player(player)
-        except PlayerValidationError as err:
-            return JSONResponse(
-                status_code=400, content={"status": 400, "error": f"{err}"}
-            )
         except PlayerAlreadyExists as err:
             return JSONResponse(
                 status_code=409,

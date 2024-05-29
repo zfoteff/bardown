@@ -12,7 +12,7 @@ from errors.coaches_errors import CoachAlreadyExists, CoachDoesNotExist
 from players import COACHES_TABLE_NAME
 from players.models.dao.coach import Coach as CoachDAO
 from players.models.dto.coach import Coach as CoachDTO
-from players.models.dto.coaches_request_filters import CoachesRequestFilters
+from players.models.coaches_request_filters import CoachesRequestFilters
 
 logger = Logger("teams-db-interface")
 

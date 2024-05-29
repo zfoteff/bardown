@@ -2,7 +2,7 @@ import re
 
 from errors.coaches_errors import CoachValidationError
 from players.api.validators import NAME_REGEX_PATTERN, UUID_REGEX_PATTERN
-from players.models.dto.coaches_request_filters import CoachesRequestFilters
+from players.models.coaches_request_filters import CoachesRequestFilters
 
 
 def _order_equals_allowed_value(order: str) -> bool:

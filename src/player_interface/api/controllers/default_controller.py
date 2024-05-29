@@ -20,10 +20,13 @@ class DefaultController:
     async def render_homepage(request: Request) -> HTMLResponse:
         return templates.TemplateResponse("home.html", context={"request": request})
 
-    async def render_stats_page(request: Request) -> HTMLResponse:
+    async def render_game_stats_page(request: Request) -> HTMLResponse:
         return templates.TemplateResponse(
             "statistics.html", context={"request": request}
         )
+
+    async def render_season_stats_page(request: Request) -> HTMLResponse:
+        return templates.TemplateResponse("season_stats_page.html")
 
     async def render_teams_page(request: Request) -> HTMLResponse:
         teams = []

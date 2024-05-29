@@ -12,7 +12,7 @@ from errors.players_errors import PlayerAlreadyExists, PlayerDoesNotExist
 from players import PLAYERS_TABLE_NAME
 from players.models.dao.player import Player as PlayerDAO
 from players.models.dto.player import Player as PlayerDTO
-from players.models.dto.players_request_filters import PlayersRequestFilters
+from players.models.players_request_filters import PlayersRequestFilters
 
 logger = Logger("player-db-interface")
 
@@ -22,11 +22,8 @@ class PlayerDatabaseInterface:
         self.__client = MySQLClient(**PLAYER_TABLE_DB_CONFIG)
         self.__client.open_connection()
 
-    def close_connection(self):
-        self.__client.close_connection()
-
     def _build_query_from_filters(self, filters: PlayersRequestFilters) -> str:
-        query = f"SELECT * FROM players"
+        query = f"SELECT * FROM {PLAYERS_TABLE_NAME}"
 
         if filters.order is not None:
             query += f" ORDER BY {filters.order_by} {filters.order}"
@@ -44,8 +41,18 @@ class PlayerDatabaseInterface:
         new_player_id = str(
             uuid5(namespace=NAMESPACE_OID, name=player.first_name + player.last_name)
         )
+
+        exists, player_id = self.player_exists(
+            first_name=player.first_name, last_name=player.last_name
+        )
+
+        if exists:
+            raise PlayerAlreadyExists(
+                "Player already exists", existing_player_id=player_id
+            )
+
         query = f"""
-            INSERT INTO players 
+            INSERT INTO {PLAYERS_TABLE_NAME} 
             VALUES (
                 "{new_player_id}",
                 {player.number},
@@ -72,7 +79,11 @@ class PlayerDatabaseInterface:
     def update_player(
         self, player_id: str, player: PlayerDTO
     ) -> str | PlayerDoesNotExist:
-        player_id = self.player_exists(player_id)
+        exists, player_id = self.player_exists(player_id)
+
+        if exists is False:
+            raise PlayerDoesNotExist(f"Player does not exist with this id: {player_id}")
+
         query = f"""
             UPDATE {PLAYERS_TABLE_NAME}
             SET number={player.number},
@@ -115,24 +126,32 @@ class PlayerDatabaseInterface:
         return True
 
     def player_exists(
-        self, player_id=None, first_name: str = None, last_name: str = None
-    ) -> str | PlayerDoesNotExist:
+        self, player_id: str = None, first_name: str = None, last_name: str = None
+    ) -> Tuple[bool, str | None]:
+        """Check whether a player exists in the database
+
+        Args:
+            player_id (str, optional): Player id to query database for. Defaults to None.
+            first_name (str, optional): Firstname to query database for. Defaults to None.
+            last_name (str, optional): Lastname to query database for. Defaults to None.
+
+        Returns:
+            Tuple[bool, str | None]: Tuple containing a boolean asserting the player's
+            existance, and the associated player id if applicable
+        """
         query = f"SELECT playerid FROM {PLAYERS_TABLE_NAME} WHERE "
 
         if player_id is None:
             # Perform query with first and last name
             query += f"firstname='{first_name}' AND lastname='{last_name}'"
         else:
+            # Perform query with player id
             query += f"playerid='{player_id}'"
 
         success, player = self.__client.execute_query(query, return_results=True)
 
         if not success or (len(player) == 0 or player is None):
-            raise PlayerDoesNotExist(
-                f"""
-                Player does not exist with these fields: 
-                    player_id: {player_id}, first_name: {first_name}, last_name: {last_name}
-                """
-            )
+            # If no player is found with the provided fields, return false and a null id
+            return False, None
 
-        return player[0][0]
+        return True, player[0][0]

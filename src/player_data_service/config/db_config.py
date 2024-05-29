@@ -1,8 +1,9 @@
 import os
 
 from dotenv import load_dotenv
+
 from players import COACHES_TABLE_NAME, PLAYERS_TABLE_NAME, TEAMS_TABLE_NAME
-from statistics import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
+from stats.__init___ import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
 
 load_dotenv()
 

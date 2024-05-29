@@ -13,7 +13,7 @@ from players import TEAMS_TABLE_NAME
 from players.models.dao.team import Team
 from players.models.dao.team import Team as TeamDAO
 from players.models.dto.team import Team as TeamDTO
-from players.models.dto.teams_request_filters import TeamsRequestFilters
+from players.models.teams_request_filters import TeamsRequestFilters
 
 logger = Logger("teams-db-interface")
 

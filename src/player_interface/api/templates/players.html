@@ -7,11 +7,11 @@
 {% block content %}
     <h2>Players</h2>
     <div class="player-content-card" id="player-filters">
-        <form method="GET" id="player-filters" action="GET">
-            <input type="text" id="firstname" name="First Name" placeholder="First Name" />
-            <input type="text" id="lastname" name="Last Name" placeholder="Last Name" />
-            <input type="text" id="number" name="Number" placeholder="Number" />
-            <input list="grades" id="grade" name="Grade" placeholder="Grade" multiple />
+        <form method="GET" id="player-filters" action="/players">
+            <input type="text" id="firstname" name="filters.firstname" placeholder="First Name" />
+            <input type="text" id="lastname" name="filters.lastname" placeholder="Last Name" />
+            <input type="text" id="number" name="filters.number" placeholder="Number" />
+            <input list="grades" id="grade" name="filters.grade" placeholder="Grade" multiple />
             <datalist id="grades">
                 <option value="Freshman">
                 <option value="Sophomore">

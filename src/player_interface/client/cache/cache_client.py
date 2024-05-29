@@ -1,10 +1,11 @@
-from typing import Self, Tuple
 import json
-from redis import Redis
-from redis.exceptions import ConnectionError, DataError
+from typing import Self, Tuple
+
 from bin.logger import Logger
 from config.cache_config import CacheConfig
 from models.player_data_service_response import PlayerDataServiceResponse
+from redis import Redis
+from redis.exceptions import ConnectionError, DataError
 
 logger = Logger("cache")
 
@@ -22,7 +23,6 @@ class CacheClient:
             retry_on_timeout=False,
             socket_keepalive=True,
         )
-        logger.info(f"Connected to cache instance")
 
     def cache_response(self, url: str, response: PlayerDataServiceResponse) -> bool:
         response_bytes = json.dumps(response.data).encode("utf-8")
@@ -32,7 +32,7 @@ class CacheClient:
                 value=response_bytes,
                 ex=self._config.ttl,
             )
-            logger.info(f"Cached value for {url}: {response.data}")
+            logger.info(f"Cached value for {url}")
             return True
         except ConnectionError as e:
             logger.error(f"Connection error to cache: {e}")
@@ -50,7 +50,7 @@ class CacheClient:
                 logger.info(f"Cache miss: {key}")
                 return (False, None)
 
-            logger.info(f"Cache hit for {key}: {cached_response}")
+            logger.info(f"Cache hit for {key}")
             return (
                 True,
                 PlayerDataServiceResponse(

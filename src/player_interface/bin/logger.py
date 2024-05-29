@@ -4,6 +4,7 @@ Logging helper class
 
 import logging as log
 import os
+import sys
 
 LOG_DIR = str(os.getcwd()) + "/logs/"
 
@@ -26,7 +27,7 @@ def log_setup(logger_name: str, log_file: str, mode: str = "a"):
     formatter = log.Formatter("[%(levelname)s]\t[%(asctime)s] %(message)s")
     file_handler = log.FileHandler(log_file, mode=mode)
     file_handler.setFormatter(formatter)
-    stream_handler = log.StreamHandler()
+    stream_handler = log.StreamHandler(sys.stdout)
 
     #   Create logging object with handlers
     new_log.setLevel(log.DEBUG)
