@@ -6,9 +6,9 @@ from bin.logger import Logger
 from stats.api.controller.statistics_controller import StatisticsController
 
 API_VERSION = "v0"
-logger = Logger("statistics-router")
 STATISTICS_ROUTER = APIRouter(prefix=f"/statistics/{API_VERSION}")
 
+logger = Logger("statistics-router")
 # STATISTICS ROUTES
 STATISTICS_ROUTER.add_api_route(
     path="/statistics/game",
@@ -26,7 +26,5 @@ STATISTICS_ROUTER.add_api_route(
     path="/statistics/game",
     endpoint=StatisticsController.get_game_statistics,
     methods=["GET"],
-    responses = {
-        200: {}
-    }
+    responses={200: {}},
 )

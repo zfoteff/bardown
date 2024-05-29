@@ -12,7 +12,7 @@ from config.db_config import (
 from connectors.mysql import MySQLClient
 from errors.statistics_errors import GameStatisticsAlreadyExist
 from stats.__init___ import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
-from stats.models.dto.statistics import Statistics
+from stats.models.dto.statistics import GameStatistics
 from stats.models.statistics_request_filters import GameStatisticsRequestFilters
 
 logger = Logger("statistics-db-interface")
@@ -48,7 +48,7 @@ class StatisticsDatabaseInterface:
         return query
 
     def create_game_statistic(
-        self, player_id: str, game_id: str, statistics: Statistics
+        self, player_id: str, game_id: str, statistics: GameStatistics
     ) -> bool | GameStatisticsAlreadyExist:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         query = f"""
@@ -69,13 +69,15 @@ class StatisticsDatabaseInterface:
 
         return True
 
-    def get_game_statistics(self, filters: GameStatisticsRequestFilters) -> Tuple[bool, List]:
+    def get_game_statistics(
+        self, filters: GameStatisticsRequestFilters
+    ) -> Tuple[bool, List]:
         query = self._build_query_from_filters(filters)
         success, result = self.__game_client.execute_query(query, return_results=True)
 
         if not success:
             return False, []
-        
+
         game_stats = []
 
         return True, game_stats
