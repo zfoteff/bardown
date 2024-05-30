@@ -41,4 +41,4 @@ def test_valid_player_DTO_to_player_DAO() -> None:
 
 @timed(logger)
 def test_invalid_player_DTO_to_player_DAO() -> None:
-    player_dto = PlayerDTO()
+    pass

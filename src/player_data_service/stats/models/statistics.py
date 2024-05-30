@@ -34,4 +34,8 @@ class Statistics(BaseModel):
     fol: Optional[int] = 0
 
     def __str__(self) -> str:
-        return f"{self.hsh}|{self.msh}|{self.lsh}|{self.hg}|{self.mg}|{self.lg}|{self.a}|{self.gb}|{self.t}|{self.ct}|{self.p}|{self.k}|{self.ms}|{self.hga}|{self.mga}|{self.lga}|{self.hgs}|{self.mgs}|{self.lgs}|{self.fow}|{self.fol}"
+        return (
+            f"{self.hsh}|{self.msh}|{self.lsh}|{self.hg}|{self.mg}|{self.lg}|{self.a}|{self.gb}"
+            + f"|{self.t}|{self.ct}|{self.p}|{self.k}|{self.ms}|{self.hga}|{self.mga}"
+            + f"|{self.lga}|{self.hgs}|{self.mgs}|{self.lgs}|{self.fow}|{self.fol}"
+        )

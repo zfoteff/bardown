@@ -4,7 +4,6 @@ __author__ = "Zac Foteff"
 from typing import List, Self, Tuple
 
 import mysql.connector as mysql
-
 from bin.logger import Logger
 
 logger = Logger("mysql-client")
@@ -30,7 +29,7 @@ class MySQLClient:
                 database=self.__database,
             )
 
-            if self.__cursor == None:
+            if self.__cursor is None:
                 self.__cursor = self.__connection.cursor(buffered=True)
                 logger.log(f"Successfully connected to {self.__table}")
                 return True
@@ -39,7 +38,9 @@ class MySQLClient:
             return True
         except mysql.Error as err:
             logger.error(
-                f"Database error when establishing connection to {self.__table}: {err} . . . Quitting"
+                f"""
+                Database error when establishing connection to {self.__table}: {err} . . . Quitting
+                """
             )
             return False
 
@@ -49,7 +50,7 @@ class MySQLClient:
         try:
             self.__cursor.close()
             self.__connection.close()
-            logger.info(f"Connection closed")
+            logger.info("Connection closed")
             return True
         except mysql.Error as err:
             logger.error(

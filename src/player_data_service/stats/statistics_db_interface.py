@@ -11,7 +11,7 @@ from config.db_config import (
 )
 from connectors.mysql import MySQLClient
 from errors.statistics_errors import GameStatisticsAlreadyExist
-from stats.__init___ import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
+from stats.__init___ import GAME_STATISTICS_TABLE_NAME
 from stats.models.dto.statistics import GameStatistics
 from stats.models.statistics_request_filters import GameStatisticsRequestFilters
 

@@ -37,7 +37,9 @@ def log_setup(logger_name: str, log_file: str, mode: str = "a"):
 
 
 class Logger:
-    """Logger object that allows a user to quickly define a new instance and log results to the file"""
+    """
+    Logger object that allows a user to quickly define a new instance and log results to the file
+    """
 
     def __init__(self, key: str = "none"):
         """Constructor for log object. Takes a name for the file and handles the rest of the

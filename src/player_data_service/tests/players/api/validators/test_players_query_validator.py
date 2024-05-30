@@ -1,8 +1,4 @@
-__version__ = "1.0.0"
-__author__ = "Zac Foteff"
-
 import pytest
-
 from bin.logger import Logger
 from errors.players_errors import PlayerValidationError
 from players.api.validators.players_query_validator import (
@@ -93,7 +89,7 @@ def test_validate_offset() -> None:
     query_params = {"offset": 50}
     filters = validate(query_params)
 
-    assert filters.offset is 50
+    assert filters.offset == 50
 
 
 @timed(logger)
@@ -106,26 +102,10 @@ def test_validate_incorrect_offset() -> None:
 
 @timed(logger)
 def test_validate_incorrect_limit() -> None:
-    query_params = {"limit": 50}
-    filters = validate(query_params)
-
-    assert filters.limit is 50
-
-
-@timed(logger)
-def test_validate_incorrect_limit() -> None:
     query_params = {"limit": -1}
     filters = validate(query_params)
 
-    assert filters.limit is 10
-
-
-@timed(logger)
-def test_validate_incorrect_limit() -> None:
-    query_params = {"limit": -1}
-    filters = validate(query_params)
-
-    assert filters.limit is 10
+    assert filters.limit == 10
 
 
 @timed(logger)

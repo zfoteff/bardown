@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 __author__ = "Zac Foteff"
-__version__ = "v0.0.2"
+__version__ = "0.0.3"
 
 from contextlib import asynccontextmanager
 from logging import Logger
 
+from bin.metadata import servers, tags_metadata
 from fastapi import APIRouter, FastAPI
 from fastapi.responses import JSONResponse
-
-from bin.metadata import servers, tags_metadata
 from players.api.player_router import PLAYER_ROUTER
 from stats.api.statistics_router import STATISTICS_ROUTER
 

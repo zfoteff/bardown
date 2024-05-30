@@ -1,12 +1,10 @@
 __version__ = "0.1.0"
 __author__ = "Zac Foteff"
 
+from bin.logger import Logger
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-
-from bin.logger import Logger
-from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist, TeamValidationError
 from players.models.dto.team import Team
 from players.teams_db_interface import TeamsDatabaseInterface
 

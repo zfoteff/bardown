@@ -38,7 +38,10 @@ class Player:
         return cls(**{k: v for k, v in zip(cls().to_dict().keys(), player_tuple)})
 
     def __str__(self) -> str:
-        return f"{self.number}. {self.last_name}, {self.first_name} [{self.position}] | {self.grade} at {self.school}"
+        return (
+            f"{self.number}. {self.last_name}, {self.first_name} [{self.position}] "
+            + "| {self.grade} at {self.school}"
+        )
 
     def to_dict(self) -> str:
         return {

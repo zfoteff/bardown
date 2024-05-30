@@ -1,8 +1,5 @@
-from fastapi import APIRouter
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
-
 from bin.logger import Logger
+from fastapi import APIRouter
 from stats.api.controller.statistics_controller import StatisticsController
 
 API_VERSION = "v0"

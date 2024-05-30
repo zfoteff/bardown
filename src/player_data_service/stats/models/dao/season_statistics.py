@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from datetime import datetime
-from typing import Self, Tuple
+from typing import Dict, Self, Tuple
 
 
 class SeasonStatistics:

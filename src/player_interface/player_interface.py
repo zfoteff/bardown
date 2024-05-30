@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 __author__ = "Zac Foteff"
-__version__ = "v0.0.2"
+__version__ = "0.0.2"
 
 from contextlib import asynccontextmanager
 

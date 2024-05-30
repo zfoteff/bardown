@@ -35,7 +35,10 @@ class Coach:
         return cls(**{k: v for k, v in zip(cls().to_dict().keys(), coach_tuple)})
 
     def __str__(self) -> str:
-        return f"{self.last_name}, {self.first_name} [{self.role} since {self.since}] | phone: {self.phone_number}, email: {self.email}"
+        return (
+            f"{self.last_name}, {self.first_name} [{self.role} since {self.since}] "
+            + "| phone: {self.phone_number}, email: {self.email}"
+        )
 
     def to_dict(self) -> str:
         return {

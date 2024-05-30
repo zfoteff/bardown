@@ -52,15 +52,15 @@ class PlayerDatabaseInterface:
             )
 
         query = f"""
-            INSERT INTO {PLAYERS_TABLE_NAME} 
+            INSERT INTO {PLAYERS_TABLE_NAME}
             VALUES (
                 "{new_player_id}",
                 {player.number},
-                "{player.first_name}", 
-                "{player.last_name}", 
-                "{player.position}", 
-                "{player.grade}", 
-                "{player.school}", 
+                "{player.first_name}",
+                "{player.last_name}",
+                "{player.position}",
+                "{player.grade}",
+                "{player.school}",
                 "{create_modify_time}",
                 "{create_modify_time}"
             )

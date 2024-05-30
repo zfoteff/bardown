@@ -67,10 +67,10 @@ VALID_GAME_STATISTICS = {
     "mgs": 0,
     "lgs": 0,
     "fow": 1,
-    "fol": 2
+    "fol": 2,
 }
 VALID_GAME_STATISTICS_TUPLE = (
     VALID_UUID_0,
     VALID_UUID_1,
-    "4|5|4|2|0|2|3|2|0|1|1|0|1|0|0|0|0|0|0|1|2"
+    "4|5|4|2|0|2|3|2|0|1|1|0|1|0|0|0|0|0|0|1|2",
 )

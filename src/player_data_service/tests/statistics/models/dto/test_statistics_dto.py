@@ -6,8 +6,8 @@ from stats.models.dto.statistics import GameStatistics
 from tests.bin.decorators.timed import timed
 from tests.constants import VALID_GAME_STATISTICS
 
-
 logger = Logger("test")
+
 
 @timed(logger)
 def test_create_single_statistics_dto_instance() -> None:

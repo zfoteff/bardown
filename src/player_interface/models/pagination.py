@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Self
+from typing import Dict, Optional, Self
 
 
 class Pagination:
@@ -32,8 +32,8 @@ class Pagination:
         return self._offset
 
     @offset.setter
-    def offset(self) -> None:
-        self._offset = self._offset_value(offset)
+    def offset(self, new_offset) -> None:
+        self._offset = self._offset_value(new_offset)
 
     def to_dict(self) -> Dict:
         data = {}
