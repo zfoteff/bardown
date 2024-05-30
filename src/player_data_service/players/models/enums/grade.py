@@ -6,3 +6,4 @@ class Grade(Enum):
     SOPHOMORE = "SO"
     JUNIOR = "JR"
     SENIOR = "SR"
+    GRADUATE = "GD"

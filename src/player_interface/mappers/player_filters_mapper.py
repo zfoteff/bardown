@@ -1,0 +1,26 @@
+from typing import Dict, List
+
+from models.player_filters import PlayerFilters
+
+
+def string_to_list(data: str) -> List[str]:
+    return data.replace(" ", "").split(",")
+
+
+class PlayerFiltersMapper:
+    def form_to_player_filters(form: Dict) -> PlayerFilters:
+        filters = PlayerFilters()
+        if "player_id" in form.keys():
+            filters.player_ids = string_to_list(form["player_id"])
+        if "first_name" in form.keys():
+            filters.first_names = string_to_list(form["first_name"])
+        if "last_name" in form.keys():
+            filters.last_names = string_to_list(form["last_name"])
+        if "number" in form.keys():
+            filters.numbers = string_to_list(form["number"])
+        if "position" in form.keys():
+            filters.positions = string_to_list(form["position"])
+        if "grade" in form.keys():
+            filters.grades = string_to_list(form["grade"])
+
+        return filters

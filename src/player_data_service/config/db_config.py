@@ -1,8 +1,8 @@
 import os
 
 from dotenv import load_dotenv
-
 from players import COACHES_TABLE_NAME, PLAYERS_TABLE_NAME, TEAMS_TABLE_NAME
+from stats.__init___ import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
 
 load_dotenv()
 
@@ -30,5 +30,11 @@ STATISTICS_TABLE_DB_CONFIG = {
     "user": os.environ["MYSQL_USER"],
     "password": os.environ["MYSQL_PASSWORD"],
     "host": os.environ["MYSQL_HOST"],
-    "table": "players",
+    "table": GAME_STATISTICS_TABLE_NAME,
+}
+SEASON_STATISTICS_TABLE_DB_CONFIG = {
+    "user": os.environ["MYSQL_USER"],
+    "password": os.environ["MYSQL_PASSWORD"],
+    "host": os.environ["MYSQL_HOST"],
+    "table": SEASON_STATISTICS_TABLE_NAME,
 }

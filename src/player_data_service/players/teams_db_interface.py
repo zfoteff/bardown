@@ -10,10 +10,9 @@ from config.db_config import TEAMS_TABLE_DB_CONFIG
 from connectors.mysql import MySQLClient
 from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
 from players import TEAMS_TABLE_NAME
-from players.models.dao.team import Team
 from players.models.dao.team import Team as TeamDAO
 from players.models.dto.team import Team as TeamDTO
-from players.models.dto.teams_request_filters import TeamsRequestFilters
+from players.models.teams_request_filters import TeamsRequestFilters
 
 logger = Logger("teams-db-interface")
 
@@ -27,7 +26,7 @@ class TeamsDatabaseInterface:
         self.__client.close_connection()
 
     def _build_query_from_filters(self, filters: TeamsRequestFilters) -> str:
-        query = f"SELECT * FROM players"
+        query = f"SELECT * FROM {TEAMS_TABLE_NAME}"
 
         if filters.order is not None:
             query += f" ORDER BY {filters.order_by} {filters.order}"
@@ -44,7 +43,7 @@ class TeamsDatabaseInterface:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         new_team_id = str(uuid5(namespace=NAMESPACE_OID, name=team.name))
         query = f"""
-            INSERT INTO {TEAMS_TABLE_NAME} 
+            INSERT INTO {TEAMS_TABLE_NAME}
             VALUES (
                 "{new_team_id}",
                 "{team.name}",

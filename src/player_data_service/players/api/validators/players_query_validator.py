@@ -2,8 +2,7 @@ import re
 
 from errors.players_errors import PlayerValidationError
 from players.api.validators import NAME_REGEX_PATTERN, UUID_REGEX_PATTERN
-from players.models.dto.players_request_filters import PlayersRequestFilters
-from players.models.enums.grade import Grade
+from players.models.players_request_filters import PlayersRequestFilters
 
 
 def _order_equals_allowed_value(order: str) -> bool:
@@ -31,7 +30,7 @@ def _name_missing_pair(first_name: str, last_name: str) -> bool:
 
 def _validate_player_id_filter(filters: PlayersRequestFilters, player_id: str) -> None:
     # PlayerID validation, if provided. Must be Non-null str and match UUI4 format
-    if type(player_id) != str:
+    if type(player_id) is not str:
         raise PlayerValidationError("PlayerId must be a string in UUIDv5 format")
 
     regex = re.compile(UUID_REGEX_PATTERN)
@@ -104,7 +103,6 @@ def _validate_offset(filters: PlayersRequestFilters, offset: int) -> None:
 def _validate_ordering_rules(
     filters: PlayersRequestFilters, order: str, order_by: str
 ) -> None:
-    # Ordering rules. Both order direction and order by field must be provided, and match set of accepted values
     if _order_missing_pair(order, order_by):
         if order is None:
             raise PlayerValidationError(

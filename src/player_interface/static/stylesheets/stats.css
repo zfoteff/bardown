@@ -1,24 +1,30 @@
-#stats-table {
+.statistics-content-card {
     margin: auto;
-    width: 90%;
-    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    vertical-align: top;
+    background-color: whitesmoke;
+    border: 1px solid darkslategrey;
+    border-radius: 1rem;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+#stats-table {
+    width: 100%;
 }
 
 .text-field {
-    width: 10em;
+    width: fit-content;
 }
 .num-field {
-    text-align: right;
-    width: 5em;
-}
-
-.num-field p { 
-    margin: 2px;
+    text-align: center;
+    width: 1.5em;
 }
 
 tr {
     border-bottom: 1px solid black;
 }
 tr:nth-child(even) {
-    background-color: whitesmoke;
+    background-color: lightgrey;
 }

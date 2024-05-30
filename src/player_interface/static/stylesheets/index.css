@@ -16,14 +16,26 @@ body {
 
 .content {
     padding: 1em;
-    padding-top: 5em;
-    padding-bottom: 5em;
+    padding-top: 2em;
+    padding-bottom: 2em;
     margin: 0;
     background-color: #F1DABF;
     min-width: 90vw;
     max-width: fit-content;
     border: 5px solid #8a1f1f;
     border-radius: 1rem;
+}
+
+.content-card {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    vertical-align: top;
+    background-color: whitesmoke;
+    border: 1px solid darkslategrey;
+    border-radius: 1rem;
+    padding: 1em;
+    margin-bottom: 1em;
 }
 
 @media (max-width: 800px) {

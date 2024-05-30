@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+{% block title %}Teams{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="../static/stylesheets/teams.css">
+{% endblock %}
+{% block content %}
+    <h2>Teams</h2>
+    <div class="teams-content-card" id="team-filters">
+      <form method="GET" id="team-filters" action="GET">
+        <input type="text" id="name" name="name" placeholder="Team Name">
+      </form>
+    </div>
+    <div class="teams-content-card" id="teams-output">
+      <table id="teams-table">
+        <tbody>
+          <tr>
+            <th>Name</th>
+            <th>Location</th>
+          </tr>
+          {% for team in teams %}
+            <tr>
+              <td class="text-field">{{ team }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+{% endblock %}

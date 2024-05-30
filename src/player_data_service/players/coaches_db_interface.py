@@ -10,9 +10,9 @@ from config.db_config import COACHES_TABLE_DB_CONFIG
 from connectors.mysql import MySQLClient
 from errors.coaches_errors import CoachAlreadyExists, CoachDoesNotExist
 from players import COACHES_TABLE_NAME
+from players.models.coaches_request_filters import CoachesRequestFilters
 from players.models.dao.coach import Coach as CoachDAO
 from players.models.dto.coach import Coach as CoachDTO
-from players.models.dto.coaches_request_filters import CoachesRequestFilters
 
 logger = Logger("teams-db-interface")
 
@@ -45,7 +45,7 @@ class CoachesDatabaseInterface:
             uuid5(namespace=NAMESPACE_OID, name=coach.first_name + coach.last_name)
         )
         query = f"""
-            INSERT INTO {COACHES_TABLE_NAME} 
+            INSERT INTO {COACHES_TABLE_NAME}
             VALUES (
                 "{new_coach_id}",
                 "{coach.first_name}",
@@ -81,7 +81,7 @@ class CoachesDatabaseInterface:
         return True, coaches
 
     def update_coach(self, coach_id: str, coach: CoachDTO) -> str | CoachDoesNotExist:
-        # TODO: Make update evalute only fields that exist in DTO, other fields may be set as null otherwise
+        # TODO: Make update evalute only fields that exist in DTO
         coach_id = self.coach_exists(coach_id)
         query = f"""
             UPDATE {COACHES_TABLE_NAME}

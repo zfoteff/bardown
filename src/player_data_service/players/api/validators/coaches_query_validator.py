@@ -2,7 +2,7 @@ import re
 
 from errors.coaches_errors import CoachValidationError
 from players.api.validators import NAME_REGEX_PATTERN, UUID_REGEX_PATTERN
-from players.models.dto.coaches_request_filters import CoachesRequestFilters
+from players.models.coaches_request_filters import CoachesRequestFilters
 
 
 def _order_equals_allowed_value(order: str) -> bool:
@@ -30,7 +30,7 @@ def _name_missing_pair(first_name: str, last_name: str) -> bool:
 
 def _validate_coach_id_filter(filters: CoachesRequestFilters, coach_id: str) -> None:
     # CoachID validation, if provided. Must be non-null str in UUID5 format
-    if type(coach_id) != str:
+    if type(coach_id) is not str:
         raise CoachValidationError(
             "CoachId must be a string in UUIDv4 format", invalid_fields=list("coach_id")
         )
@@ -80,7 +80,6 @@ def _validate_role_filter(filters: CoachesRequestFilters, role: str) -> None:
 def _validate_ordering_rules(
     filters: CoachesRequestFilters, order: str, order_by: str
 ) -> None:
-    # Ordering rules. Both order direction and order by field must be provided, and match set of accepted values
     if _order_missing_pair(order, order_by):
         if order is None:
             raise CoachValidationError(

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% block head %}
+    <script src="../static/htmx.min.js"></script>
     <link rel="stylesheet" href="../static/stylesheets/index.css"/>
+    {% block head %}
     <title>{% block title %}{% endblock %} | BarDown</title>
     {% endblock %}
 </head>
@@ -12,6 +13,7 @@
         {% block navigation %}
         <div class="nav-content">
             <button onClick="location.href='/';">Home</button>
+            <button onClick="location.href='/teams';">Teams</button>
             <button onClick="location.href='/players';">Players</button>
             <button onClick="location.href='/statistics';">Statistics</button>
         </div>
