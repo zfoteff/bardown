@@ -15,18 +15,46 @@ services:
     expose:
       - "3306"
 
-  player-data-service:
-    image: player-data-service
-    build: ./player-data-service/Dockerfile
+  cache:
+    image: valkey/valkey
+    restart: always
     ports:
-      - "3001:3001"
+      - "6379:6379"
+    expose:
+      - "6379"
     depends_on:
       - db
 
+  # mq:
+  #   image: rabbitmq:latest
+  #   restart: always
+  #   ports: 
+  #     - "15691:15691"
+  #     - "15692:15692"
+  #     - "25672:25672"
+  #     - "4369:4369"
+  #     - "5671:5671"
+  #     - "5672:5672"
+  #   expose:
+  #     - "15691"
+  #     - "15692"
+  #     - "25672"
+  #     - "4369"
+  #     - "5671"
+  #     - "5672"
+
   player-interface:
     image: player-interface
-    build: ./player-interface/Dockerfile
+    build: ./src/player_interface/
     ports:
       - "3000:3000"
     depends_on:
-      - player_data_service
+      - cache 
+
+  player-data-service:
+    image: player-data-service
+    build: ./src/player_data_service/
+    ports:
+      - "3001:3001"
+    depends_on:
+      - player-interface

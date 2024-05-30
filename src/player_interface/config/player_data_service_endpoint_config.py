@@ -6,7 +6,7 @@ from config.endpoint_config import EndpointConfig
 class PlayerDataServiceEndpointConfig(EndpointConfig):
     def __init__(self) -> Self:
         super().__init__(
-            base_url="http://127.0.0.1:3001",
+            base_url="http://0.0.0.0:3001",
             base_path="/",
             api_version="v0",
             app_pathname="players",
