@@ -1,6 +1,3 @@
-__version__ = "1.0.0"
-__author__ = "Zac Foteff"
-
 from datetime import datetime
 from typing import List, Tuple
 
@@ -10,9 +7,10 @@ from config.db_config import (
     STATISTICS_TABLE_DB_CONFIG,
 )
 from connectors.mysql import MySQLClient
-from errors.statistics_errors import GameStatisticsAlreadyExist
+from errors.statistics_errors import GameStatisticsAlreadyExist, GameStatisticsDoNoExist
 from stats.__init___ import GAME_STATISTICS_TABLE_NAME
-from stats.models.dto.statistics import GameStatistics
+from stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
+from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
 from stats.models.statistics_request_filters import GameStatisticsRequestFilters
 
 logger = Logger("statistics-db-interface")
@@ -48,7 +46,7 @@ class StatisticsDatabaseInterface:
         return query
 
     def create_game_statistic(
-        self, player_id: str, game_id: str, statistics: GameStatistics
+        self, player_id: str, game_id: str, statistics: GameStatisticsDTO
     ) -> bool | GameStatisticsAlreadyExist:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         query = f"""
@@ -78,6 +76,12 @@ class StatisticsDatabaseInterface:
         if not success:
             return False, []
 
-        game_stats = []
+        game_stats = [
+            GameStatisticsDAO.from_tuple(game_statistics_tuple=game_statistics_data)
+            for game_statistics_data in result
+        ]
 
         return True, game_stats
+    
+    def update_game_statistics(self, player_id: str, game_statistics: GameStatisticsDTO) -> str | GameStatisticsDoNoExist:
+        exists, id - self._game_statistics_exists

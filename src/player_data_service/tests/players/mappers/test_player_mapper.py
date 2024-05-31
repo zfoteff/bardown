@@ -1,6 +1,3 @@
-__version__ = "1.0.0"
-__author__ = "Zac Foteff"
-
 from bin.logger import Logger
 from players.mappers.player_mapper import (
     player_DAO_to_player_DTO,

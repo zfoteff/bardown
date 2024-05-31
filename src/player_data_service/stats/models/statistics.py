@@ -33,6 +33,10 @@ class Statistics(BaseModel):
     fow: Optional[int] = 0
     fol: Optional[int] = 0
 
+    def statistics_from_string(self, statistics_string: str) -> None:
+        stats = dict(zip(dict(self).keys(), map(int, statistics_string.split("|"))))
+        return Statistics(**stats)
+
     def __str__(self) -> str:
         return (
             f"{self.hsh}|{self.msh}|{self.lsh}|{self.hg}|{self.mg}|{self.lg}|{self.a}|{self.gb}"
