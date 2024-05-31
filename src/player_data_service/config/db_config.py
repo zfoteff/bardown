@@ -13,7 +13,6 @@ PLAYER_TABLE_DB_CONFIG = {
     "host": os.environ["MYSQL_HOST"],
     "table": PLAYERS_TABLE_NAME,
 }
-
 TEAMS_TABLE_DB_CONFIG = {
     "user": os.environ["MYSQL_USER"],
     "password": os.environ["MYSQL_PASSWORD"],
