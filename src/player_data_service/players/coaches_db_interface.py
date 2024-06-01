@@ -14,7 +14,7 @@ from players.models.coaches_request_filters import CoachesRequestFilters
 from players.models.dao.coach import Coach as CoachDAO
 from players.models.dto.coach import Coach as CoachDTO
 
-logger = Logger("teams-db-interface")
+logger = Logger("db")
 
 
 class CoachesDatabaseInterface:

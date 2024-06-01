@@ -1,6 +1,3 @@
-__version__ = "0.1.0"
-__author__ = "Zac Foteff"
-
 from bin.logger import Logger
 from errors.players_errors import (
     PlayerAlreadyExists,

@@ -1,6 +1,3 @@
-__version__ = "1.0.0"
-__author__ = "Zac Foteff"
-
 from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
@@ -14,7 +11,7 @@ from players.models.dao.player import Player as PlayerDAO
 from players.models.dto.player import Player as PlayerDTO
 from players.models.players_request_filters import PlayersRequestFilters
 
-logger = Logger("player-db-interface")
+logger = Logger("db")
 
 
 class PlayerDatabaseInterface:

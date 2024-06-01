@@ -1,10 +1,7 @@
-__version__ = "0.1.0"
-__author__ = "Zac Foteff"
-
 from fastapi import APIRouter
-from players.api.controllers.coach_controller import CoachController
-from players.api.controllers.player_controller import PlayerController
-from players.api.controllers.team_controller import TeamController
+from controllers.coach_controller import CoachController
+from controllers.player_controller import PlayerController
+from controllers.team_controller import TeamController
 
 API_VERSION = "v0"
 PLAYER_ROUTER = APIRouter(prefix=f"/players/{API_VERSION}")

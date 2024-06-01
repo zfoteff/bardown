@@ -13,7 +13,7 @@ from stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
 from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
 from stats.models.statistics_request_filters import GameStatisticsRequestFilters
 
-logger = Logger("statistics-db-interface")
+logger = Logger("db")
 
 
 class StatisticsDatabaseInterface:
