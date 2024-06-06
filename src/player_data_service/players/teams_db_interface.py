@@ -1,6 +1,3 @@
-__version__ = "1.0.0"
-__author__ = "Zac Foteff"
-
 from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
@@ -14,7 +11,7 @@ from players.models.dao.team import Team as TeamDAO
 from players.models.dto.team import Team as TeamDTO
 from players.models.teams_request_filters import TeamsRequestFilters
 
-logger = Logger("teams-db-interface")
+logger = Logger("db")
 
 
 class TeamsDatabaseInterface:

@@ -78,17 +78,27 @@ def _validate_number_filter(filters: PlayersRequestFilters, number: int) -> None
 
 
 def _validate_grade_filter(filters: PlayersRequestFilters, grade: str) -> None:
+    # TODO: Complete grade validation
+    """
+    Grade validation. Should accept full name, or the acronym (e.g. 'senior', 'SR')
+    and should always set the filters with the enumerated value
+    """
     pass
 
 
 def _validate_position_filter(filters: PlayersRequestFilters, position: str) -> None:
+    # TODO: Complete position validations
+    """
+    Position validation. Should accept full name, or the acronym (e.g. 'attack', 'A')
+    and should always set the filters with the enumerated value
+    """
     pass
 
 
 def _validate_limit(filters: PlayersRequestFilters, limit: int) -> None:
     if int(limit) < 0:
         # Limit validation, if provided. Must be a non-null, positive integer
-        filters.limit = 10
+        filters.limit = 25
     else:
         filters.limit = limit
 

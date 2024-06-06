@@ -1,6 +1,3 @@
-__version__ = "0.1.0"
-__author__ = "Zac Foteff"
-
 from fastapi import APIRouter
 from players.api.controllers.coach_controller import CoachController
 from players.api.controllers.player_controller import PlayerController

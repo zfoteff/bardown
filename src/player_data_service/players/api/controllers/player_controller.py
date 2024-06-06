@@ -1,6 +1,3 @@
-__version__ = "0.1.0"
-__author__ = "Zac Foteff"
-
 from bin.logger import Logger
 from errors.players_errors import (
     PlayerAlreadyExists,
@@ -112,8 +109,9 @@ class PlayerController:
             JSONResponse: Updated player object
         """
         try:
-            success = db_interface.update_player(player_id, player)
+            success = db_interface.update_player(player, player_id)
         except PlayerDoesNotExist as err:
+            query = f"SELECT * "
             return JSONResponse(
                 status_code=404, content={"status": 404, "error": f"{err}"}
             )
@@ -125,7 +123,7 @@ class PlayerController:
 
         return JSONResponse(
             status_code=200,
-            content={"status": 200, "data": f"{player.model_dump_json()}"},
+            content={"status": 200, "data": jsonable_encoder(player)},
         )
 
     async def delete_player(player_id: str) -> JSONResponse:

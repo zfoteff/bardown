@@ -13,7 +13,7 @@ from stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
 from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
 from stats.models.statistics_request_filters import GameStatisticsRequestFilters
 
-logger = Logger("statistics-db-interface")
+logger = Logger("db")
 
 
 class StatisticsDatabaseInterface:
@@ -82,6 +82,8 @@ class StatisticsDatabaseInterface:
         ]
 
         return True, game_stats
-    
-    def update_game_statistics(self, player_id: str, game_statistics: GameStatisticsDTO) -> str | GameStatisticsDoNoExist:
+
+    def update_game_statistics(
+        self, player_id: str, game_statistics: GameStatisticsDTO
+    ) -> str | GameStatisticsDoNoExist:
         exists, id - self._game_statistics_exists

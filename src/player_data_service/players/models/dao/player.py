@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Self, Tuple
+from typing import Dict, Self, Tuple
 
 from players.models.enums.grade import Grade
 from players.models.enums.position import Position
@@ -43,10 +43,10 @@ class Player:
             + "| {self.grade} at {self.school}"
         )
 
-    def to_dict(self) -> str:
+    def to_dict(self) -> Dict:
         return {
             "player_id": f"{self.player_id}",
-            "number": {self.number},
+            "number": self.number,
             "first_name": f"{self.first_name}",
             "last_name": f"{self.last_name}",
             "position": self.position,

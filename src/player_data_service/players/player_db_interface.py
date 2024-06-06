@@ -1,6 +1,3 @@
-__version__ = "1.0.0"
-__author__ = "Zac Foteff"
-
 from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
@@ -14,7 +11,7 @@ from players.models.dao.player import Player as PlayerDAO
 from players.models.dto.player import Player as PlayerDTO
 from players.models.players_request_filters import PlayersRequestFilters
 
-logger = Logger("player-db-interface")
+logger = Logger("db")
 
 
 class PlayerDatabaseInterface:
@@ -24,6 +21,9 @@ class PlayerDatabaseInterface:
 
     def _build_query_from_filters(self, filters: PlayersRequestFilters) -> str:
         query = f"SELECT * FROM {PLAYERS_TABLE_NAME}"
+
+        if filters.player_id is not None:
+            query += f" WHERE playerid='{filters.player_id}'"
 
         if filters.order is not None:
             query += f" ORDER BY {filters.order_by} {filters.order}"
@@ -77,8 +77,9 @@ class PlayerDatabaseInterface:
         return True
 
     def update_player(
-        self, player_id: str, player: PlayerDTO
-    ) -> str | PlayerDoesNotExist:
+        self, player: PlayerDTO, player_id: str
+    ) -> bool | PlayerDoesNotExist:
+        # TODO Complete patch to merge existing fields with null fields
         exists, player_id = self.player_exists(player_id)
 
         if exists is False:
@@ -92,7 +93,7 @@ class PlayerDatabaseInterface:
                 position="{player.position}",
                 grade="{player.grade}",
                 school="{player.school}",
-                modified="{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}")
+                modified='{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
             WHERE playerid={player_id}
         """
 
