@@ -109,8 +109,9 @@ class PlayerController:
             JSONResponse: Updated player object
         """
         try:
-            success = db_interface.update_player(player)
+            success = db_interface.update_player(player, player_id)
         except PlayerDoesNotExist as err:
+            query = f"SELECT * "
             return JSONResponse(
                 status_code=404, content={"status": 404, "error": f"{err}"}
             )

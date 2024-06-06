@@ -22,6 +22,9 @@ class GamesDBInterface:
     def _build_query_from_filters(self, filters: GameRequestFilters) -> str:
         query = f"SELECT * FROM {GAMES_TABLE_NAME}"
 
+        if filters.game_id is not None:
+            query += f" WHERE gameid='{filters.game_id}'"
+
         if filters.order is not None:
             query += f" ORDER BY {filters.order_by} {filters.order}"
 
@@ -33,9 +36,30 @@ class GamesDBInterface:
 
         return query
 
+    def _build_update_fields(self, game: GameDTO) -> str:
+        modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        game_dict = {}
+
+        for k, v in dict(game).items():
+            if v is not None:
+                game_dict[k] = v
+
+        update_fields = [f"{k}='{v}'" for k, v in dict(game_dict).items()]
+        update_fields.append(f"modified='{modify_time}'")
+        return ", ".join(update_fields)
+
+    def _build_update_query(self, game: GameDTO, game_id: str) -> str:
+        update_fields = self._build_update_fields(game)
+        query = (
+            f"UPDATE {GAMES_TABLE_NAME} SET {update_fields} WHERE gameid='{game_id}'"
+        )
+        return query
+
     def create_game(self, game: GameDTO) -> bool | GameAlreadyExists:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        new_game_id = str(uuid5(namespace=NAMESPACE_OID, name=str(game.date) + game.title))
+        new_game_id = str(
+            uuid5(namespace=NAMESPACE_OID, name=str(game.date) + game.title)
+        )
 
         exists, game_id = self.game_exists(title=game.title, date=game.date)
 
@@ -76,23 +100,14 @@ class GamesDBInterface:
 
         return True, games
 
-    def update_game(self, game: GameDTO) -> str | GameDoesNotExist:
+    def update_game(self, game: GameDTO, game_id: str) -> str | GameDoesNotExist:
         # TODO Complete patch to merge existing fields with null fields
-        exists, game_id = self.game_exists(game.game_id)
+        exists, game_id = self.game_exists(game_id)
 
         if exists is False:
             raise GameDoesNotExist(f"Game does not exist with this id: {game_id}")
 
-        query = f""" 
-            UPDATE {GAMES_TABLE_NAME}
-            SET title='{game.title}',
-                date='{game.date}',
-                score='{game.score}',
-                location='{game.location}',
-                modfied='{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
-            WHERE gameid={game_id}
-        """
-
+        query = self._build_update_query(game, game_id)
         success, _ = self.__client.execute_query(query, commit_candidate=True)
 
         if not success:

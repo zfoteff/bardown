@@ -22,6 +22,9 @@ class PlayerDatabaseInterface:
     def _build_query_from_filters(self, filters: PlayersRequestFilters) -> str:
         query = f"SELECT * FROM {PLAYERS_TABLE_NAME}"
 
+        if filters.player_id is not None:
+            query += f" WHERE playerid='{filters.player_id}'"
+
         if filters.order is not None:
             query += f" ORDER BY {filters.order_by} {filters.order}"
 
@@ -73,9 +76,11 @@ class PlayerDatabaseInterface:
         player.modified = create_modify_time
         return True
 
-    def update_player(self, player: PlayerDTO) -> bool | PlayerDoesNotExist:
+    def update_player(
+        self, player: PlayerDTO, player_id: str
+    ) -> bool | PlayerDoesNotExist:
         # TODO Complete patch to merge existing fields with null fields
-        exists, player_id = self.player_exists(player.player_id)
+        exists, player_id = self.player_exists(player_id)
 
         if exists is False:
             raise PlayerDoesNotExist(f"Player does not exist with this id: {player_id}")

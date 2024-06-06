@@ -65,9 +65,9 @@ class GameController:
             },
         )
 
-    async def update_game(game: Game) -> JSONResponse:
+    async def update_game(game_id: str, game: Game) -> JSONResponse:
         try:
-            success = db_interface.update_game(game)
+            success = db_interface.update_game(game, game_id)
         except GameDoesNotExist as err:
             return JSONResponse(
                 status_code=404, content={"status": 404, "error": f"{err}"}
