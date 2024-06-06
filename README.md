@@ -1,6 +1,15 @@
-# <center><i>BARDOWN</i></center>
+BARDOWN
+===
+
 ![](https://img.shields.io/github/commit-activity/t/zfoteff/clackamas-lacrosse-application)
-![Python3](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![](https://img.shields.io/github/commits-difference/zfoteff/clackamas-lacrosse-application?base=main&head=develop&color=red)  
+![Python3](https://img.shields.io/badge/Python3.11-3776AB?style=flat&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?logo=fastapi)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1.svg?&logo=mysql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-%23DD0031.svg?logo=redis&logoColor=white)
+![RabbitMQ](https://img.shields.io/badge/Rabbitmq-FF6600?logo=rabbitmq&logoColor=white)
+
+---
 
 ## Overview
 Player management and statistic tracking application designed for the Clackamas Lacrosse program. The application is intended to enable coaches and players to view player profiles, game and season statistics, and team affiliations.
