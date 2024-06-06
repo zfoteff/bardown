@@ -73,10 +73,9 @@ class PlayerDatabaseInterface:
         player.modified = create_modify_time
         return True
 
-    def update_player(
-        self, player_id: str, player: PlayerDTO
-    ) -> str | PlayerDoesNotExist:
-        exists, player_id = self.player_exists(player_id)
+    def update_player(self, player: PlayerDTO) -> bool | PlayerDoesNotExist:
+        # TODO Complete patch to merge existing fields with null fields
+        exists, player_id = self.player_exists(player.player_id)
 
         if exists is False:
             raise PlayerDoesNotExist(f"Player does not exist with this id: {player_id}")
@@ -89,7 +88,7 @@ class PlayerDatabaseInterface:
                 position="{player.position}",
                 grade="{player.grade}",
                 school="{player.school}",
-                modified="{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}")
+                modified='{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
             WHERE playerid={player_id}
         """
 

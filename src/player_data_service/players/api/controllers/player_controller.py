@@ -109,7 +109,7 @@ class PlayerController:
             JSONResponse: Updated player object
         """
         try:
-            success = db_interface.update_player(player_id, player)
+            success = db_interface.update_player(player)
         except PlayerDoesNotExist as err:
             return JSONResponse(
                 status_code=404, content={"status": 404, "error": f"{err}"}
@@ -122,7 +122,7 @@ class PlayerController:
 
         return JSONResponse(
             status_code=200,
-            content={"status": 200, "data": f"{player.model_dump_json()}"},
+            content={"status": 200, "data": jsonable_encoder(player)},
         )
 
     async def delete_player(player_id: str) -> JSONResponse:

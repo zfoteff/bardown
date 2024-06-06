@@ -82,6 +82,8 @@ class StatisticsDatabaseInterface:
         ]
 
         return True, game_stats
-    
-    def update_game_statistics(self, player_id: str, game_statistics: GameStatisticsDTO) -> str | GameStatisticsDoNoExist:
+
+    def update_game_statistics(
+        self, player_id: str, game_statistics: GameStatisticsDTO
+    ) -> str | GameStatisticsDoNoExist:
         exists, id - self._game_statistics_exists
