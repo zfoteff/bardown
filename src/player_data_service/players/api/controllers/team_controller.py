@@ -31,6 +31,4 @@ class TeamController:
 
     @classmethod
     async def delete_team(team_id: str) -> JSONResponse:
-        return JSONResponse(
-            status_code=200, content={"status": 200, "data": {"team_id": team_id}}
-        )
+        return JSONResponse(status_code=200, content={"status": 200, "data": {"team_id": team_id}})

@@ -13,9 +13,7 @@ class StatisticsController:
         player_id: str, game_id: str, statistics: GameStatistics
     ) -> JSONResponse:
         try:
-            result = db_interface.create_game_statistic(
-                player_id, game_id, GameStatistics
-            )
+            result = db_interface.create_game_statistic(player_id, game_id, GameStatistics)
         except StatisticsAlreadyExist as err:
             return JSONResponse(
                 status_code=409,

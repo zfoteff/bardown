@@ -3,7 +3,6 @@ __author__ = "Zac Foteff"
 __version__ = "0.0.3"
 
 from contextlib import asynccontextmanager
-from datetime import time
 from logging import Logger
 
 from bin.metadata import servers, tags_metadata

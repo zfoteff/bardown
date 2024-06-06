@@ -35,23 +35,17 @@ class PlayerDataServiceProvider:
 
         if not result:
             # If url dne in cache, make request to PDS
-            response = await self._player_data_service_client.get_players_by_filters(
-                request
-            )
+            response = await self._player_data_service_client.get_players_by_filters(request)
 
         players = list()
         if response is None or response.status != 200:
             players = []
         else:
-            players = (
-                PlayerDataServiceResponseMapper.player_data_service_response_to_players(
-                    response.data
-                )
+            players = PlayerDataServiceResponseMapper.player_data_service_response_to_players(
+                response.data
             )
             if not result:
                 # If a there was a cache miss then cache the url and response
-                self._cache_client.cache_response(
-                    url=full_request_url, response=response
-                )
+                self._cache_client.cache_response(url=full_request_url, response=response)
 
         return players

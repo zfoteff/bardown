@@ -94,9 +94,7 @@ class TeamsDatabaseInterface:
 
         return True
 
-    def team_exists(
-        self, team_id: str = None, name: str = None
-    ) -> str | TeamDoesNotExist:
+    def team_exists(self, team_id: str = None, name: str = None) -> str | TeamDoesNotExist:
         query = f"SELECT teamid FROM {TEAMS_TABLE_NAME} WHERE "
 
         if team_id is None:

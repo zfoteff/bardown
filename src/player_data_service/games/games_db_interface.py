@@ -50,16 +50,12 @@ class GamesDBInterface:
 
     def _build_update_query(self, game: GameDTO, game_id: str) -> str:
         update_fields = self._build_update_fields(game)
-        query = (
-            f"UPDATE {GAMES_TABLE_NAME} SET {update_fields} WHERE gameid='{game_id}'"
-        )
+        query = f"UPDATE {GAMES_TABLE_NAME} SET {update_fields} WHERE gameid='{game_id}'"
         return query
 
     def create_game(self, game: GameDTO) -> bool | GameAlreadyExists:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        new_game_id = str(
-            uuid5(namespace=NAMESPACE_OID, name=str(game.date) + game.title)
-        )
+        new_game_id = str(uuid5(namespace=NAMESPACE_OID, name=str(game.date) + game.title))
 
         exists, game_id = self.game_exists(title=game.title, date=game.date)
 

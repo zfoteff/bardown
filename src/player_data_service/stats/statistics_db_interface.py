@@ -67,9 +67,7 @@ class StatisticsDatabaseInterface:
 
         return True
 
-    def get_game_statistics(
-        self, filters: GameStatisticsRequestFilters
-    ) -> Tuple[bool, List]:
+    def get_game_statistics(self, filters: GameStatisticsRequestFilters) -> Tuple[bool, List]:
         query = self._build_query_from_filters(filters)
         success, result = self.__game_client.execute_query(query, return_results=True)
 
@@ -86,4 +84,4 @@ class StatisticsDatabaseInterface:
     def update_game_statistics(
         self, player_id: str, game_statistics: GameStatisticsDTO
     ) -> str | GameStatisticsDoNoExist:
-        exists, id - self._game_statistics_exists
+        pass

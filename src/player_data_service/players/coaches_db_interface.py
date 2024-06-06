@@ -41,9 +41,7 @@ class CoachesDatabaseInterface:
 
     def create_coach(self, coach: CoachDTO) -> bool | CoachAlreadyExists:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        new_coach_id = str(
-            uuid5(namespace=NAMESPACE_OID, name=coach.first_name + coach.last_name)
-        )
+        new_coach_id = str(uuid5(namespace=NAMESPACE_OID, name=coach.first_name + coach.last_name))
         query = f"""
             INSERT INTO {COACHES_TABLE_NAME}
             VALUES (
