@@ -31,10 +31,7 @@ class Game:
         return cls(**{k: v for k, v in zip(cls().to_dict().keys(), game_tuple)})
 
     def __str__(self) -> str:
-        return (
-            f"{self.number}. {self.last_name}, {self.first_name} [{self.position}] "
-            + "| {self.grade} at {self.school}"
-        )
+        return f"{self.date} | {self.title}: {self.score}"
 
     def to_dict(self) -> Dict:
         return {

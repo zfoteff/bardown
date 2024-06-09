@@ -1,6 +1,3 @@
-__version__ = "1.0.0"
-__author__ = "Zac Foteff"
-
 from bin.logger import Logger
 from players.models.dto.player import Player
 from tests.bin.decorators.timed import timed
@@ -26,6 +23,7 @@ def test_create_single_player_dto_instance() -> None:
 @timed(logger)
 def test_create_single_player_dto_instance_with_optional_fields() -> None:
     player = Player(
+        player_id=VALID_PLAYER["player_id"],
         number=VALID_PLAYER["number"],
         first_name=VALID_PLAYER["first_name"],
         last_name=VALID_PLAYER["last_name"],
