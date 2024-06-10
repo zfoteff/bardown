@@ -20,4 +20,14 @@ def test_valid_game_DAO_to_game_DTO() -> None:
 
 @timed(logger)
 def test_valid_game_DTO_to_game_DAO() -> None:
-    game_dto = GameDTO()
+    game_dto = GameDTO(
+        game_id=VALID_GAME["game_id"],
+        title=VALID_GAME["title"],
+        date=VALID_GAME["date"],
+        score=VALID_GAME["score"],
+        location=VALID_GAME["location"],
+        created=VALID_GAME["created"],
+        modified=VALID_GAME["modified"],
+    )
+    game_dao = game_DTO_to_game_DAO(game_dto)
+    assert game_dao is not None
