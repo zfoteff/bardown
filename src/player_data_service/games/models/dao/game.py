@@ -10,8 +10,8 @@ class Game:
         date: datetime = None,
         score: str = None,
         location: str = None,
-        created: str = None,
-        modified: str = None,
+        created: datetime = None,
+        modified: datetime = None,
     ) -> Self:
         self.game_id = game_id
         self.title = title
@@ -26,7 +26,7 @@ class Game:
         """Create game from a tuple
 
         Args:
-            player_tuple (Tuple): Tuple containing ordered player data
+            player_tuple (Tuple): Tuple containing ordered game data
         """
         return cls(**{k: v for k, v in zip(cls().to_dict().keys(), game_tuple)})
 
