@@ -82,7 +82,7 @@ class GameController:
         try:
             result = db_interface.delete_game(game_id)
         except GameDoesNotExist as err:
-            return JSONResponse(status_code=404, content={"status": 400, "error": f"{err}"})
+            return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
 
         if not result:
             return JSONResponse(status_code=422, content={"status": 422, "error": "Database error"})

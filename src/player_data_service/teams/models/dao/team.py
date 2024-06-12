@@ -31,9 +31,6 @@ class Team:
         return {
             "team_id": f"{self.team_id}",
             "name": f"{self.name}",
-            "date": f"{self.date}",
-            "score": f"{self.score}",
-            "location": f"{self.location}",
             "created": f"{self.created}",
             "modified": f"{self.modified}",
         }

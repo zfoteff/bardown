@@ -2,14 +2,14 @@ from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
-from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
-from teams.models.dao.team import Team as TeamDAO
-from teams.models.dto.team import Team as TeamDTO
-from teams.models.team_request_filters import TeamRequestFilters
 from bin.logger import Logger
 from config.db_config import TEAMS_TABLE_DB_CONFIG
 from connectors.mysql import MySQLClient
+from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
 from teams import TEAMS_TABLE_NAME
+from teams.models.dao.team import Team as TeamDAO
+from teams.models.dto.team import Team as TeamDTO
+from teams.models.team_request_filters import TeamRequestFilters
 
 logger = Logger("db")
 
@@ -24,6 +24,9 @@ class TeamsDBInterface:
 
         if filters.team_id is not None:
             query += f" WHERE teamid='{filters.team_id}'"
+        
+        if filters.name is not None:
+            query += f" WHERE name='{filters.name}'"
 
         if filters.order is not None:
             query += f" ORDER BY {filters.order_by} {filters.order}"
@@ -50,9 +53,7 @@ class TeamsDBInterface:
 
     def _build_update_query(self, team: TeamDTO, team_id: str) -> str:
         update_fields = self._build_update_fields(team)
-        query = (
-            f"UPDATE {TEAMS_TABLE_NAME} SET {update_fields} WHERE gameid='{team_id}'"
-        )
+        query = f"UPDATE {TEAMS_TABLE_NAME} SET {update_fields} WHERE teamid='{team_id}'"
         return query
 
     def create_team(self, team: TeamDTO) -> bool | TeamAlreadyExists:
@@ -101,7 +102,7 @@ class TeamsDBInterface:
         if exists is False:
             raise TeamDoesNotExist(f"Team does not exists with this id: {team_id}")
 
-        query = self._build_update_fields(team, team_id)
+        query = self._build_update_query(team, team_id)
         success, _ = self.__client.execute_query(query, commit_candidate=True)
 
         if not success:
@@ -109,7 +110,7 @@ class TeamsDBInterface:
 
         return True
 
-    def delete_game(self, team_id: str) -> str | TeamDoesNotExist:
+    def delete_team(self, team_id: str) -> str | TeamDoesNotExist:
         query = f"DELETE FROM {TEAMS_TABLE_NAME} WHERE teamid='{team_id}'"
         success = self.__client.execute_query(query, commit_candidate=True)
 
@@ -118,16 +119,14 @@ class TeamsDBInterface:
 
         return True
 
-    def team_exists(
-        self, team_id: str = None, name: str = None
-    ) -> Tuple[bool, str | None]:
+    def team_exists(self, team_id: str = None, name: str = None) -> Tuple[bool, str | None]:
         query = f"SELECT teamid FROM {TEAMS_TABLE_NAME} WHERE "
 
         if team_id is None:
             # Perform query with title and date
             query += f"name='{name}'"
         else:
-            # Perform query with game id
+            # Perform query with team id
             query += f"teamid='{team_id}'"
 
         success, team = self.__client.execute_query(query, return_results=True)
