@@ -10,5 +10,5 @@ class Game(BaseModel):
     date: Optional[datetime] = None
     score: Optional[str] = None
     location: Optional[str] = None
-    created: Optional[str] = None
-    modified: Optional[str] = None
+    created: Optional[datetime] = None
+    modified: Optional[datetime] = None

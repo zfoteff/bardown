@@ -17,5 +17,5 @@ class TeamDoesNotExist(Exception):
 class TeamAlreadyExists(Exception):
     def __init__(self, message=None, existing_team_id: str = None) -> None:
         self.__message = message
-        self.existing_player_id = existing_team_id
+        self.existing_team_id = existing_team_id
         super().__init__(self.__message)

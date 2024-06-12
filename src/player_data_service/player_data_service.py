@@ -11,6 +11,7 @@ from fastapi.responses import JSONResponse
 from games.api.games_router import GAMES_ROUTER
 from players.api.player_router import PLAYER_ROUTER
 from stats.api.statistics_router import STATISTICS_ROUTER
+from teams.api.teams_router import TEAMS_ROUTER
 
 logger = Logger("player-data-service")
 
@@ -52,6 +53,7 @@ async def lifespan(api: FastAPI):
     api.include_router(PLAYER_ROUTER)
     api.include_router(STATISTICS_ROUTER)
     api.include_router(GAMES_ROUTER)
+    api.include_router(TEAMS_ROUTER)
     yield
     # Shutdown events
 

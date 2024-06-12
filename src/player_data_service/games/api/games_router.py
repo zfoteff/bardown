@@ -64,7 +64,6 @@ GAMES_ROUTER.add_api_route(
                         {
                             "status": 201,
                             "data": {
-                                "game_id": "fb344330-0e2a-4348-9665-9061cae42aab",
                                 "title": "Clackamas JV @ Lakeridge JV",
                                 "date": "2024-06-05 16:02:14.588405",
                                 "score": "17-12",
@@ -92,7 +91,6 @@ GAMES_ROUTER.add_api_route(
                         {
                             "status": 200,
                             "data": {
-                                "game_id": "fb344330-0e2a-4348-9665-9061cae42aab",
                                 "title": "Clackamas JV @ Lakeridge JV",
                                 "date": "2024-06-05 16:02:14.588405",
                                 "score": "17-12",

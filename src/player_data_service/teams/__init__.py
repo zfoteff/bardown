@@ -1,0 +1,1 @@
+TEAMS_TABLE_NAME = "teams"

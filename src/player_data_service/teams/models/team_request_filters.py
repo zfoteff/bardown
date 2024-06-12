@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class TeamsRequestFilters(BaseModel):
+class TeamRequestFilters(BaseModel):
     team_id: Optional[str] = None
     name: Optional[str] = None
     limit: Optional[int] = None

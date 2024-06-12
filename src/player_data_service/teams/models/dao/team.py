@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Self, Tuple
+from typing import Dict, Self, Tuple
 
 
 class Team:
@@ -17,17 +17,17 @@ class Team:
 
     @classmethod
     def from_tuple(cls, team_tuple: Tuple) -> None:
-        """Create player from a tuple
+        """Create team from a tuple
 
         Args:
-            player_tuple (Tuple): Tuple containing ordered player data
+            player_tuple (Tuple): Tuple containing ordered team data
         """
         return cls(**{k: v for k, v in zip(cls().to_dict().keys(), team_tuple)})
 
     def __str__(self) -> str:
-        return f"{self.team_name}"
+        return f"{self.name}"
 
-    def to_dict(self) -> str:
+    def to_dict(self) -> Dict:
         return {
             "team_id": f"{self.team_id}",
             "name": f"{self.name}",

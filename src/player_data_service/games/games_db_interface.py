@@ -97,7 +97,6 @@ class GamesDBInterface:
         return True, games
 
     def update_game(self, game: GameDTO, game_id: str) -> str | GameDoesNotExist:
-        # TODO Complete patch to merge existing fields with null fields
         exists, game_id = self.game_exists(game_id)
 
         if exists is False:
