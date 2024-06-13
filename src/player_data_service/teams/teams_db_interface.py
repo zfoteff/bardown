@@ -24,7 +24,7 @@ class TeamsDBInterface:
 
         if filters.team_id is not None:
             query += f" WHERE teamid='{filters.team_id}'"
-        
+
         if filters.name is not None:
             query += f" WHERE name='{filters.name}'"
 
@@ -70,6 +70,8 @@ class TeamsDBInterface:
             VALUES (
                 "{new_team_id}",
                 "{team.name}",
+                "{team.location}",
+                "{team.imgurl}",
                 "{create_modify_time}",
                 "{create_modify_time}"
             )

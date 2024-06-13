@@ -29,7 +29,7 @@ class PlayerDataServiceRequest:
         self._query_parameters = query_parameters if query_parameters is not None else dict()
         self._request_body = request_body if request_body is not None else dict()
         self._pagination = pagination if pagination is not None else Pagination(limit=40)
-        self._ordering = ordering if ordering is not None else OrderingRules("ASC", "number")
+        self._ordering = ordering if ordering is not None else OrderingRules()
 
     def construct_query_parameters(self) -> Dict:
         return self.query_parameters | self.pagination.to_dict() | self.ordering.to_dict()

@@ -24,6 +24,8 @@ class PlayerDatabaseInterface:
 
         if filters.player_id is not None:
             query += f" WHERE playerid='{filters.player_id}'"
+        elif filters.first_name is not None and filters.last_name is not None:
+            query += f" WHERE firstname='{filters.first_name}' AND lastname='{filters.last_name}'"
 
         if filters.order is not None:
             query += f" ORDER BY {filters.order_by} {filters.order}"
@@ -59,6 +61,7 @@ class PlayerDatabaseInterface:
                 "{player.position}",
                 "{player.grade}",
                 "{player.school}",
+                "{player.imgurl}",
                 "{create_modify_time}",
                 "{create_modify_time}"
             )
@@ -123,17 +126,6 @@ class PlayerDatabaseInterface:
     def player_exists(
         self, player_id: str = None, first_name: str = None, last_name: str = None
     ) -> Tuple[bool, str | None]:
-        """Check whether a player exists in the database
-
-        Args:
-            player_id (str, optional): Player id to query database for. Defaults to None.
-            first_name (str, optional): Firstname to query database for. Defaults to None.
-            last_name (str, optional): Lastname to query database for. Defaults to None.
-
-        Returns:
-            Tuple[bool, str | None]: Tuple containing a boolean asserting the player's
-            existance, and the associated player id if applicable
-        """
         query = f"SELECT playerid FROM {PLAYERS_TABLE_NAME} WHERE "
 
         if player_id is None:

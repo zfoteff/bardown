@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from games.api.controllers.game_controller import GameController
 
 API_VERSION = "v0"
-GAMES_ROUTER = APIRouter(prefix=f"/games/{API_VERSION}")
+GAMES_ROUTER = APIRouter(prefix=f"/players/{API_VERSION}")
 
 # GAME ROUTES
 GAMES_ROUTER.add_api_route(

@@ -15,6 +15,7 @@ class Player:
         position: Position = None,
         grade: Grade = None,
         school: str = None,
+        imgurl: str = None,
         created: datetime = None,
         modified: datetime = None,
     ) -> Self:
@@ -25,6 +26,7 @@ class Player:
         self.position = position
         self.grade = grade
         self.school = school
+        self.imgurl = imgurl
         self.created = created
         self.modified = modified
 
@@ -52,6 +54,7 @@ class Player:
             "position": self.position,
             "grade": self.grade,
             "school": f"{self.school}",
+            "imgurl": f"{self.imgurl}",
             "created": f"{self.created}",
             "modified": f"{self.modified}",
         }

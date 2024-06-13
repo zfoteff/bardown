@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from teams.api.controllers.teams_controller import TeamController
 
 API_VERSION = "v0"
-TEAMS_ROUTER = APIRouter(prefix=f"/teams/{API_VERSION}")
+TEAMS_ROUTER = APIRouter(prefix=f"/players/{API_VERSION}")
 
 # TEAMS ROUTES
 TEAMS_ROUTER.add_api_route(

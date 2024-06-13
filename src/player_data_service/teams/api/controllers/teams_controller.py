@@ -46,7 +46,7 @@ class TeamController:
             result, teams = db_interface.get_team(filters)
         except TeamValidationError as err:
             return JSONResponse(
-                400, content={"status": 400, "error": {"message": f"{err}"}}
+                status_code=400, content={"status": 400, "error": {"message": f"{err}"}}
             )
 
         if not result:
@@ -69,14 +69,10 @@ class TeamController:
         try:
             result = db_interface.update_team(team, team_id)
         except TeamDoesNotExist as err:
-            return JSONResponse(
-                status_code=404, content={"status": 404, "error": f"{err}"}
-            )
+            return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
 
         if not result:
-            return JSONResponse(
-                status_code=400, content={"status": 400, "error": "Database error"}
-            )
+            return JSONResponse(status_code=400, content={"status": 400, "error": "Database error"})
 
         return JSONResponse(
             status_code=200, content={"status": 200, "data": jsonable_encoder(team)}
@@ -89,10 +85,6 @@ class TeamController:
             return JSONResponse(status=404, content={"status": 404, "error": f"{err}"})
 
         if not result:
-            return JSONResponse(
-                status_code=422, content={"status": 422, "error": "Database error"}
-            )
+            return JSONResponse(status_code=422, content={"status": 422, "error": "Database error"})
 
-        return JSONResponse(
-            status_code=200, content={"status": 200, "data": {"team_id": team_id}}
-        )
+        return JSONResponse(status_code=200, content={"status": 200, "data": {"team_id": team_id}})

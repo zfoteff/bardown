@@ -1,21 +1,11 @@
-.teams-content-card {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    vertical-align: top;
-    background-color: whitesmoke;
-    border: 1px solid darkslategrey;
-    border-radius: 1rem;
-    padding: 1em;
-    margin-bottom: 1em;
-}
-
 #teams-filters {
     flex-direction: row;
 }
+
 #teams-table {
     margin: auto;
 }
+
 #teams-filters input {
     width: 8em;
     margin-right: 0.5em;
@@ -27,14 +17,32 @@
 
 .text-field {
     width: fit-content;
+    font-size: 1.25rem;
 }
-.num-field {
+
+.link-field {
     text-align: center;
-    width: 1.5em;
+    width: 10.35rem;
 }
+
+.info-link {
+    text-align: center;
+    color: #6b1313;
+}
+
+.info-link:hover {
+    color: red;
+}
+
+.info-link:active {
+    color: darkslategrey;
+}
+
+
 tr {
     border-bottom: 1px solid black;
 }
+
 tr:nth-child(even) {
     background-color: lightgrey;
 }

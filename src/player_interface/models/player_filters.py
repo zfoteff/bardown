@@ -1,6 +1,3 @@
-__version__ = "0.1.0"
-__author__ = "Zac Foteff"
-
 from typing import Dict, List, Self
 
 
@@ -13,6 +10,10 @@ class PlayerFilters:
         numbers: List[str] = None,
         positions: List[str] = None,
         grades: List[str] = None,
+        limit: int = 40,
+        offset: int = 0,
+        order: str = "ASC",
+        order_by: str = "number",
     ) -> Self:
         self.player_ids = player_ids
         self.first_names = first_names
@@ -20,6 +21,10 @@ class PlayerFilters:
         self.numbers = numbers
         self.positions = positions
         self.grades = grades
+        self.limit = limit
+        self.offset = offset
+        self.order = order
+        self.order_by = order_by
 
     def _should_add_contents_of_list(self, data: List) -> bool:
         return data is not None and len(data) > 0
@@ -39,5 +44,10 @@ class PlayerFilters:
             filters["filter.number"] = str.join(",", self.numbers)
         if self._should_add_contents_of_list(self.grades):
             filters["filter.grade"] = str.join(",", self.grades)
+
+        filters["limit"] = self.limit
+        filters["offset"] = self.offset
+        filters["order"] = self.order
+        filters["orderBy"] = self.order_by
 
         return filters

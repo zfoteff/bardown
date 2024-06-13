@@ -12,6 +12,7 @@ class Coach:
         since: str = None,
         email: str = None,
         phone_number: str = None,
+        imgurl: str = None,
         created: datetime = None,
         modified: datetime = None,
     ) -> Self:
@@ -22,6 +23,7 @@ class Coach:
         self.since = since
         self.email = email
         self.phone_number = phone_number
+        self.imgurl = imgurl
         self.created = created
         self.modified = modified
 
@@ -49,6 +51,7 @@ class Coach:
             "since": f"{self.since}",
             "email": f"{self.email}",
             "phone_number": f"{self.phone_number}",
+            "img_url": f"{self.imgurl}",
             "created": f"{self.created}",
             "modified": f"{self.modified}",
         }

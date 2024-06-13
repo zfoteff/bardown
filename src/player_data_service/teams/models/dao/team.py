@@ -7,11 +7,15 @@ class Team:
         self,
         team_id: str = None,
         name: str = None,
+        location: str = None,
+        imgurl: str = None,
         created: datetime = None,
         modified: datetime = None,
     ) -> Self:
         self.team_id = team_id
         self.name = name
+        self.location = location
+        self.imgurl = imgurl
         self.created = created
         self.modified = modified
 
@@ -31,6 +35,8 @@ class Team:
         return {
             "team_id": f"{self.team_id}",
             "name": f"{self.name}",
+            "location": f"{self.location}",
+            "imgurl": f"{self.imgurl}",
             "created": f"{self.created}",
             "modified": f"{self.modified}",
         }

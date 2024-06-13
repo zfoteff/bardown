@@ -69,3 +69,9 @@ class EndpointConfig:
     @read_timeout_ms.setter
     def read_timeout_ms(self, new_read_timeout_ms: int) -> None:
         self._read_timeout_ms = new_read_timeout_ms
+
+    def compose_path(self) -> str:
+        """
+        Create base path for all requests based on environment configuration
+        """
+        return f"{self.base_url}/{self.app_pathname}/{self.api_version}/"

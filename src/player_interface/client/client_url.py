@@ -1,17 +1,13 @@
 from typing import Self
 
-from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
+from config.player_data_service_endpoint_config import EndpointConfig
 
 
 class ClientUrl:
-    def __init__(
-        self,
-        path: str,
-        method: str,
-    ) -> Self:
+    def __init__(self, path: str, method: str, config: EndpointConfig) -> Self:
         self.__path = path
         self.__method = method
-        self.__config = PlayerDataServiceEndpointConfig()
+        self.__config = config
 
     @property
     def path(self) -> str:

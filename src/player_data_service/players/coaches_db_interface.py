@@ -52,6 +52,7 @@ class CoachesDatabaseInterface:
                 "{coach.since}",
                 "{coach.email}",
                 "{coach.phone_number}",
+                "{coach.imgurl}",
                 "{create_modify_time}",
                 "{create_modify_time}"
             )
@@ -89,6 +90,7 @@ class CoachesDatabaseInterface:
                 since="{coach.since}",
                 email="{coach.email}",
                 phonenumber="{coach.phone_number}",
+                img_url='{coach.img_url}',
                 modified="{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}"
             WHERE coachid={coach_id}
         """
