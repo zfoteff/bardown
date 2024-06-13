@@ -51,7 +51,7 @@ class Coach:
             "since": f"{self.since}",
             "email": f"{self.email}",
             "phone_number": f"{self.phone_number}",
-            "img_url": f"{self.imgurl}",
+            "imgurl": f"{self.imgurl}",
             "created": f"{self.created}",
             "modified": f"{self.modified}",
         }

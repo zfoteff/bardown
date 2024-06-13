@@ -38,6 +38,23 @@ class PlayerDatabaseInterface:
 
         return query
 
+    def _build_update_fields(self, player: PlayerDTO) -> str:
+        modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        player_dict = {}
+
+        for k, v in dict(player).items():
+            if v is not None:
+                player_dict[k.replace("_", "")] = v
+
+        update_fields = [f"{k}='{v}'" for k, v in dict(player_dict).items()]
+        update_fields.append(f"modified='{modify_time}'")
+        return ", ".join(update_fields)
+
+    def _build_update_query(self, player: PlayerDTO, player_id: str) -> str:
+        update_fields = self._build_update_fields(player)
+        query = f"UPDATE {PLAYERS_TABLE_NAME} SET {update_fields} WHERE playerid='{player_id}'"
+        return query
+
     def create_player(self, player: PlayerDTO) -> bool | PlayerAlreadyExists:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         new_player_id = str(
@@ -49,7 +66,9 @@ class PlayerDatabaseInterface:
         )
 
         if exists:
-            raise PlayerAlreadyExists("Player already exists", existing_player_id=player_id)
+            raise PlayerAlreadyExists(
+                "Player already exists", existing_player_id=player_id
+            )
 
         query = f"""
             INSERT INTO {PLAYERS_TABLE_NAME}
@@ -77,25 +96,15 @@ class PlayerDatabaseInterface:
         player.modified = create_modify_time
         return True
 
-    def update_player(self, player: PlayerDTO, player_id: str) -> bool | PlayerDoesNotExist:
-        # TODO Complete patch to merge existing fields with null fields
+    def update_player(
+        self, player: PlayerDTO, player_id: str
+    ) -> bool | PlayerDoesNotExist:
         exists, player_id = self.player_exists(player_id)
 
         if exists is False:
             raise PlayerDoesNotExist(f"Player does not exist with this id: {player_id}")
 
-        query = f"""
-            UPDATE {PLAYERS_TABLE_NAME}
-            SET number={player.number},
-                first_name="{player.first_name}",
-                last_name="{player.last_name}",
-                position="{player.position}",
-                grade="{player.grade}",
-                school="{player.school}",
-                modified='{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
-            WHERE playerid={player_id}
-        """
-
+        query = self._build_update_query(player, player_id)
         success, _ = self.__client.execute_query(query, commit_candidate=True)
 
         if not success:
@@ -110,7 +119,9 @@ class PlayerDatabaseInterface:
         if not success:
             return False, []
 
-        players = [PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result]
+        players = [
+            PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result
+        ]
 
         return True, players
 
