@@ -6,6 +6,8 @@ from client.client_url import ClientUrl
 from client.playerdataservice.player_data_service_client import PlayerDataServiceClient
 from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
 from mappers.player_response_mapper import PlayerDataServiceResponseMapper
+from models.game import Game
+from models.game_filters import GameFilters
 from models.player import Player
 from models.player_data_service_request import PlayerDataServiceRequest
 from models.player_filters import PlayerFilters
@@ -80,3 +82,28 @@ class PlayerDataServiceProvider:
                 self._cache_client.cache_response(url=full_request_url, response=response)
 
         return teams
+
+    async def get_games_by_filters(self, filters: GameFilters) -> List[Game]:
+        url = ClientUrl("game", "GET", config=PlayerDataServiceEndpointConfig())
+        request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
+        full_request_url = url.url + request.query_string()
+
+        result, response = self._cache_client.retrieve_response(
+            full_request_url
+        )
+
+        if not result:
+            response = await self._player_data_service_client.exchange_with_query_parameters(
+                request
+            )
+
+        games = list()
+        if response is None or response.status != 200:
+            games = []
+        else:
+            games = PlayerDataServiceResponseMapper.player_data_service_response_to_games(
+                response.data
+            )
+            if not result:
+                self._cache_client.cache_response(url=full_request_url, response=response)
+        return games

@@ -66,9 +66,7 @@ class PlayerDatabaseInterface:
         )
 
         if exists:
-            raise PlayerAlreadyExists(
-                "Player already exists", existing_player_id=player_id
-            )
+            raise PlayerAlreadyExists("Player already exists", existing_player_id=player_id)
 
         query = f"""
             INSERT INTO {PLAYERS_TABLE_NAME}
@@ -96,9 +94,7 @@ class PlayerDatabaseInterface:
         player.modified = create_modify_time
         return True
 
-    def update_player(
-        self, player: PlayerDTO, player_id: str
-    ) -> bool | PlayerDoesNotExist:
+    def update_player(self, player: PlayerDTO, player_id: str) -> bool | PlayerDoesNotExist:
         exists, player_id = self.player_exists(player_id)
 
         if exists is False:
@@ -119,9 +115,7 @@ class PlayerDatabaseInterface:
         if not success:
             return False, []
 
-        players = [
-            PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result
-        ]
+        players = [PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result]
 
         return True, players
 

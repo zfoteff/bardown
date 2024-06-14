@@ -3,6 +3,7 @@ from typing import Self
 from fastapi import Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from mappers.game_filters_mapper import GameFiltersMapper
 from mappers.player_filters_mapper import PlayerFiltersMapper
 from mappers.team_filters_mapper import TeamFiltersMapper
 from providers.player_data_service_provider import PlayerDataServiceProvider
@@ -19,7 +20,11 @@ class DefaultController:
         return templates.TemplateResponse("home.html", context={"request": request})
 
     async def render_game_page(request: Request) -> HTMLResponse:
-        return templates.TemplateResponse("games.html", context={"request": request, "games": []})
+        filters = GameFiltersMapper.form_to_game_filters({})
+        games = await player_data_service_provider.get_games_by_filters(filters)
+        return templates.TemplateResponse(
+            "games.html", context={"request": request, "games": games}
+        )
 
     async def render_game_stats_page(request: Request) -> HTMLResponse:
         return templates.TemplateResponse("statistics.html", context={"request": request})

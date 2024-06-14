@@ -11,13 +11,7 @@ class Team:
     _modified: datetime
 
     def __init__(
-        self,
-        team_id: str,
-        name: str,
-        location: str,
-        imgurl: str,
-        created: str,
-        modified: str
+        self, team_id: str, name: str, location: str, imgurl: str, created: str, modified: str
     ) -> Self:
         self._team_id = team_id
         self._name = name
@@ -33,11 +27,11 @@ class Team:
     @property
     def name(self) -> str:
         return self._name
-    
+
     @property
     def location(self) -> str:
         return self._location
-    
+
     @property
     def img_url(self) -> str:
         return self._img_url

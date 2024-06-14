@@ -68,7 +68,7 @@ class Player:
     @property
     def school(self) -> str:
         return self._school
-    
+
     @property
     def img_url(self) -> str:
         return self._img_url
