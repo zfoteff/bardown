@@ -1,12 +1,11 @@
-__version__ = "0.1.0"
-__author__ = "Zac Foteff"
-
 from typing import Self
 
 from fastapi import Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from mappers.game_filters_mapper import GameFiltersMapper
 from mappers.player_filters_mapper import PlayerFiltersMapper
+from mappers.team_filters_mapper import TeamFiltersMapper
 from providers.player_data_service_provider import PlayerDataServiceProvider
 
 templates = Jinja2Templates(directory="api/templates")
@@ -20,16 +19,22 @@ class DefaultController:
     async def render_homepage(request: Request) -> HTMLResponse:
         return templates.TemplateResponse("home.html", context={"request": request})
 
-    async def render_game_stats_page(request: Request) -> HTMLResponse:
+    async def render_game_page(request: Request) -> HTMLResponse:
+        filters = GameFiltersMapper.form_to_game_filters({})
+        games = await player_data_service_provider.get_games_by_filters(filters)
         return templates.TemplateResponse(
-            "statistics.html", context={"request": request}
+            "games.html", context={"request": request, "games": games}
         )
+
+    async def render_game_stats_page(request: Request) -> HTMLResponse:
+        return templates.TemplateResponse("statistics.html", context={"request": request})
 
     async def render_season_stats_page(request: Request) -> HTMLResponse:
         return templates.TemplateResponse("season_stats_page.html")
 
     async def render_teams_page(request: Request) -> HTMLResponse:
-        teams = []
+        filters = TeamFiltersMapper.form_to_team_filters({})
+        teams = await player_data_service_provider.get_teams_by_filters(filters)
         return templates.TemplateResponse(
             "teams.html", context={"request": request, "teams": teams}
         )

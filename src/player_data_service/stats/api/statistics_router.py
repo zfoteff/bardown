@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from stats.api.controller.statistics_controller import StatisticsController
 
 API_VERSION = "v0"
-STATISTICS_ROUTER = APIRouter(prefix=f"/statistics/{API_VERSION}")
+STATISTICS_ROUTER = APIRouter(prefix=f"/players/{API_VERSION}")
 
 logger = Logger("statistics-router")
 # STATISTICS ROUTES

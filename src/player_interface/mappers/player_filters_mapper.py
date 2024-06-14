@@ -23,4 +23,8 @@ class PlayerFiltersMapper:
         if "grade" in form.keys():
             filters.grades = string_to_list(form["grade"])
 
+        filters.limit = 40
+        filters.order = "ASC"
+        filters.order_by = "number"
+
         return filters

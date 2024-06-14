@@ -12,5 +12,6 @@ class Player(BaseModel):
     position: Optional[str] = None
     grade: Optional[str] = None
     school: Optional[str] = None
+    imgurl: Optional[str] = None
     created: Optional[datetime] = None
     modified: Optional[datetime] = None

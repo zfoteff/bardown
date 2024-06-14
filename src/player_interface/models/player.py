@@ -1,6 +1,3 @@
-__version__ = "0.1.0"
-__author__ = "Zac Foteff"
-
 from datetime import datetime
 from typing import Self
 
@@ -16,6 +13,7 @@ class Player:
     _position: Position
     _grade: Grade
     _school: str
+    _img_url: str
     _created: datetime
     _modified: datetime
 
@@ -28,6 +26,7 @@ class Player:
         position: str,
         grade: str,
         school: str,
+        imgurl: str,
         created: str,
         modified: str,
     ) -> Self:
@@ -38,6 +37,7 @@ class Player:
         self._position = Position(position)
         self._grade = Grade(grade)
         self._school = school
+        self._img_url = imgurl
         self._created = datetime.fromisoformat(created)
         self._modified = datetime.fromisoformat(modified)
 
@@ -68,6 +68,10 @@ class Player:
     @property
     def school(self) -> str:
         return self._school
+
+    @property
+    def img_url(self) -> str:
+        return self._img_url
 
     @property
     def created(self) -> str:

@@ -12,5 +12,6 @@ class Coach(BaseModel):
     since: Optional[int] = None
     email: Optional[str] = None
     phone_number: Optional[str] = None
+    imgurl: Optional[str] = None
     created: Optional[datetime] = None
     modified: Optional[datetime] = None

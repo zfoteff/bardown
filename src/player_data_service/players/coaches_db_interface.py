@@ -14,7 +14,7 @@ from players.models.coaches_request_filters import CoachesRequestFilters
 from players.models.dao.coach import Coach as CoachDAO
 from players.models.dto.coach import Coach as CoachDTO
 
-logger = Logger("teams-db-interface")
+logger = Logger("db")
 
 
 class CoachesDatabaseInterface:
@@ -27,6 +27,9 @@ class CoachesDatabaseInterface:
 
     def _build_query_from_filters(self, filters: CoachesRequestFilters) -> str:
         query = f"SELECT * FROM {COACHES_TABLE_NAME}"
+
+        if filters.coach_id is not None:
+            query += f" WHERE coachid='{filters.coach_id}'"
 
         if filters.order is not None:
             query += f" ORDER BY {filters.order_by} {filters.order}"
@@ -41,9 +44,7 @@ class CoachesDatabaseInterface:
 
     def create_coach(self, coach: CoachDTO) -> bool | CoachAlreadyExists:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        new_coach_id = str(
-            uuid5(namespace=NAMESPACE_OID, name=coach.first_name + coach.last_name)
-        )
+        new_coach_id = str(uuid5(namespace=NAMESPACE_OID, name=coach.first_name + coach.last_name))
         query = f"""
             INSERT INTO {COACHES_TABLE_NAME}
             VALUES (
@@ -54,6 +55,7 @@ class CoachesDatabaseInterface:
                 "{coach.since}",
                 "{coach.email}",
                 "{coach.phone_number}",
+                "{coach.imgurl}",
                 "{create_modify_time}",
                 "{create_modify_time}"
             )
@@ -91,6 +93,7 @@ class CoachesDatabaseInterface:
                 since="{coach.since}",
                 email="{coach.email}",
                 phonenumber="{coach.phone_number}",
+                img_url='{coach.img_url}',
                 modified="{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}"
             WHERE coachid={coach_id}
         """

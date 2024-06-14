@@ -1,0 +1,25 @@
+#games-table {
+    margin: auto;
+}
+#games-filters input {
+    width: 8em;
+    margin-right: 0.5em;
+}
+
+#games-table {
+    width: 100%;
+}
+
+.text-field {
+    width: fit-content;
+}
+.num-field {
+    text-align: center;
+    width: 1.5em;
+}
+tr {
+    border-bottom: 1px solid black;
+}
+tr:nth-child(even) {
+    background-color: lightgrey;
+}

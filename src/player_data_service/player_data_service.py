@@ -8,8 +8,10 @@ from logging import Logger
 from bin.metadata import servers, tags_metadata
 from fastapi import APIRouter, FastAPI
 from fastapi.responses import JSONResponse
+from games.api.games_router import GAMES_ROUTER
 from players.api.player_router import PLAYER_ROUTER
 from stats.api.statistics_router import STATISTICS_ROUTER
+from teams.api.teams_router import TEAMS_ROUTER
 
 logger = Logger("player-data-service")
 
@@ -36,7 +38,7 @@ default_router.add_api_route(
             "description": "Service is running as expected",
             "content": {
                 "application/json": {
-                    "example": [{"status": 200, "response": "Running"}],
+                    "example": [{"status": "UP", "timestamp": 17000000}],
                 }
             },
         }
@@ -50,6 +52,8 @@ async def lifespan(api: FastAPI):
     api.include_router(default_router)
     api.include_router(PLAYER_ROUTER)
     api.include_router(STATISTICS_ROUTER)
+    api.include_router(GAMES_ROUTER)
+    api.include_router(TEAMS_ROUTER)
     yield
     # Shutdown events
 

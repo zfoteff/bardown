@@ -39,3 +39,11 @@ PLAYER_INTERFACE_ROUTER.add_api_route(
     methods=["GET"],
     response_class=HTMLResponse,
 )
+
+PLAYER_INTERFACE_ROUTER.add_api_route(
+    path="/games",
+    endpoint=DefaultController.render_game_page,
+    description="Render games page",
+    methods=["GET"],
+    response_class=HTMLResponse,
+)

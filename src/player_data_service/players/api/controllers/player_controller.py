@@ -1,6 +1,3 @@
-__version__ = "0.1.0"
-__author__ = "Zac Foteff"
-
 from bin.logger import Logger
 from errors.players_errors import (
     PlayerAlreadyExists,
@@ -94,10 +91,7 @@ class PlayerController:
                 "status": 200,
                 "data": []
                 if (players == []) or (players is None)
-                else [
-                    jsonable_encoder(player_DAO_to_player_DTO(player))
-                    for player in players
-                ],
+                else [jsonable_encoder(player_DAO_to_player_DTO(player)) for player in players],
             },
         )
 
@@ -112,20 +106,16 @@ class PlayerController:
             JSONResponse: Updated player object
         """
         try:
-            success = db_interface.update_player(player_id, player)
+            success = db_interface.update_player(player, player_id)
         except PlayerDoesNotExist as err:
-            return JSONResponse(
-                status_code=404, content={"status": 404, "error": f"{err}"}
-            )
+            return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
 
         if not success:
-            return JSONResponse(
-                status_code=400, content={"status": 400, "error": "Database error"}
-            )
+            return JSONResponse(status_code=400, content={"status": 400, "error": "Database error"})
 
         return JSONResponse(
             status_code=200,
-            content={"status": 200, "data": f"{player.model_dump_json()}"},
+            content={"status": 200, "data": jsonable_encoder(player)},
         )
 
     async def delete_player(player_id: str) -> JSONResponse:
@@ -140,14 +130,10 @@ class PlayerController:
         try:
             result = db_interface.delete_players(player_id)
         except PlayerDoesNotExist as err:
-            return JSONResponse(
-                status_code=404, content={"status": 404, "error": f"{err}"}
-            )
+            return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
 
         if not result:
-            return JSONResponse(
-                status_code=422, content={"status": 422, "error": "Database error"}
-            )
+            return JSONResponse(status_code=422, content={"status": 422, "error": "Database error"})
 
         return JSONResponse(
             status_code=200, content={"status": 200, "data": {"player_id": player_id}}

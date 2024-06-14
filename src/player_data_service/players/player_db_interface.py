@@ -1,6 +1,3 @@
-__version__ = "1.0.0"
-__author__ = "Zac Foteff"
-
 from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
@@ -14,7 +11,7 @@ from players.models.dao.player import Player as PlayerDAO
 from players.models.dto.player import Player as PlayerDTO
 from players.models.players_request_filters import PlayersRequestFilters
 
-logger = Logger("player-db-interface")
+logger = Logger("db")
 
 
 class PlayerDatabaseInterface:
@@ -25,6 +22,11 @@ class PlayerDatabaseInterface:
     def _build_query_from_filters(self, filters: PlayersRequestFilters) -> str:
         query = f"SELECT * FROM {PLAYERS_TABLE_NAME}"
 
+        if filters.player_id is not None:
+            query += f" WHERE playerid='{filters.player_id}'"
+        elif filters.first_name is not None and filters.last_name is not None:
+            query += f" WHERE firstname='{filters.first_name}' AND lastname='{filters.last_name}'"
+
         if filters.order is not None:
             query += f" ORDER BY {filters.order_by} {filters.order}"
 
@@ -34,6 +36,23 @@ class PlayerDatabaseInterface:
         if filters.offset is not None:
             query += f" OFFSET {filters.offset}"
 
+        return query
+
+    def _build_update_fields(self, player: PlayerDTO) -> str:
+        modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        player_dict = {}
+
+        for k, v in dict(player).items():
+            if v is not None:
+                player_dict[k.replace("_", "")] = v
+
+        update_fields = [f"{k}='{v}'" for k, v in dict(player_dict).items()]
+        update_fields.append(f"modified='{modify_time}'")
+        return ", ".join(update_fields)
+
+    def _build_update_query(self, player: PlayerDTO, player_id: str) -> str:
+        update_fields = self._build_update_fields(player)
+        query = f"UPDATE {PLAYERS_TABLE_NAME} SET {update_fields} WHERE playerid='{player_id}'"
         return query
 
     def create_player(self, player: PlayerDTO) -> bool | PlayerAlreadyExists:
@@ -47,9 +66,7 @@ class PlayerDatabaseInterface:
         )
 
         if exists:
-            raise PlayerAlreadyExists(
-                "Player already exists", existing_player_id=player_id
-            )
+            raise PlayerAlreadyExists("Player already exists", existing_player_id=player_id)
 
         query = f"""
             INSERT INTO {PLAYERS_TABLE_NAME}
@@ -61,6 +78,7 @@ class PlayerDatabaseInterface:
                 "{player.position}",
                 "{player.grade}",
                 "{player.school}",
+                "{player.imgurl}",
                 "{create_modify_time}",
                 "{create_modify_time}"
             )
@@ -76,26 +94,13 @@ class PlayerDatabaseInterface:
         player.modified = create_modify_time
         return True
 
-    def update_player(
-        self, player_id: str, player: PlayerDTO
-    ) -> str | PlayerDoesNotExist:
+    def update_player(self, player: PlayerDTO, player_id: str) -> bool | PlayerDoesNotExist:
         exists, player_id = self.player_exists(player_id)
 
         if exists is False:
             raise PlayerDoesNotExist(f"Player does not exist with this id: {player_id}")
 
-        query = f"""
-            UPDATE {PLAYERS_TABLE_NAME}
-            SET number={player.number},
-                first_name="{player.first_name}",
-                last_name="{player.last_name}",
-                position="{player.position}",
-                grade="{player.grade}",
-                school="{player.school}",
-                modified="{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}")
-            WHERE playerid={player_id}
-        """
-
+        query = self._build_update_query(player, player_id)
         success, _ = self.__client.execute_query(query, commit_candidate=True)
 
         if not success:
@@ -110,9 +115,7 @@ class PlayerDatabaseInterface:
         if not success:
             return False, []
 
-        players = [
-            PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result
-        ]
+        players = [PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result]
 
         return True, players
 
@@ -128,17 +131,6 @@ class PlayerDatabaseInterface:
     def player_exists(
         self, player_id: str = None, first_name: str = None, last_name: str = None
     ) -> Tuple[bool, str | None]:
-        """Check whether a player exists in the database
-
-        Args:
-            player_id (str, optional): Player id to query database for. Defaults to None.
-            first_name (str, optional): Firstname to query database for. Defaults to None.
-            last_name (str, optional): Lastname to query database for. Defaults to None.
-
-        Returns:
-            Tuple[bool, str | None]: Tuple containing a boolean asserting the player's
-            existance, and the associated player id if applicable
-        """
         query = f"SELECT playerid FROM {PLAYERS_TABLE_NAME} WHERE "
 
         if player_id is None:

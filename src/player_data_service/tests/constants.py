@@ -46,6 +46,24 @@ VALID_COACH_TUPLE = (
     "2024-04-16 09:25:37",
     "2024-04-16 09:25:37",
 )
+VALID_GAME = {
+    "game_id": VALID_UUID_0,
+    "title": "team1 @ team2",
+    "date": "2024-04-16 09:25:37",
+    "score": "1-2",
+    "location": "team1 school",
+    "created": "2024-04-16 09:25:37",
+    "modified": "2024-04-16 09:25:37",
+}
+VALID_GAME_TUPLE = (
+    VALID_UUID_0,
+    "team1 @ team2",
+    "2024-04-16 09:25:37",
+    "1-2",
+    "team1 school",
+    "2024-04-16 09:25:37",
+    "2024-04-16 09:25:37",
+)
 VALID_GAME_STATISTICS = {
     "hsh": 4,
     "msh": 5,
@@ -69,8 +87,9 @@ VALID_GAME_STATISTICS = {
     "fow": 1,
     "fol": 2,
 }
+VALID_GAME_STATISTICS_STRING = "4|5|4|2|0|2|3|2|0|1|1|0|1|0|0|0|0|0|0|1|2"
 VALID_GAME_STATISTICS_TUPLE = (
     VALID_UUID_0,
     VALID_UUID_1,
-    "4|5|4|2|0|2|3|2|0|1|1|0|1|0|0|0|0|0|0|1|2",
+    VALID_GAME_STATISTICS_STRING,
 )

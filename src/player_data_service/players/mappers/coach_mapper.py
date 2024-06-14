@@ -15,6 +15,7 @@ def coach_DAO_to_coach_DTO(coach_dao: CoachDAO) -> CoachDTO:
         since=coach_dao.since,
         email=coach_dao.email,
         phone_number=coach_dao.phone_number,
+        imgurl=coach_dao.imgurl,
         created=coach_dao.created,
         modified=coach_dao.modified,
     )

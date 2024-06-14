@@ -17,6 +17,7 @@ def player_DAO_to_player_DTO(player_dao: PlayerDAO) -> PlayerDTO:
         position=Position(player_dao.position),
         grade=Grade(player_dao.grade),
         school=player_dao.school,
+        imgurl=player_dao.imgurl,
         created=player_dao.created,
         modified=player_dao.modified,
     )
