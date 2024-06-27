@@ -1,6 +1,3 @@
-__version__ = "0.1.0"
-__author__ = "Zac Foteff"
-
 from api.controllers.default_controller import DefaultController
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
