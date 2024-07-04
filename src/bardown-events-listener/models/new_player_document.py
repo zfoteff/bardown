@@ -1,5 +1,6 @@
-from datetime import datetime
 from typing import Optional, List
+from models.enums.grade import Grade
+from models.enums.position import Position
 
 from models.document import Document
 
