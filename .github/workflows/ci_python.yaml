@@ -10,6 +10,11 @@ on:
         description: "Space-separated list of packages to install using apt-get."
         default: ""
         type: string
+      image_name:
+        description: "Name of the image to be published"
+
+env:
+  REGISTRY: ghcr.io
 
 jobs:
   build:
@@ -22,7 +27,7 @@ jobs:
     
     steps:
       - name: Checkout project
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -43,16 +48,40 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Test Player Data Service
+      - name: Test Python service
         run: |
           python3 -m pytest tests/
-        
-  # publish:
-  #   timeout-minutes: 10
-  #   runs-on: ubuntu-22.04
-  #   needs: 
-  #     - build
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Publish Player Interface
-  #       run: pwd    
+
+  containerize:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+
+  
+  publish:
+    timeout-minutes: 10
+    runs-on: ubuntu-22.04
+    needs:
+      - build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log into Container registry
+        users: docker/login-action
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: $${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate metadata for Docker
+        id: metadata
+        uses: docker/metadata-action
+        with:
+          images: ${{ env.REGISTRY }}/${{ inputs.image_name }}
+
+      - name: Push Docker Image
+        id: push
+        uses: docker/build-push-action
+
+
+      - name: Publish Player Interface
+        run: pwd
