@@ -3,7 +3,7 @@ name: Python CI
 on:
   workflow_call:
     inputs:
-      working-dir:
+      working_dir:
         required: true
         type: string
       install-packages:
@@ -12,6 +12,10 @@ on:
         type: string
       image_name:
         description: "Name of the image to be published"
+        type: string
+      image_tag:
+        description: "Version tag to apply to the image"
+        type: string
 
 env:
   REGISTRY: ghcr.io
@@ -81,7 +85,8 @@ jobs:
       - name: Push Docker Image
         id: push
         uses: docker/build-push-action
-
-
-      - name: Publish Player Interface
-        run: pwd
+        with:
+          context: .
+          file: ${{ inputs.working_dir }}/dockerfile
+          push: true
+          tags: ${{ inputs.tags }}
