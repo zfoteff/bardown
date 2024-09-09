@@ -5,12 +5,12 @@ from models.enums.grade import Grade
 from models.enums.position import Position
 
 
-class NewPlayerDocument(Document):
+class NewCoachDocument(Document):
     first_name: str
-    last_name: int
-    number: int
-    position: Position
-    grade: Grade
-    school: str
+    last_name: str
+    role: str
+    since: str
+    email: str
+    phone_number: str
     imgurl: Optional[str] = ""
     teams: Optional[List[str]] = []

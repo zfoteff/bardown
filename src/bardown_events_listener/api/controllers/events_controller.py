@@ -1,7 +1,7 @@
 from bin.logger import Logger
-from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
 from event_service import EventService
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 from models.new_player_document import NewPlayerDocument
 
 logger = Logger("bardown-events-listener")
@@ -11,6 +11,7 @@ event_service = EventService()
 class EventsController:
     async def create_new_player_event(self, new_player_event: NewPlayerDocument) -> JSONResponse:
         try:
+            event = event
             result = event_service.create_new_player_event(new_player_event)
         except Exception as err:
             return JSONResponse(

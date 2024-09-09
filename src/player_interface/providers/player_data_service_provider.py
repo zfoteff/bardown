@@ -88,9 +88,7 @@ class PlayerDataServiceProvider:
         request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
         full_request_url = url.url + request.query_string()
 
-        result, response = self._cache_client.retrieve_response(
-            full_request_url
-        )
+        result, response = self._cache_client.retrieve_response(full_request_url)
 
         if not result:
             response = await self._player_data_service_client.exchange_with_query_parameters(
