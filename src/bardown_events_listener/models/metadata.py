@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from models.enums.event_types import EventType
 from pydantic import BaseModel
 
 
