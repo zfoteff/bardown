@@ -39,9 +39,12 @@ class DefaultController:
             "teams.html", context={"request": request, "teams": teams}
         )
 
-    async def render_player_page(request: Request) -> HTMLResponse:
-        filters = PlayerFiltersMapper.form_to_player_filters({})
+    async def render_players_page(request: Request) -> HTMLResponse:
+        filters = PlayerFiltersMapper.form_to_players_filters({})
         players = await player_data_service_provider.get_players_by_filters(filters)
         return templates.TemplateResponse(
             "players.html", context={"request": request, "players": players}
         )
+
+    async def render_player_page(request: Request) -> HTMLResponse:
+        players = await player_data_service_provider.get_player_by_filters(filters)

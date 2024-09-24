@@ -1,0 +1,9 @@
+{% extends "index.html" %}
+{% block title %}Player Name{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="../static/stylesheets/player.css"/>
+{% endblock %}
+{% block content %}
+    <h2>{{ player.name || "Playername"}}</h2>
+{% endblock %}

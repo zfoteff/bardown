@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from models.player_filters import PlayerFilters
+from models.player_filters import PlayersFilters
 
 
 def string_to_list(data: str) -> List[str]:
@@ -8,8 +8,8 @@ def string_to_list(data: str) -> List[str]:
 
 
 class PlayerFiltersMapper:
-    def form_to_player_filters(form: Dict) -> PlayerFilters:
-        filters = PlayerFilters()
+    def form_to_players_filters(form: Dict) -> PlayersFilters:
+        filters = PlayersFilters()
         if "player_id" in form.keys():
             filters.player_ids = string_to_list(form["player_id"])
         if "first_name" in form.keys():

@@ -2,7 +2,7 @@ __version__ = "1.0.0"
 __author__ = "Zac Foteff"
 
 from bin.logger import Logger
-from models.player_filters import PlayerFilters
+from models.player_filters import PlayersFilters
 from tests.bin.decorators.timed import timed
 
 logger = Logger("test")
@@ -10,7 +10,7 @@ logger = Logger("test")
 
 @timed(logger)
 def test_create_empty_player_filters() -> None:
-    filters = PlayerFilters()
+    filters = PlayersFilters()
     logger.debug(filters.to_dict())
     assert filters.to_dict() == {}
 
@@ -32,7 +32,7 @@ def test_create_player_filters_will_all_values() -> None:
         "filter.grade": str.join(",", test_grades),
     }
 
-    filters = PlayerFilters(
+    filters = PlayersFilters(
         player_ids=test_player_ids,
         first_names=test_first_names,
         last_names=test_last_names,
@@ -50,7 +50,7 @@ def test_create_player_filters_will_all_values() -> None:
 
 @timed(logger)
 def test_create_player_filter_with_empty_values():
-    filters = PlayerFilters(
+    filters = PlayersFilters(
         player_ids=[],
         first_names=[],
         last_names=[],
@@ -76,7 +76,7 @@ def test_create_player_filter_with_some_empty_values():
         "filter.grade": str.join(",", test_grades),
     }
 
-    filters = PlayerFilters(
+    filters = PlayersFilters(
         player_ids=test_player_ids,
         first_names=test_first_names,
         last_names=test_last_names,

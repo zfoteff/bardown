@@ -15,7 +15,7 @@ PLAYER_INTERFACE_ROUTER.add_api_route(
 
 PLAYER_INTERFACE_ROUTER.add_api_route(
     path="/players",
-    endpoint=DefaultController.render_player_page,
+    endpoint=DefaultController.render_players_page,
     description="Render players page",
     methods=["GET"],
     response_class=HTMLResponse,

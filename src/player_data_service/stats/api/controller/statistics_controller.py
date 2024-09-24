@@ -44,4 +44,5 @@ class StatisticsController:
         )
 
     async def get_game_statistics(player_id: str, game_id: str) -> JSONResponse:
-        pass
+        try:
+            result = db_interface.get_game_statistics()

@@ -10,7 +10,7 @@ from models.game import Game
 from models.game_filters import GameFilters
 from models.player import Player
 from models.player_data_service_request import PlayerDataServiceRequest
-from models.player_filters import PlayerFilters
+from models.players_filters import PlayersFilters
 from models.team import Team
 from models.team_filters import TeamFilters
 
@@ -25,7 +25,7 @@ class PlayerDataServiceProvider:
         self._player_data_service_client = PlayerDataServiceClient
         self._cache_client = CacheClient()
 
-    async def get_players_by_filters(self, filters: PlayerFilters) -> List[Player]:
+    async def get_players_by_filters(self, filters: PlayersFilters) -> List[Player]:
         """
         Create request for the get by filters endpoint of the player interface:
         """
@@ -53,6 +53,24 @@ class PlayerDataServiceProvider:
                 self._cache_client.cache_response(url=full_request_url, response=response)
 
         return players
+
+    async def get_player_by_filters(self, player_id: str) -> PlayerWithStatistics:
+        url = ClientUrl("player", "GET", config=PlayerDataServiceEndpointConfig())
+        request = PlayerDataServiceRequest(url=url, query_parameters={"player_id": player_id})
+        full_request_url = url.url + request.query_string()
+
+        result, response = self._cache_client.retrieve_response(full_request_url)
+
+        if not result:
+            response = await self._player_data_service_client.exchange_with_query_parameters(
+                request
+            )
+            response = await self._player_data_service_client.
+
+        player_data = PlayerWithStatistics()
+        if response is None or response.status != 200:
+            player_data = 
+            
 
     async def get_teams_by_filters(self, filters: TeamFilters) -> List[Team]:
         """
