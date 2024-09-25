@@ -1,5 +1,5 @@
 from bin.logger import Logger
-from errors.statistics_errors import StatisticsAlreadyExist
+from errors.statistics_errors import StatisticsAlreadyExist, StatisticsDoNoExist
 from fastapi.responses import JSONResponse
 from stats.models.dto.game_statistics import GameStatistics
 from stats.statistics_db_interface import StatisticsDatabaseInterface
@@ -43,6 +43,32 @@ class StatisticsController:
             },
         )
 
-    async def get_game_statistics(player_id: str, game_id: str) -> JSONResponse:
+    async def get_game_statistics_by_player_id(player_id: str, game_id: str) -> JSONResponse:
         try:
-            result = db_interface.get_game_statistics()
+            filter = validate_get_game_statistics_parameters(player_id, game_id)
+            result, statistics = db_interface.get_game_statistics()
+        except StatisticsDoNoExist as err:
+            return JSONResponse(
+                status_code=404,
+                content={
+                    "status": 404,
+                    "error": {
+                        "message": f"{err}"
+                    }
+                }
+            )
+        
+        if not result:
+            return JSONResponse(
+                status_code=403,
+                content={"status": 403, "error": {"message": "Database error"}},
+            )
+            
+        return JSONResponse(
+            status_code=200,
+            content={
+                "status": 201,
+                "data": {}
+            }
+        )
+

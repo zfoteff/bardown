@@ -41,7 +41,9 @@ class CacheClient:
             logger.error(f"Error caching value {response.data}\n{e}")
             return False
 
-    def retrieve_response(self, key: str) -> Tuple[bool, PlayerDataServiceResponse | None]:
+    def retrieve_response(
+        self, key: str
+    ) -> Tuple[bool, PlayerDataServiceResponse | None]:
         try:
             cached_response = self._client.get(key)
             if cached_response is None:
@@ -51,7 +53,9 @@ class CacheClient:
             logger.info(f"Cache hit for {key}")
             return (
                 True,
-                PlayerDataServiceResponse(200, data=json.loads(cached_response.decode("utf-8"))),
+                PlayerDataServiceResponse(
+                    200, data=json.loads(cached_response.decode("utf-8"))
+                ),
             )
         except ConnectionError as e:
             logger.error(f"Connection error to cache: {e}")

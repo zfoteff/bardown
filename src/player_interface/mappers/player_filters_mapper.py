@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from models.player_filters import PlayersFilters
+from models.players_filters import PlayersFilters
 
 
 def string_to_list(data: str) -> List[str]:
