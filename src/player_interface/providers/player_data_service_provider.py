@@ -62,6 +62,14 @@ class PlayerDataServiceProvider:
         return players
 
     async def get_player_by_filters(self, player_id: str) -> PlayerWithStatistics:
+        """Get player with associated statistics for games and seasons
+
+        Args:
+            player_id (str): _description_
+
+        Returns:
+            PlayerWithStatistics: _description_
+        """
         get_player_url = ClientUrl(
             "player", "GET", config=PlayerDataServiceEndpointConfig()
         )
@@ -100,10 +108,10 @@ class PlayerDataServiceProvider:
 
         player_data = None
         statistics_data = None
-        if get_player_response is None or get_player_response.status != 200:
+        if get_player_response is not None and get_player_response.status is 200:
             player_data = Player(**get_player_response.data)
         
-        if get_statistics_response is None or get_statistics_response != 200:
+        if get_statistics_response is not None and get_statistics_response is 200:
             statistics_data = PlayerDataServiceResponseMapper.player_data_service_response_to_composite_statistics(get_statistics_response.data)
 
         return PlayerWithStatistics(player_data, statistics_data)

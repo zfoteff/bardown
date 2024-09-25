@@ -48,5 +48,8 @@ class DefaultController:
             "players.html", context={"request": request, "players": players}
         )
 
-    async def render_player_page(request: Request) -> HTMLResponse:
-        players = await player_data_service_provider.get_player_by_filters(filters)
+    async def render_player_page(request: Request, player_id: str) -> HTMLResponse:
+        player_with_statistics = await player_data_service_provider.get_player_by_filters(player_id)
+        return templates.TemplateResponse(
+            "player.html", context={"request": request, "data": player_with_statistics}
+        )
