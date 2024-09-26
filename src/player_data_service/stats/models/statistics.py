@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Self
 
 from pydantic import BaseModel
 
@@ -33,7 +33,7 @@ class Statistics(BaseModel):
     fow: Optional[int] = 0
     fol: Optional[int] = 0
 
-    def statistics_from_string(self, statistics_string: str) -> None:
+    def statistics_from_string(self, statistics_string: str):
         stats = dict(zip(dict(self).keys(), map(int, statistics_string.split("|"))))
         return Statistics(**stats)
 

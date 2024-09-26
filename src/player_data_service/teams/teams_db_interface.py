@@ -53,7 +53,9 @@ class TeamsDBInterface:
 
     def _build_update_query(self, team: TeamDTO, team_id: str) -> str:
         update_fields = self._build_update_fields(team)
-        query = f"UPDATE {TEAMS_TABLE_NAME} SET {update_fields} WHERE teamid='{team_id}'"
+        query = (
+            f"UPDATE {TEAMS_TABLE_NAME} SET {update_fields} WHERE teamid='{team_id}'"
+        )
         return query
 
     def create_team(self, team: TeamDTO) -> bool | TeamAlreadyExists:
@@ -121,7 +123,9 @@ class TeamsDBInterface:
 
         return True
 
-    def team_exists(self, team_id: str = None, name: str = None) -> Tuple[bool, str | None]:
+    def team_exists(
+        self, team_id: str = None, name: str = None
+    ) -> Tuple[bool, str | None]:
         query = f"SELECT teamid FROM {TEAMS_TABLE_NAME} WHERE "
 
         if team_id is None:

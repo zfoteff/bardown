@@ -16,7 +16,8 @@ def _order_by_equals_allowed_value(order_by: str) -> bool:
 
 def _order_missing_pair(order: str, order_by: str) -> bool:
     return not (
-        (order is None and order_by is None) or (order is not None and order_by is not None)
+        (order is None and order_by is None)
+        or (order is not None and order_by is not None)
     )
 
 
@@ -40,7 +41,9 @@ def _validate_player_id_filter(filters: PlayersRequestFilters, player_id: str) -
     filters.player_id = player_id
 
 
-def _validate_name_filter(filters: PlayersRequestFilters, first_name: str, last_name: str) -> None:
+def _validate_name_filter(
+    filters: PlayersRequestFilters, first_name: str, last_name: str
+) -> None:
     # Name filter validation. Both first and last name must be provided, and match regex filter
     if _name_missing_pair(first_name, last_name):
         if first_name is None:
@@ -107,7 +110,9 @@ def _validate_offset(filters: PlayersRequestFilters, offset: int) -> None:
     filters.offset = offset
 
 
-def _validate_ordering_rules(filters: PlayersRequestFilters, order: str, order_by: str) -> None:
+def _validate_ordering_rules(
+    filters: PlayersRequestFilters, order: str, order_by: str
+) -> None:
     if _order_missing_pair(order, order_by):
         if order is None:
             raise PlayerValidationError(
@@ -118,7 +123,9 @@ def _validate_ordering_rules(filters: PlayersRequestFilters, order: str, order_b
                 "orderBy parameter cannot be null when order parameter exists"
             )
     elif not _order_equals_allowed_value(order):
-        raise PlayerValidationError('order value must be one of the allowed values ["ASC", "DESC"]')
+        raise PlayerValidationError(
+            'order value must be one of the allowed values ["ASC", "DESC"]'
+        )
 
     filters.order = str.upper(order)
 

@@ -28,7 +28,9 @@ def test_valid_game_statistics_DAO_to_game_statistics_DTO() -> None:
         created=datetime.now(),
         modified=datetime.now(),
     )
-    game_stats_dto = game_statistics_DAO_to_game_statistics_DTO(game_stats_dao=game_stats_dao)
+    game_stats_dto = game_statistics_DAO_to_game_statistics_DTO(
+        game_stats_dao=game_stats_dao
+    )
     assert game_stats_dto is not None
 
 

@@ -53,7 +53,9 @@ class MySQLClient:
             logger.info("Connection closed")
             return True
         except mysql.Error as err:
-            logger.error(f"Database error when closing connection: {err} . . . Quitting")
+            logger.error(
+                f"Database error when closing connection: {err} . . . Quitting"
+            )
 
     def execute_query(
         self, query: str, commit_candidate: bool = False, return_results: bool = False

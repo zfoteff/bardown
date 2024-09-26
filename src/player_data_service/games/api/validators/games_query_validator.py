@@ -24,7 +24,9 @@ def _validate_offset(filters: GameRequestFilters, offset: int) -> None:
     filters.offset = offset
 
 
-def _validate_ordering_rules(filters: GameRequestFilters, order: str, order_by: str) -> None:
+def _validate_ordering_rules(
+    filters: GameRequestFilters, order: str, order_by: str
+) -> None:
     if _order_missing_pair(order, order_by):
         if order is None:
             raise GameValidationError(
@@ -73,19 +75,24 @@ def _order_by_equals_allowed_value(order_by: str) -> bool:
 
 def _order_missing_pair(order: str, order_by: str) -> bool:
     return not (
-        (order is None and order_by is None) or (order is not None and order_by is not None)
+        (order is None and order_by is None)
+        or (order is not None and order_by is not None)
     )
 
 
 def _validate_game_id_filter(filters: GameRequestFilters, game_id: str) -> None:
     # Game ID validation, if provided. Must be Non-null str and match UUI4 format
     if type(game_id) is not str:
-        raise GameValidationError("Game id must be a string in UUIDv5 format", ["game_id"])
+        raise GameValidationError(
+            "Game id must be a string in UUIDv5 format", ["game_id"]
+        )
 
     regex = re.compile(UUID_REGEX_PATTERN)
     game_id_matches = regex.match(game_id)
     if game_id_matches is None:
-        raise GameValidationError("Game id must be a string in UUIDv5 format", ["game_id"])
+        raise GameValidationError(
+            "Game id must be a string in UUIDv5 format", ["game_id"]
+        )
 
     filters.game_id = game_id
 
@@ -95,7 +102,9 @@ def _validate_date_filter(filters: GameRequestFilters, date: str) -> None:
     try:
         filtered_date = datetime.strptime(date, "%Y/%m/%d")
     except ValueError:
-        raise GameValidationError("filter.date must be in yyyy/mm/dd format", ["filter.date"])
+        raise GameValidationError(
+            "filter.date must be in yyyy/mm/dd format", ["filter.date"]
+        )
 
     filters.date = filtered_date
 

@@ -34,7 +34,9 @@ class CoachController:
         try:
             result = db_interface.create_coach(coach)
         except CoachValidationError as err:
-            return JSONResponse(status_code=400, content={"status": 400, "error": f"{err}"})
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": f"{err}"}
+            )
         except CoachAlreadyExists as err:
             return JSONResponse(
                 status_code=409,
@@ -48,7 +50,9 @@ class CoachController:
             )
 
         if not result:
-            return JSONResponse(status_code=403, content={"status": 403, "error": "Database error"})
+            return JSONResponse(
+                status_code=403, content={"status": 403, "error": "Database error"}
+            )
 
         return JSONResponse(
             status_code=201, content={"status": 201, "data": jsonable_encoder(coach)}
@@ -79,10 +83,14 @@ class CoachController:
             filters = validate_get_coaches_query_parameters(request.query_params)
             result, coaches = db_interface.get_coaches(filters)
         except CoachValidationError as err:
-            return JSONResponse(status_code=400, content={"status": 400, "error": f"{err}"})
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": f"{err}"}
+            )
 
         if not result:
-            return JSONResponse(status_code=400, content={"status": 400, "error": "Database error"})
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": "Database error"}
+            )
 
         return JSONResponse(
             status_code=200,
@@ -90,7 +98,9 @@ class CoachController:
                 "status": 200,
                 "data": []
                 if (coaches == []) or (coaches is None)
-                else [jsonable_encoder(coach_DAO_to_coach_DTO(coach)) for coach in coaches],
+                else [
+                    jsonable_encoder(coach_DAO_to_coach_DTO(coach)) for coach in coaches
+                ],
             },
         )
 
@@ -107,10 +117,14 @@ class CoachController:
         try:
             success = db_interface.update_coach(coach_id, coach)
         except CoachDoesNotExist as err:
-            return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
+            return JSONResponse(
+                status_code=404, content={"status": 404, "error": f"{err}"}
+            )
 
         if not success:
-            return JSONResponse(status_code=400, content={"status": 400, "error": "Database error"})
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": "Database error"}
+            )
 
         return JSONResponse(
             status_code=200, content={"status": 200, "data": jsonable_encoder(coach)}
@@ -128,10 +142,14 @@ class CoachController:
         try:
             result = db_interface.delete_coach(coach_id)
         except CoachDoesNotExist as err:
-            return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
+            return JSONResponse(
+                status_code=404, content={"status": 404, "error": f"{err}"}
+            )
 
         if not result:
-            return JSONResponse(status_code=422, content={"status": 422, "error": "Database error"})
+            return JSONResponse(
+                status_code=422, content={"status": 422, "error": "Database error"}
+            )
 
         return JSONResponse(
             status_code=200, content={"status": 200, "data": {"coach_id": coach_id}}

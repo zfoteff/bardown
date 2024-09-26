@@ -20,8 +20,32 @@ STATISTICS_ROUTER.add_api_route(
     },
 )
 STATISTICS_ROUTER.add_api_route(
+    path="/statistics/",
+    endpoint=StatisticsController.get_composite_statistics,
+    methods=["GET"],
+    responses={200: {}},
+)
+STATISTICS_ROUTER.add_api_route(
     path="/statistics/game",
     endpoint=StatisticsController.get_game_statistics,
     methods=["GET"],
     responses={200: {}},
+)
+STATISTICS_ROUTER.add_api_route(
+    path="/statistics/season",
+    endpoint=StatisticsController.get_season_statistics,
+    methods=["GET"],
+    responses={200: {}},
+)
+STATISTICS_ROUTER.add_api_route(
+    path="/statistics/",
+    endpoint=StatisticsController.delete_game_statistics,
+    methods=["DELETE"],
+    responses={201: {}},
+)
+STATISTICS_ROUTER.add_api_route(
+    path="/statistics/",
+    endpoint=StatisticsController.delete_season_statistics,
+    methods=["DELETE"],
+    responses={201: {}},
 )

@@ -69,10 +69,14 @@ class GameController:
         try:
             success = db_interface.update_game(game, game_id)
         except GameDoesNotExist as err:
-            return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
+            return JSONResponse(
+                status_code=404, content={"status": 404, "error": f"{err}"}
+            )
 
         if not success:
-            return JSONResponse(status_code=400, content={"status": 400, "error": "Database error"})
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": "Database error"}
+            )
 
         return JSONResponse(
             status_code=200, content={"status": 200, "data": jsonable_encoder(game)}
@@ -82,9 +86,15 @@ class GameController:
         try:
             result = db_interface.delete_game(game_id)
         except GameDoesNotExist as err:
-            return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
+            return JSONResponse(
+                status_code=404, content={"status": 404, "error": f"{err}"}
+            )
 
         if not result:
-            return JSONResponse(status_code=422, content={"status": 422, "error": "Database error"})
+            return JSONResponse(
+                status_code=422, content={"status": 422, "error": "Database error"}
+            )
 
-        return JSONResponse(status_code=200, content={"status": 200, "data": {"game_id": game_id}})
+        return JSONResponse(
+            status_code=200, content={"status": 200, "data": {"game_id": game_id}}
+        )

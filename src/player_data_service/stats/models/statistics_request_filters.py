@@ -13,6 +13,7 @@ class GameStatisticsRequestFilters(BaseModel):
 
 
 class SeasonStatisticsRequestFilters(BaseModel):
+    player_id: Optional[str] = None
     limit: Optional[int] = None
     offset: Optional[int] = None
     order: Optional[str] = None
