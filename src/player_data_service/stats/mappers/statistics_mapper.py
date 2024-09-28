@@ -1,5 +1,7 @@
 from stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
 from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
+from stats.models.dao.season_statistics import SeasonStatistics as SeasonStatisticsDAO
+from stats.models.dto.season_statistics import SeasonStatistics as SeasonStatisticsDTO
 from stats.models.statistics import Statistics
 
 
@@ -27,4 +29,23 @@ def game_statistics_DAO_to_game_statistics_DTO(
         statistics=statistics,
         created=game_stats_dao.created,
         modified=game_stats_dao.modified,
+    )
+
+def season_statistics_DTO_to_season_statistics_DAO(
+        
+)
+
+def season_statistics_DAO_to_season_statistics_DTO(
+        season_stats_dao: SeasonStatisticsDAO
+) -> SeasonStatisticsDTO:
+    statistics = Statistics
+    statistics.statistics_from_string(season_stats_dao.statistics)
+
+    return SeasonStatisticsDTO(
+        player_id=season_stats_dao.player_id,
+        team_id=season_stats_dao.team_id,
+        year=season_stats_dao.year,
+        statistics=statistics,
+        created=season_stats_dao.created,
+        modified=season_stats_dao.modified,
     )

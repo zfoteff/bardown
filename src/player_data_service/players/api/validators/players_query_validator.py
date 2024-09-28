@@ -1,6 +1,6 @@
 import re
 
-from errors.players_errors import PlayerValidationError
+from errors.players_errors import PlayerRequestValidationError
 from players.api.validators import NAME_REGEX_PATTERN, UUID_REGEX_PATTERN
 from players.models.players_request_filters import PlayersRequestFilters
 
@@ -31,12 +31,12 @@ def _name_missing_pair(first_name: str, last_name: str) -> bool:
 def _validate_player_id_filter(filters: PlayersRequestFilters, player_id: str) -> None:
     # PlayerID validation, if provided. Must be Non-null str and match UUI4 format
     if type(player_id) is not str:
-        raise PlayerValidationError("PlayerId must be a string in UUIDv5 format")
+        raise PlayerRequestValidationError("PlayerId must be a string in UUIDv5 format")
 
     regex = re.compile(UUID_REGEX_PATTERN)
     player_id_matches = regex.match(player_id)
     if player_id_matches is None:
-        raise PlayerValidationError("PlayerId must be a string in UUIDv5 format")
+        raise PlayerRequestValidationError("PlayerId must be a string in UUIDv5 format")
 
     filters.player_id = player_id
 
@@ -47,12 +47,12 @@ def _validate_name_filter(
     # Name filter validation. Both first and last name must be provided, and match regex filter
     if _name_missing_pair(first_name, last_name):
         if first_name is None:
-            raise PlayerValidationError(
+            raise PlayerRequestValidationError(
                 "filter.firstName must both be provided with filter.lastName to filter results."
             )
 
         if last_name is None:
-            raise PlayerValidationError(
+            raise PlayerRequestValidationError(
                 "filter.lastName must both be provided with filter.firstName to filter results."
             )
 
@@ -61,10 +61,10 @@ def _validate_name_filter(
     last_name_matches = regex.match(str.capitalize(last_name))
 
     if first_name_matches is None:
-        raise PlayerValidationError("filter.firstName is invalid.")
+        raise PlayerRequestValidationError("filter.firstName is invalid.")
 
     if last_name_matches is None:
-        raise PlayerValidationError("filter.lastName is invalid.")
+        raise PlayerRequestValidationError("filter.lastName is invalid.")
 
     filters.first_name = first_name
     filters.last_name = last_name
@@ -72,7 +72,7 @@ def _validate_name_filter(
 
 def _validate_number_filter(filters: PlayersRequestFilters, number: int) -> None:
     if int(number) < 0:
-        raise PlayerValidationError("filter.number must be a positive integer")
+        raise PlayerRequestValidationError("filter.number must be a positive integer")
 
     filters.number = number
 
@@ -115,22 +115,22 @@ def _validate_ordering_rules(
 ) -> None:
     if _order_missing_pair(order, order_by):
         if order is None:
-            raise PlayerValidationError(
+            raise PlayerRequestValidationError(
                 "order parameter cannot be null when orderBy parameter exists"
             )
         elif order_by is None:
-            raise PlayerValidationError(
+            raise PlayerRequestValidationError(
                 "orderBy parameter cannot be null when order parameter exists"
             )
     elif not _order_equals_allowed_value(order):
-        raise PlayerValidationError(
+        raise PlayerRequestValidationError(
             'order value must be one of the allowed values ["ASC", "DESC"]'
         )
 
     filters.order = str.upper(order)
 
     if not _order_by_equals_allowed_value(order_by):
-        raise PlayerValidationError(
+        raise PlayerRequestValidationError(
             "order query must be one of the allowed values ['first_name'. 'last_name', 'number']"
         )
 
@@ -139,7 +139,7 @@ def _validate_ordering_rules(
 
 def validate_get_players_query_parameters(
     query_params: dict,
-) -> PlayersRequestFilters | PlayerValidationError:
+) -> PlayersRequestFilters | PlayerRequestValidationError:
     filters = PlayersRequestFilters()
 
     # Get all query param values, or none if none provided

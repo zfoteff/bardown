@@ -2,7 +2,7 @@ from bin.logger import Logger
 from errors.players_errors import (
     PlayerAlreadyExists,
     PlayerDoesNotExist,
-    PlayerValidationError,
+    PlayerRequestValidationError,
 )
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
@@ -74,7 +74,7 @@ class PlayerController:
         try:
             filters = validate_get_players_query_parameters(request.query_params)
             result, players = db_interface.get_players(filters)
-        except PlayerValidationError as err:
+        except PlayerRequestValidationError as err:
             return JSONResponse(
                 status_code=400, content={"status": 400, "error": {"message": f"{err}"}}
             )

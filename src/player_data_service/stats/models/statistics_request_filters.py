@@ -14,6 +14,8 @@ class GameStatisticsRequestFilters(BaseModel):
 
 class SeasonStatisticsRequestFilters(BaseModel):
     player_id: Optional[str] = None
+    team_id: Optional[str] = None
+    year: Optional[int] = None
     limit: Optional[int] = None
     offset: Optional[int] = None
     order: Optional[str] = None

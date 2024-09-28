@@ -1,15 +1,24 @@
+from typing import List, Tuple
+
+from bin.logger import Logger
+from errors.statistics_errors import (
+    StatisticsAlreadyExist,
+    StatisticsDoNoExist,
+    StatisticsValidationError,
+)
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
-from bin.logger import Logger
-from typing import List, Tuple
-from errors.statistics_errors import StatisticsAlreadyExist, StatisticsDoNoExist
 from fastapi.responses import JSONResponse
+from stats.api.validators.statistics_query_validator import (
+    validate_get_game_statistics_query_parameters,
+    validate_get_season_statistics_query_parameters,
+)
 from stats.models.dao.season_statistics import SeasonStatistics
 from stats.models.dto.game_statistics import GameStatistics
+from stats.models.statistics import Statistics
 from stats.models.statistics_request_filters import SeasonStatisticsRequestFilters
 from stats.statistics_db_interface import StatisticsDatabaseInterface
-from stats.api.validators.game_statistics_query_validator import *
-from stats.api.validators.season_statistics_query_validator import *
+from teams.models.dao import team
 
 logger = Logger("player-data-service-controller")
 db_interface = StatisticsDatabaseInterface()
@@ -77,8 +86,8 @@ class StatisticsController:
 
         if not result:
             return JSONResponse(
-                status_code=403,
-                content={"status": 403, "error": {"message": "Database error"}},
+                status_code=422,
+                content={"status": 422, "error": {"message": "Database error"}},
             )
 
         return JSONResponse(status_code=200, content={"status": 201, "data": {}})
@@ -88,3 +97,67 @@ class StatisticsController:
     ) -> Tuple[bool, List]:
         try:
             filters = validate_get_season_statistics_parameters()
+            result, statistics = db_interface.get_season_statistics(filters)
+        except StatisticsValidationError as err:
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": {"message": f"{err}"}}
+            )
+
+        if not result:
+            return JSONResponse(
+                status_code=422, content={"status": 422, "error": {"message": f"{err}"}}
+            )
+        
+        return JSONResponse(
+            status_code=200,
+            content={
+                "status": 200,
+                "data": [jsonable_encoder(statistics_DAO_to_statistics_DTO(statistics))] 
+            }
+        )
+
+    async def delete_game_statistics(
+        self, player_id: str, game_id: str
+    ) -> JSONResponse:
+        try:
+            result = db_interface.delete_game_statistics(player_id, game_id)
+        except StatisticsDoNoExist as err:
+            return JSONResponse(
+                status_code=404, content={"status": 404, "error": {"message": f"{err}"}}
+            )
+
+        if not result:
+            return JSONResponse(
+                status_code=422, content={"status": 422, "error": "Database error"}
+            )
+
+        return JSONResponse(
+            status_code=200,
+            content={
+                "status": 200,
+                "data": {"player_id": player_id, "game_id": game_id},
+            },
+        )
+
+    async def delete_season_statistics(
+        self, player_id: str, team_id: str, year: int
+    ) -> JSONResponse:
+        try:
+            result = db_interface.delete_season_statistics(player_id, team_id, year)
+        except StatisticsDoNoExist as err:
+            return JSONResponse(
+                status_code=404, content={"status": 404, "error": {"message": f"{err}"}}
+            )
+
+        if not result:
+            return JSONResponse(
+                status_code=422, content={"status": 422, "error": "Database error"}
+            )
+
+        return JSONResponse(
+            status_code=200,
+            content={
+                "status": 200,
+                "data": {"player_id": player_id, "game_id": team_id, "year": year},
+            },
+        )

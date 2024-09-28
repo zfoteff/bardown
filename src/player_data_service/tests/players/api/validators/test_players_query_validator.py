@@ -1,6 +1,6 @@
 import pytest
 from bin.logger import Logger
-from errors.players_errors import PlayerValidationError
+from errors.players_errors import PlayerRequestValidationError
 from players.api.validators.players_query_validator import (
     validate_get_players_query_parameters as validate,
 )
@@ -50,13 +50,13 @@ def test_validate_query_params_with_all_values() -> None:
 
 @timed(logger)
 def test_invalidate_incorrect_playerId() -> None:
-    with pytest.raises(PlayerValidationError) as err:
+    with pytest.raises(PlayerRequestValidationError) as err:
         query_params = {"filter.playerId": 123}
         _ = validate(query_params)
 
     assert "PlayerId must be a string in UUIDv5 format" == str(err.value)
 
-    with pytest.raises(PlayerValidationError) as err:
+    with pytest.raises(PlayerRequestValidationError) as err:
         query_params = {"filter.playerId": "player123"}
         _ = validate(query_params)
 
@@ -65,7 +65,7 @@ def test_invalidate_incorrect_playerId() -> None:
 
 @timed(logger)
 def test_invalidate_missing_name_fields() -> None:
-    with pytest.raises(PlayerValidationError) as err:
+    with pytest.raises(PlayerRequestValidationError) as err:
         query_params = {"filter.firstName": "name"}
         _ = validate(query_params)
 
@@ -74,7 +74,7 @@ def test_invalidate_missing_name_fields() -> None:
         == str(err.value)
     )
 
-    with pytest.raises(PlayerValidationError) as err:
+    with pytest.raises(PlayerRequestValidationError) as err:
         query_params = {"filter.lastName": "name"}
         _ = validate(query_params)
 
@@ -119,7 +119,7 @@ def test_validate_order_rules() -> None:
 
 @timed(logger)
 def test_invalidate_missing_order_fields() -> None:
-    with pytest.raises(PlayerValidationError) as err:
+    with pytest.raises(PlayerRequestValidationError) as err:
         query_params = {"order": "ASC"}
         _ = validate(query_params)
 
@@ -127,7 +127,7 @@ def test_invalidate_missing_order_fields() -> None:
         err.value
     )
 
-    with pytest.raises(PlayerValidationError) as err:
+    with pytest.raises(PlayerRequestValidationError) as err:
         query_params = {"orderBy": "number"}
         _ = validate(query_params)
 
@@ -138,7 +138,7 @@ def test_invalidate_missing_order_fields() -> None:
 
 @timed(logger)
 def test_invalidate_invalid_order_value() -> None:
-    with pytest.raises(PlayerValidationError) as err:
+    with pytest.raises(PlayerRequestValidationError) as err:
         query_params = {"order": "up", "orderBy": "number"}
         _ = validate(query_params)
 
@@ -149,7 +149,7 @@ def test_invalidate_invalid_order_value() -> None:
 
 @timed(logger)
 def test_invalidate_invalid_order_by_value() -> None:
-    with pytest.raises(PlayerValidationError) as err:
+    with pytest.raises(PlayerRequestValidationError) as err:
         query_params = {"order": "ASC", "orderBy": "experience"}
         _ = validate(query_params)
 
