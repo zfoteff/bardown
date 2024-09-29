@@ -32,11 +32,12 @@ def game_statistics_DAO_to_game_statistics_DTO(
     )
 
 def season_statistics_DTO_to_season_statistics_DAO(
-        
-)
+    season_stats_dto: SeasonStatisticsDTO    
+) -> SeasonStatisticsDAO:
+    return SeasonStatisticsDAO()
 
 def season_statistics_DAO_to_season_statistics_DTO(
-        season_stats_dao: SeasonStatisticsDAO
+    season_stats_dao: SeasonStatisticsDAO
 ) -> SeasonStatisticsDTO:
     statistics = Statistics
     statistics.statistics_from_string(season_stats_dao.statistics)
