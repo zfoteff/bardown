@@ -17,6 +17,19 @@ def game_statistics_DTO_to_game_statistics_DAO(
     )
 
 
+def season_statistics_DTO_to_season_statistics_DAO(
+    season_stats_dto: SeasonStatisticsDTO,
+) -> SeasonStatisticsDAO:
+    return SeasonStatisticsDAO(
+        player_id=season_stats_dto.player_id,
+        team_id=season_stats_dto.team_id,
+        year=season_stats_dto.year,
+        statistics=str(season_stats_dto.statistics),
+        created=season_stats_dto.created,
+        modified=season_stats_dto.modified,
+    )
+
+
 def game_statistics_DAO_to_game_statistics_DTO(
     game_stats_dao: GameStatisticsDAO,
 ) -> GameStatisticsDTO:
@@ -31,15 +44,11 @@ def game_statistics_DAO_to_game_statistics_DTO(
         modified=game_stats_dao.modified,
     )
 
-def season_statistics_DTO_to_season_statistics_DAO(
-    season_stats_dto: SeasonStatisticsDTO    
-) -> SeasonStatisticsDAO:
-    return SeasonStatisticsDAO()
 
 def season_statistics_DAO_to_season_statistics_DTO(
-    season_stats_dao: SeasonStatisticsDAO
+    season_stats_dao: SeasonStatisticsDAO,
 ) -> SeasonStatisticsDTO:
-    statistics = Statistics
+    statistics = Statistics()
     statistics.statistics_from_string(season_stats_dao.statistics)
 
     return SeasonStatisticsDTO(

@@ -20,7 +20,7 @@ class MySQLClient:
         self.__cursor = None
 
     def open_connection(self) -> bool:
-        logger.info(f"Attempting connection to {self.__table} at {self.__host} . . .")
+        logger.log(f"Attempting connection to {self.__table} at {self.__host} . . .")
         try:
             self.__connection = mysql.connect(
                 user=self.__user,
@@ -53,9 +53,7 @@ class MySQLClient:
             logger.info("Connection closed")
             return True
         except mysql.Error as err:
-            logger.error(
-                f"Database error when closing connection: {err} . . . Quitting"
-            )
+            logger.error(f"Database error when closing connection: {err} . . . Quitting")
 
     def execute_query(
         self, query: str, commit_candidate: bool = False, return_results: bool = False

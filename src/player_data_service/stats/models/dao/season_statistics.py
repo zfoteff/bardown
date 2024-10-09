@@ -26,9 +26,7 @@ class SeasonStatistics:
         Args:
             player_tuple (Tuple): Tuple containing ordered season statistic data
         """
-        return cls(
-            **{k: v for k, v in zip(cls().to_dict().keys(), season_statistics_tuple)}
-        )
+        return cls(**{k: v for k, v in zip(cls().to_dict().keys(), season_statistics_tuple)})
 
     def to_dict(self) -> Dict:
         return {

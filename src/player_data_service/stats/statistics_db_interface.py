@@ -19,6 +19,7 @@ from stats.models.dao.season_statistics import SeasonStatistics as SeasonStatist
 from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
 from stats.models.dto.season_statistics import SeasonStatistics as SeasonStatisticsDTO
 from stats.models.statistics_request_filters import (
+    CompositeStatisticsRequestFilters,
     GameStatisticsRequestFilters,
     SeasonStatisticsRequestFilters,
 )
@@ -53,9 +54,7 @@ class StatisticsDatabaseInterface:
             query += f" WHERE gameid='{filters.game_id}'"
 
         if filters.player_id is not None and filters.game_id is not None:
-            query += (
-                f" WHERE playerid='{filters.player_id}' AND gameid='{filters.game_id}'"
-            )
+            query += f" WHERE playerid='{filters.player_id}' AND gameid='{filters.game_id}'"
 
         if filters.order is not None:
             query += f" ORDER BY {filters.order_by} {filters.order}"
@@ -93,7 +92,7 @@ class StatisticsDatabaseInterface:
             VALUES (
                 "{statistics.player_id}",
                 "{statistics.game_id}",
-                "{str(statistics)}",
+                "{str(statistics.statistics)}",
                 "{create_modify_time}",
                 "{create_modify_time}"
             )
@@ -114,9 +113,9 @@ class StatisticsDatabaseInterface:
             INSERT INTO {SEASON_STATISTICS_TABLE_NAME}
             VALUES (
                 "{statistics.player_id}",
-                "{statistics.team_id}"
-                "{statistics.year}",
-                "{str(statistics)}",
+                "{statistics.team_id}",
+                {statistics.year},
+                "{str(statistics.statistics)}",
                 "{create_modify_time}",
                 "{create_modify_time}"
             )
@@ -129,9 +128,7 @@ class StatisticsDatabaseInterface:
 
         return True
 
-    def get_game_statistics(
-        self, filters: GameStatisticsRequestFilters
-    ) -> Tuple[bool, List]:
+    def get_game_statistics(self, filters: GameStatisticsRequestFilters) -> Tuple[bool, List]:
         query = self._build_query_from_game_statistics_filters(filters)
         success, result = self.__game_client.execute_query(query, return_results=True)
 
@@ -145,9 +142,7 @@ class StatisticsDatabaseInterface:
 
         return True, game_stats
 
-    def get_season_statistics(
-        self, filters: SeasonStatisticsRequestFilters
-    ) -> Tuple[bool, List]:
+    def get_season_statistics(self, filters: SeasonStatisticsRequestFilters) -> Tuple[bool, List]:
         query = self._build_query_from_season_statistics_filters(filters)
         success, result = self.__season_client.execute_query(query, return_results=True)
 
@@ -155,13 +150,16 @@ class StatisticsDatabaseInterface:
             return False, []
 
         season_stats = [
-            SeasonStatisticsDAO.from_tuple(
-                season_statistics_tuple=season_statistics_data
-            )
+            SeasonStatisticsDAO.from_tuple(season_statistics_tuple=season_statistics_data)
             for season_statistics_data in result
         ]
 
         return True, season_stats
+
+    def get_composite_statistics_for_player(
+        filters: CompositeStatisticsRequestFilters,
+    ) -> Tuple[bool, List]:
+        pass
 
     def update_game_statistics(
         self, player_id: str, game_statistics: GameStatisticsDTO
@@ -173,9 +171,7 @@ class StatisticsDatabaseInterface:
     ) -> str | GameStatisticsDoNoExist:
         pass
 
-    def delete_game_statistics(
-        self, player_id: str, game_id: str
-    ) -> str | StatisticsDoNoExist:
+    def delete_game_statistics(self, player_id: str, game_id: str) -> str | StatisticsDoNoExist:
         query = f"DELETE FROM {SEASON_STATISTICS_TABLE_NAME} WHERE playerid='{player_id}' AND gameid='{game_id}'"
         success = self.__game_client.execute_query(query, commit_candidate=True)
 

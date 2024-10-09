@@ -89,13 +89,10 @@ class Player:
             "position": self._position,
             "grade": self._grade,
             "school": self._school,
-            "img_url": self._img_url
+            "img_url": self._img_url,
         }
 
         if full_definition:
-            player_dict.update({
-                "created": self._created,
-                "modified": self._modified
-            })
+            player_dict.update({"created": self._created, "modified": self._modified})
 
         return player_dict

@@ -13,12 +13,13 @@ from stats.api.validators.statistics_query_validator import (
     validate_get_game_statistics_query_parameters,
     validate_get_season_statistics_query_parameters,
 )
-from stats.models.dao.season_statistics import SeasonStatistics
+from stats.models.dto.season_statistics import SeasonStatistics
 from stats.models.dto.game_statistics import GameStatistics
-from stats.models.statistics import Statistics
-from stats.models.statistics_request_filters import SeasonStatisticsRequestFilters
+from stats.mappers.statistics_mapper import (
+    game_statistics_DAO_to_game_statistics_DTO,
+    season_statistics_DAO_to_season_statistics_DTO,
+)
 from stats.statistics_db_interface import StatisticsDatabaseInterface
-from teams.models.dao import team
 
 logger = Logger("player-data-service-controller")
 db_interface = StatisticsDatabaseInterface()
@@ -77,7 +78,7 @@ class StatisticsController:
 
     async def get_game_statistics(request: Request) -> JSONResponse:
         try:
-            filters = validate_get_game_statistics_parameters(request.query_params)
+            filters = validate_get_game_statistics_query_parameters(request.query_params)
             result, statistics = db_interface.get_game_statistics(filters)
         except StatisticsDoNoExist as err:
             return JSONResponse(
@@ -90,13 +91,22 @@ class StatisticsController:
                 content={"status": 422, "error": {"message": "Database error"}},
             )
 
-        return JSONResponse(status_code=200, content={"status": 201, "data": {}})
+        return JSONResponse(
+            status_code=200,
+            content={
+                "status": 200,
+                "data": []
+                if (statistics == []) or (statistics is None)
+                else [
+                    jsonable_encoder(game_statistics_DAO_to_game_statistics_DTO(statistic))
+                    for statistic in statistics
+                ],
+            },
+        )
 
-    async def get_season_statistics(
-        self, filters: SeasonStatisticsRequestFilters
-    ) -> Tuple[bool, List]:
+    async def get_season_statistics(request: Request) -> Tuple[bool, List]:
         try:
-            filters = validate_get_season_statistics_parameters()
+            filters = validate_get_season_statistics_query_parameters(request.query_params)
             result, statistics = db_interface.get_season_statistics(filters)
         except StatisticsValidationError as err:
             return JSONResponse(
@@ -107,18 +117,21 @@ class StatisticsController:
             return JSONResponse(
                 status_code=422, content={"status": 422, "error": {"message": f"{err}"}}
             )
-        
+
         return JSONResponse(
             status_code=200,
             content={
                 "status": 200,
-                "data": [jsonable_encoder(statistics_DAO_to_statistics_DTO(statistics))] 
-            }
+                "data": []
+                if (statistics == []) or (statistics is None)
+                else [
+                    jsonable_encoder(season_statistics_DAO_to_season_statistics_DTO(statistic))
+                    for statistic in statistics
+                ],
+            },
         )
 
-    async def delete_game_statistics(
-        self, player_id: str, game_id: str
-    ) -> JSONResponse:
+    async def delete_game_statistics(self, player_id: str, game_id: str) -> JSONResponse:
         try:
             result = db_interface.delete_game_statistics(player_id, game_id)
         except StatisticsDoNoExist as err:
@@ -127,9 +140,7 @@ class StatisticsController:
             )
 
         if not result:
-            return JSONResponse(
-                status_code=422, content={"status": 422, "error": "Database error"}
-            )
+            return JSONResponse(status_code=422, content={"status": 422, "error": "Database error"})
 
         return JSONResponse(
             status_code=200,
@@ -150,9 +161,7 @@ class StatisticsController:
             )
 
         if not result:
-            return JSONResponse(
-                status_code=422, content={"status": 422, "error": "Database error"}
-            )
+            return JSONResponse(status_code=422, content={"status": 422, "error": "Database error"})
 
         return JSONResponse(
             status_code=200,

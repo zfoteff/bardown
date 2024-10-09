@@ -26,7 +26,7 @@ PLAYER_INTERFACE_ROUTER.add_api_route(
     endpoint=DefaultController.render_player_page,
     description="Render player page with statistics",
     methods=["GET"],
-    response_class=HTMLResponse
+    response_class=HTMLResponse,
 )
 
 PLAYER_INTERFACE_ROUTER.add_api_route(

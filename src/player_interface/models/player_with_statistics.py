@@ -15,22 +15,18 @@ class GameStatistics:
     @property
     def game_title(self) -> str:
         return self._game_title
-    
+
     @property
     def date(self) -> str:
         return self._date
-    
+
     @property
     def statistics(self) -> str:
         return self._statistics
-    
+
     def to_dict(self) -> str:
-        return {
-            "game_title": self._game_title,
-            "date": self._date,
-            "statistics": self._statistics
-        }
-        
+        return {"game_title": self._game_title, "date": self._date, "statistics": self._statistics}
+
 
 class CompositeStatistics:
     _season: str
@@ -51,7 +47,7 @@ class CompositeStatistics:
     def to_dict(self) -> dict:
         return {
             "season": f"{self._season}",
-            "games": [game_stat.to_dict() for game_stat in self._games]
+            "games": [game_stat.to_dict() for game_stat in self._games],
         }
 
 
@@ -66,13 +62,10 @@ class PlayerWithStatistics:
     @property
     def player(self) -> Player:
         return self._player
-    
+
     @property
     def statistics(self) -> CompositeStatistics:
         return self._statistics
-    
+
     def to_dict(self) -> dict:
-        return {
-            "player": self._player.to_dict(),
-            "statistics": self._statistics.to_dict()
-        }
+        return {"player": self._player.to_dict(), "statistics": self._statistics.to_dict()}

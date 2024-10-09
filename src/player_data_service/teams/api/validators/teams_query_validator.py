@@ -27,9 +27,7 @@ def _validate_offset(filters: TeamRequestFilters, offset: int) -> None:
     filters.offset = offset
 
 
-def _validate_ordering_rules(
-    filters: TeamRequestFilters, order: str, order_by: str
-) -> None:
+def _validate_ordering_rules(filters: TeamRequestFilters, order: str, order_by: str) -> None:
     if _order_missing_pair(order, order_by):
         if order is None:
             raise TeamValidationError(
@@ -78,8 +76,7 @@ def _order_by_equals_allowed_value(order_by: str) -> bool:
 
 def _order_missing_pair(order: str, order_by: str) -> bool:
     return not (
-        (order is None and order_by is None)
-        or (order is not None and order_by is not None)
+        (order is None and order_by is None) or (order is not None and order_by is not None)
     )
 
 
@@ -93,9 +90,7 @@ def _validate_team_id_filter(filters: TeamRequestFilters, team_id: str) -> None:
     regex = re.compile(UUID_REGEX_PATTERN)
     team_id_matches = regex.match(team_id)
     if team_id_matches is None:
-        raise TeamValidationError(
-            "PlayerId must be a string in UUIDv5 format", ["filter.teamId"]
-        )
+        raise TeamValidationError("PlayerId must be a string in UUIDv5 format", ["filter.teamId"])
 
     filters.team_id = team_id
 

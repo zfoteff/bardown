@@ -2,11 +2,11 @@ from fastapi import APIRouter
 from teams.api.controllers.teams_controller import TeamController
 
 API_VERSION = "v0"
-TEAMS_ROUTER = APIRouter(prefix=f"/players/{API_VERSION}")
+TEAMS_ROUTER = APIRouter(prefix=f"/team/{API_VERSION}")
 
 # TEAMS ROUTES
 TEAMS_ROUTER.add_api_route(
-    path="/team",
+    path="/",
     endpoint=TeamController.create_team,
     methods=["POST"],
     tags=["teams"],
@@ -31,7 +31,7 @@ TEAMS_ROUTER.add_api_route(
     },
 )
 TEAMS_ROUTER.add_api_route(
-    path="/team",
+    path="/",
     endpoint=TeamController.get_teams,
     methods=["GET"],
     tags=["teams"],
@@ -59,7 +59,7 @@ TEAMS_ROUTER.add_api_route(
     },
 )
 TEAMS_ROUTER.add_api_route(
-    path="/team",
+    path="/",
     endpoint=TeamController.update_team,
     methods=["PATCH"],
     tags=["teams"],
@@ -84,7 +84,7 @@ TEAMS_ROUTER.add_api_route(
     },
 )
 TEAMS_ROUTER.add_api_route(
-    path="/team",
+    path="/",
     endpoint=TeamController.delete_team,
     methods=["DELETE"],
     tags=["teams"],

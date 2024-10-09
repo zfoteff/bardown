@@ -38,26 +38,20 @@ class PlayerDataServiceProvider:
 
         if not result:
             # If url dne in cache, make request to PDS
-            response = (
-                await self._player_data_service_client.exchange_with_query_parameters(
-                    request
-                )
+            response = await self._player_data_service_client.exchange_with_query_parameters(
+                request
             )
 
         players = list()
         if response is None or response.status != 200:
             players = []
         else:
-            players = (
-                PlayerDataServiceResponseMapper.player_data_service_response_to_players(
-                    response.data
-                )
+            players = PlayerDataServiceResponseMapper.player_data_service_response_to_players(
+                response.data
             )
             if not result:
                 # If a there was a cache miss then cache the url and response
-                self._cache_client.cache_response(
-                    url=full_request_url, response=response
-                )
+                self._cache_client.cache_response(url=full_request_url, response=response)
 
         return players
 
@@ -70,9 +64,7 @@ class PlayerDataServiceProvider:
         Returns:
             PlayerWithStatistics: _description_
         """
-        get_player_url = ClientUrl(
-            "player", "GET", config=PlayerDataServiceEndpointConfig()
-        )
+        get_player_url = ClientUrl("player", "GET", config=PlayerDataServiceEndpointConfig())
         get_statistics_url = ClientUrl(
             "statistics", "GET", config=PlayerDataServiceEndpointConfig()
         )
@@ -83,9 +75,7 @@ class PlayerDataServiceProvider:
             url=get_player_url, query_parameters={"player_id": player_id}
         )
         full_get_player_request_url = get_player_url.url + player_request.query_string()
-        full_get_statistics_request_url = (
-            get_statistics_url.url + statistics_request.query_string()
-        )
+        full_get_statistics_request_url = get_statistics_url.url + statistics_request.query_string()
 
         result, get_player_response = self._cache_client.retrieve_response(
             full_get_player_request_url
@@ -110,9 +100,11 @@ class PlayerDataServiceProvider:
         statistics_data = None
         if get_player_response is not None and get_player_response.status is 200:
             player_data = Player(**get_player_response.data)
-        
+
         if get_statistics_response is not None and get_statistics_response is 200:
-            statistics_data = PlayerDataServiceResponseMapper.player_data_service_response_to_composite_statistics(get_statistics_response.data)
+            statistics_data = PlayerDataServiceResponseMapper.player_data_service_response_to_composite_statistics(
+                get_statistics_response.data
+            )
 
         return PlayerWithStatistics(player_data, statistics_data)
 
@@ -128,10 +120,8 @@ class PlayerDataServiceProvider:
 
         if not result:
             # If URL dne in cache, make request to PDS
-            response = (
-                await self._player_data_service_client.exchange_with_query_parameters(
-                    request
-                )
+            response = await self._player_data_service_client.exchange_with_query_parameters(
+                request
             )
 
         teams = list()
@@ -139,15 +129,11 @@ class PlayerDataServiceProvider:
             # TODO: Create error response handler
             teams = []
         else:
-            teams = (
-                PlayerDataServiceResponseMapper.player_data_sevice_response_to_teams(
-                    response.data
-                )
+            teams = PlayerDataServiceResponseMapper.player_data_sevice_response_to_teams(
+                response.data
             )
             if not result:
-                self._cache_client.cache_response(
-                    url=full_request_url, response=response
-                )
+                self._cache_client.cache_response(url=full_request_url, response=response)
 
         return teams
 
@@ -159,23 +145,17 @@ class PlayerDataServiceProvider:
         result, response = self._cache_client.retrieve_response(full_request_url)
 
         if not result:
-            response = (
-                await self._player_data_service_client.exchange_with_query_parameters(
-                    request
-                )
+            response = await self._player_data_service_client.exchange_with_query_parameters(
+                request
             )
 
         games = list()
         if response is None or response.status != 200:
             games = []
         else:
-            games = (
-                PlayerDataServiceResponseMapper.player_data_service_response_to_games(
-                    response.data
-                )
+            games = PlayerDataServiceResponseMapper.player_data_service_response_to_games(
+                response.data
             )
             if not result:
-                self._cache_client.cache_response(
-                    url=full_request_url, response=response
-                )
+                self._cache_client.cache_response(url=full_request_url, response=response)
         return games
