@@ -22,7 +22,7 @@ class CompositeStatisticsController:
     async def get_composite_statistics(request: Request) -> JSONResponse:
         try:
             filters = validate_get_composite_statistics_query_parameters(request.query_params)
-            result, statistics = db_interface.get_composite_statistics_for_player()
+            result, statistics = db_interface.get_composite_statistics_for_player(filters)
         except StatisticsDoNoExist as err:
             return JSONResponse(
                 status_code=404, content={"status": 404, "error": {"message": f"{err}"}}
