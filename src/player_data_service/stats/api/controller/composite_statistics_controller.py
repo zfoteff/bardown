@@ -10,6 +10,9 @@ from errors.statistics_errors import (
     StatisticsDoNoExist,
     StatisticsValidationError,
 )
+from stats.api.validators.statistics_query_validator import (
+    validate_get_composite_statistics_query_parameters,
+)
 from stats.models.dto.composite_statistics import CompositeStatistics
 from stats.models.statistics_request_filters import CompositeStatisticsRequestFilters
 from stats.statistics_db_interface import StatisticsDatabaseInterface

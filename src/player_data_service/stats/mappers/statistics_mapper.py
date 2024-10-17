@@ -59,3 +59,11 @@ def season_statistics_DAO_to_season_statistics_DTO(
         created=season_stats_dao.created,
         modified=season_stats_dao.modified,
     )
+
+
+def composite_statistics_DTO_to_composite_statistics_DAO():
+    pass
+
+
+def composite_statistics_DAO_to_composite_statistics_DTO():
+    pass

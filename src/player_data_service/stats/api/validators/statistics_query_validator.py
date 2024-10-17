@@ -2,6 +2,7 @@ import re
 from errors.statistics_errors import StatisticsValidationError
 from stats.api.validators import UUID_REGEX_PATTERN
 from stats.models.statistics_request_filters import (
+    CompositeStatisticsRequestFilters,
     GameStatisticsRequestFilters,
     SeasonStatisticsRequestFilters,
 )
@@ -80,7 +81,7 @@ def _validate_player_id_filter(filters, player_id: str) -> None:
 
 
 def _validate_game_id_filter(filters, game_id: str) -> None:
-    # PlayerID validation, if provided. Must be Non-null str and match UUI4 format
+    # GameID validation, if provided. Must be Non-null str and match UUI4 format
     if type(game_id) is not str:
         raise StatisticsValidationError("GameId must be a string in UUIDv5 format")
 
@@ -88,6 +89,19 @@ def _validate_game_id_filter(filters, game_id: str) -> None:
     game_id_matches = regex.match(game_id)
     if game_id_matches is None:
         raise StatisticsValidationError("GameId must be a string in UUIDv5 format")
+
+    filters.player_id = game_id
+
+
+def _validate_team_id_filter(filters, game_id: str) -> None:
+    # TeamID validation, if provided. Must be Non-null str and match UUI4 format
+    if type(game_id) is not str:
+        raise StatisticsValidationError("TeamId must be a string in UUIDv5 format")
+
+    regex = re.compile(UUID_REGEX_PATTERN)
+    game_id_matches = regex.match(game_id)
+    if game_id_matches is None:
+        raise StatisticsValidationError("TeamId must be a string in UUIDv5 format")
 
     filters.player_id = game_id
 
@@ -118,16 +132,12 @@ def validate_get_game_statistics_query_parameters(
 
     if player_id is not None:
         _validate_player_id_filter(filters, player_id)
-
     if game_id is not None:
         _validate_game_id_filter(filters, game_id)
-
     if limit is not None:
         _validate_limit(filters, limit)
-
     if offset is not None:
         _validate_offset(filters, offset)
-
     if order is not None or order_by is not None:
         _validate_ordering_rules(filters, order, order_by)
 
@@ -140,7 +150,7 @@ def validate_get_season_statistics_query_parameters(
     filters = SeasonStatisticsRequestFilters()
 
     player_id = query_params.get("filter.playerId")
-    game_id = query_params.get("filter.teamId")
+    team_id = query_params.get("filter.teamId")
     year = query_params.get("filter.year")
     limit = query_params.get("limit")
     offset = query_params.get("offset")
@@ -149,20 +159,45 @@ def validate_get_season_statistics_query_parameters(
 
     if player_id is not None:
         _validate_player_id_filter(filters, player_id)
-
-    if game_id is not None:
-        _validate_game_id_filter(filters, game_id)
-
+    if team_id is not None:
+        _validate_team_id_filter(filters, team_id)
     if year is not None:
         _validate_year_filter(filters, year)
-
     if limit is not None:
         _validate_limit(filters, limit)
-
     if offset is not None:
         _validate_offset(filters, offset)
-
     if order is not None or order_by is not None:
         _validate_ordering_rules(filters, order, order_by)
 
     return filters
+
+
+def validate_get_composite_statistics_query_parameters(
+    query_params: dict,
+) -> CompositeStatisticsRequestFilters | StatisticsValidationError:
+    filters = CompositeStatisticsRequestFilters()
+
+    player_id = query_params.get("filter.player.playerId")
+    game_id = query_params.get("filter.game.gameId")
+    team_id = query_params.get("filter.team.teamId")
+    year = query_params.get("filter.year")
+    limit = query_params.get("limit")
+    offset = query_params.get("offset")
+    order = query_params.get("order")
+    order_by = query_params.get("orderBy")
+
+    if player_id is not None:
+        _validate_player_id_filter(filters, player_id)
+    if team_id is not None:
+        _validate_team_id_filter(filters, team_id)
+    if game_id is not None:
+        _validate_game_id_filter(filters, game_id)
+    if year is not None:
+        _validate_year_filter(filters, year)
+    if limit is not None:
+        _validate_limit(filters, limit)
+    if offset is not None:
+        _validate_offset(filters, offset)
+    if order is not None or order_by is not None:
+        _validate_ordering_rules(filters, order, order_by)

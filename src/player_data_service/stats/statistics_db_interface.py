@@ -156,7 +156,8 @@ class StatisticsDatabaseInterface:
 
         return True, season_stats
 
-    def get_composite_statistics_for_player(self, 
+    def get_composite_statistics_for_player(
+        self,
         filters: CompositeStatisticsRequestFilters,
     ) -> Tuple[bool, List] | StatisticsDoNoExist:
         query = self._build_query_from_composite_statistics_filters(filters)
@@ -164,7 +165,7 @@ class StatisticsDatabaseInterface:
 
         if not success:
             return False, []
-        
+
         composite_statistics = []
 
     def update_game_statistics(
