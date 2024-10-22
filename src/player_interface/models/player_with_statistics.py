@@ -1,5 +1,6 @@
+from typing import List, Self
+
 from models.player import Player
-from typing import Self, List
 
 
 class GameStatistics:

@@ -1,5 +1,6 @@
-from pydantic import BaseModel
+from typing import List
 
+from pydantic import BaseModel
 from stats.models.statistics import Statistics
 
 
@@ -10,4 +11,4 @@ class PlayerGameStatistics(BaseModel):
 
 class CompositeGameStatistics(BaseModel):
     game_id: str = None
-    statistics: PlayerGameStatistics = None
+    statistics: List[PlayerGameStatistics] = None

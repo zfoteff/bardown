@@ -1,7 +1,6 @@
-from typing import Optional, List
+from typing import List, Optional
 
 from pydantic import BaseModel
-
 from stats.models.dto.composite_game_statistics import CompositeGameStatistics
 from stats.models.dto.composite_season_statistics import CompositeSeasonStatistics
 

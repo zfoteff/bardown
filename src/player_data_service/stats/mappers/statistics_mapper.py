@@ -1,6 +1,24 @@
+from stats.models.dao.composite_game_statistics import (
+    CompositeGameStatistics as CompositeGameStatisticsDAO,
+)
+from stats.models.dao.composite_season_statistics import (
+    CompositeSeasonStatistics as CompositeSeasonStatisticsDAO,
+)
+from stats.models.dao.composite_statistics import (
+    CompositeStatistics as CompositeStatisticsDAO,
+)
 from stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
-from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
 from stats.models.dao.season_statistics import SeasonStatistics as SeasonStatisticsDAO
+from stats.models.dto.composite_game_statistics import (
+    CompositeGameStatistics as CompositeGameStatisticsDTO,
+)
+from stats.models.dto.composite_season_statistics import (
+    CompositeSeasonStatistics as CompositeSeasonStatisticsDTO,
+)
+from stats.models.dto.composite_statistics import (
+    CompositeStatistics as CompositeStatisticsDTO,
+)
+from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
 from stats.models.dto.season_statistics import SeasonStatistics as SeasonStatisticsDTO
 from stats.models.statistics import Statistics
 
@@ -33,8 +51,7 @@ def season_statistics_DTO_to_season_statistics_DAO(
 def game_statistics_DAO_to_game_statistics_DTO(
     game_stats_dao: GameStatisticsDAO,
 ) -> GameStatisticsDTO:
-    statistics = Statistics()
-    statistics.statistics_from_string(game_stats_dao.statistics)
+    statistics = Statistics.from_string(game_stats_dao.statistics)
 
     return GameStatisticsDTO(
         player_id=game_stats_dao.player_id,
@@ -48,8 +65,7 @@ def game_statistics_DAO_to_game_statistics_DTO(
 def season_statistics_DAO_to_season_statistics_DTO(
     season_stats_dao: SeasonStatisticsDAO,
 ) -> SeasonStatisticsDTO:
-    statistics = Statistics()
-    statistics.statistics_from_string(season_stats_dao.statistics)
+    statistics = Statistics.from_string(season_stats_dao.statistics)
 
     return SeasonStatisticsDTO(
         player_id=season_stats_dao.player_id,
@@ -61,9 +77,19 @@ def season_statistics_DAO_to_season_statistics_DTO(
     )
 
 
-def composite_statistics_DTO_to_composite_statistics_DAO():
+def composite_statistics_DTO_to_composite_statistics_DAO(
+    composite_stats_dto: CompositeStatisticsDTO,
+) -> CompositeStatisticsDAO:
     pass
 
 
-def composite_statistics_DAO_to_composite_statistics_DTO():
-    pass
+def composite_statistics_DAO_to_composite_statistics_DTO(
+    composite_stats_dao: CompositeStatisticsDAO,
+) -> CompositeStatisticsDTO:
+    game_stats = [
+        CompositeGameStatisticsDTO(game.game_id, [statistics for statistics in game.statistics])
+        for game in composite_stats_dao.games
+    ]
+    season_stats = [CompositeSeasonStatisticsDTO(season.year, []) for season in composite_stats_dao.season]
+
+    return CompositeStatisticsDTO(game=game_stats)

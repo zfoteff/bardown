@@ -1,7 +1,9 @@
 from bin.logger import Logger
 from fastapi import APIRouter
+from stats.api.controller.composite_statistics_controller import (
+    CompositeStatisticsController,
+)
 from stats.api.controller.statistics_controller import StatisticsController
-from stats.api.controller.composite_statistics_controller import CompositeStatisticsController
 
 API_VERSION = "v0"
 STATISTICS_ROUTER = APIRouter(prefix=f"/statistics/{API_VERSION}")

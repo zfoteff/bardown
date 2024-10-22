@@ -1,17 +1,19 @@
 from typing import List, Tuple
 
 from bin.logger import Logger
-from fastapi import Request
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
-
 from errors.statistics_errors import (
     StatisticsAlreadyExist,
     StatisticsDoNoExist,
     StatisticsValidationError,
 )
+from fastapi import Request
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 from stats.api.validators.statistics_query_validator import (
     validate_get_composite_statistics_query_parameters,
+)
+from stats.mappers.statistics_mapper import (
+    composite_statistics_DAO_to_composite_statistics_DTO,
 )
 from stats.models.dto.composite_statistics import CompositeStatistics
 from stats.models.statistics_request_filters import CompositeStatisticsRequestFilters

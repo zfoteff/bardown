@@ -13,12 +13,12 @@ from stats.api.validators.statistics_query_validator import (
     validate_get_game_statistics_query_parameters,
     validate_get_season_statistics_query_parameters,
 )
-from stats.models.dto.season_statistics import SeasonStatistics
-from stats.models.dto.game_statistics import GameStatistics
 from stats.mappers.statistics_mapper import (
     game_statistics_DAO_to_game_statistics_DTO,
     season_statistics_DAO_to_season_statistics_DTO,
 )
+from stats.models.dto.game_statistics import GameStatistics
+from stats.models.dto.season_statistics import SeasonStatistics
 from stats.statistics_db_interface import StatisticsDatabaseInterface
 
 logger = Logger("player-data-service-controller")

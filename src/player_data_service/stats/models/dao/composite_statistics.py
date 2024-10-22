@@ -1,4 +1,7 @@
-from typing import List, Self
+from typing import Dict, List, Self
+
+from stats.models.dao.composite_game_statistics import CompositeGameStatistics
+from stats.models.dao.composite_season_statistics import CompositeSeasonStatistics
 
 
 class CompositeStatistics:
@@ -10,4 +13,11 @@ class CompositeStatistics:
         game_stats: List[CompositeGameStatistics],
         season_stats: List[CompositeSeasonStatistics],
     ) -> None:
-        pass
+        self.games = game_stats
+        self.season = season_stats
+
+    def to_dict(self) -> Dict:
+        return {
+            "games": self.games.to_dict(),
+            "season": self.season.to_dict(),
+        }
