@@ -74,4 +74,4 @@ class EndpointConfig:
         """
         Create base path for all requests based on environment configuration
         """
-        return f"{self.base_url}/{self.app_pathname}/{self.api_version}/"
+        return f"{self.base_url}/{self.base_path}/{self.api_version}/{self.app_pathname}"

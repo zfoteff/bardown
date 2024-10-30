@@ -7,7 +7,7 @@ class PlayerDataServiceEndpointConfig(EndpointConfig):
     def __init__(
         self,
         base_url: str = "http://0.0.0.0:3001",
-        base_path: str = "/",
+        base_path: str = "/players",
         api_version: str = "v0",
         app_pathname: str = "players",
     ) -> Self:

@@ -5,5 +5,8 @@
     <link rel="stylesheet" href="../static/stylesheets/player.css"/>
 {% endblock %}
 {% block content %}
-    <h2>{{ data.player.name || "Playername"}}</h2>
+    <div class="player-content">
+        <h2>{{ data.player.name || "Playername" }}</h2>
+        <h3>{{ data.player.position || "Attack" }}</h3>
+    </div>
 {% endblock %}
