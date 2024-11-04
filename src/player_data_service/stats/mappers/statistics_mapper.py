@@ -90,6 +90,8 @@ def composite_statistics_DAO_to_composite_statistics_DTO(
         CompositeGameStatisticsDTO(game.game_id, [statistics for statistics in game.statistics])
         for game in composite_stats_dao.games
     ]
-    season_stats = [CompositeSeasonStatisticsDTO(season.year, []) for season in composite_stats_dao.season]
+    season_stats = [
+        CompositeSeasonStatisticsDTO(season.year, [statistics for statistics in season.sta]) for season in composite_stats_dao.season
+    ]
 
     return CompositeStatisticsDTO(game=game_stats)

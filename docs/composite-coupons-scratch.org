@@ -1,0 +1,17 @@
+#+title: Composite Coupons Scratch
+#+author: zfoteff
+
+
+data:
+  games:
+    game_id: str
+    statistics: [
+      player_id: str
+      statistics: Statistics
+    ]
+
+
+  season:
+    year: int
+    team:
+    players:

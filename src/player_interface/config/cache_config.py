@@ -22,6 +22,10 @@ class CacheConfig:
 
     @property
     def ttl(self) -> int:
-        # Add [-30, 30] second modifier to key ttl
+        """Add [-30, 30] second modifier to key ttl
+
+        Returns:
+            int: Cache entry TTL [-30, 30] second modifier applied
+        """
         modifier = randint(-30, 30)
         return self._ttl + modifier

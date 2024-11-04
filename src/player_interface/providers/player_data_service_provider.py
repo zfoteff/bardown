@@ -30,7 +30,9 @@ class PlayerDataServiceProvider:
         """
         Create request for the get by filters endpoint of the player interface:
         """
-        url = ClientUrl("player", "GET", config=PlayerDataServiceEndpointConfig())
+        url = ClientUrl(
+            "GET", config=PlayerDataServiceEndpointConfig(base_path="players", app_pathname="player")
+        )
         request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
         full_request_url = url.url + request.query_string()
 
@@ -56,17 +58,14 @@ class PlayerDataServiceProvider:
         return players
 
     async def get_player_by_filters(self, player_id: str) -> PlayerWithStatistics:
-        """Get player with associated statistics for games and seasons
-
-        Args:
-            player_id (str): _description_
-
-        Returns:
-            PlayerWithStatistics: _description_
         """
-        get_player_url = ClientUrl("player", "GET", config=PlayerDataServiceEndpointConfig())
+        Get player with associated statistics for games and seasons
+        """
+        get_player_url = ClientUrl(
+            "GET", config=PlayerDataServiceEndpointConfig(base_path="players", app_pathname="player")
+        )
         get_statistics_url = ClientUrl(
-            "statistics", "GET", config=PlayerDataServiceEndpointConfig()
+            "GET", config=PlayerDataServiceEndpointConfig(base_path="statistics", app_pathname=None)
         )
         player_request = PlayerDataServiceRequest(
             url=get_player_url, query_parameters={"player_id": player_id}
@@ -99,7 +98,9 @@ class PlayerDataServiceProvider:
         player_data = None
         statistics_data = None
         if get_player_response is not None and get_player_response.status is 200:
-            player_data = Player(**get_player_response.data)
+            player_data = PlayerDataServiceResponseMapper.player_data_service_response_to_players(
+                get_player_response.data
+            )
 
         if get_statistics_response is not None and get_statistics_response is 200:
             statistics_data = PlayerDataServiceResponseMapper.player_data_service_response_to_composite_statistics(
@@ -112,7 +113,9 @@ class PlayerDataServiceProvider:
         """
         Create request for the get by filters endpoint of the teams interface:
         """
-        url = ClientUrl("team", "GET", config=PlayerDataServiceEndpointConfig())
+        url = ClientUrl(
+            "GET", config=PlayerDataServiceEndpointConfig(base_path="team", app_pathname=None)
+        )
         request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
         full_request_url = url.url + request.query_string()
 
@@ -138,7 +141,9 @@ class PlayerDataServiceProvider:
         return teams
 
     async def get_games_by_filters(self, filters: GameFilters) -> List[Game]:
-        url = ClientUrl("game", "GET", config=PlayerDataServiceEndpointConfig())
+        url = ClientUrl(
+            "GET", config=PlayerDataServiceEndpointConfig(base_path="game", app_pathname=None)
+        )
         request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
         full_request_url = url.url + request.query_string()
 

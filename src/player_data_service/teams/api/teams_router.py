@@ -20,6 +20,7 @@ TEAMS_ROUTER.add_api_route(
                             "status": 201,
                             "data": [
                                 {
+                                    "team_id": "fb344330-0e2a-4348-9665-9061cae42aab",
                                     "name": "La Salle Falcons",
                                 }
                             ],

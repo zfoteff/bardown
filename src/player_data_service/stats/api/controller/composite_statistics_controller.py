@@ -1,11 +1,5 @@
-from typing import List, Tuple
-
 from bin.logger import Logger
-from errors.statistics_errors import (
-    StatisticsAlreadyExist,
-    StatisticsDoNoExist,
-    StatisticsValidationError,
-)
+from errors.statistics_errors import StatisticsDoNoExist, StatisticsValidationError
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
@@ -23,11 +17,19 @@ logger = Logger("player-data-service-controller")
 db_interface = StatisticsDatabaseInterface()
 
 
+def is_player_provided(filters: CompositeStatisticsRequestFilters) -> bool:
+    return filters.player_id is not None or (
+        filters.player_first_name is not None and filters.player_last_name is not None
+    )
+
+
 class CompositeStatisticsController:
     async def get_composite_statistics(request: Request) -> JSONResponse:
         try:
             filters = validate_get_composite_statistics_query_parameters(request.query_params)
-            result, statistics = db_interface.get_composite_statistics_for_player(filters)
+
+            if is_player_provided(filters):
+                result, statistics = db_interface.get_composite_statistics_for_player(filters)
         except StatisticsDoNoExist as err:
             return JSONResponse(
                 status_code=404, content={"status": 404, "error": {"message": f"{err}"}}

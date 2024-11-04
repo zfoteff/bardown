@@ -11,4 +11,5 @@ class PlayerSeasonStatistics(BaseModel):
 
 class CompositeSeasonStatistics(BaseModel):
     year: int = None
+    team: str = None
     players: List[PlayerSeasonStatistics] = None

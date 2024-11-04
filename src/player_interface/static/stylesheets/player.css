@@ -1,0 +1,22 @@
+.player-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.player-header img {
+  width: 25vh;  
+}
+
+.player-header-content {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.player-header-content h2 {
+  text-align: left;
+}
+
+.player-header-content h3 {
+  text-align: left;
+}

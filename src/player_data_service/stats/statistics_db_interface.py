@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 from bin.logger import Logger
 from config.db_config import (
@@ -13,7 +13,7 @@ from errors.statistics_errors import (
     StatisticsAlreadyExist,
     StatisticsDoNoExist,
 )
-from stats.__init___ import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
+from stats import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
 from stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
 from stats.models.dao.season_statistics import SeasonStatistics as SeasonStatisticsDAO
 from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
@@ -82,6 +82,28 @@ class StatisticsDatabaseInterface:
             query += f" OFFSET {filters.offset}"
 
         return query
+
+    def _build_query_from_composite_statistics_filters(
+        self, filters: CompositeStatisticsRequestFilters
+    ) -> Tuple[str]:
+        game_query = f"""
+            select 
+                s.gameid, s.statistics, p.playerid
+            from players p
+                inner join game_statistics as s on p.playerid=s.playerid
+            where p.playerid="{filters.player_id}"
+        """
+
+        season_query = f"""
+            select 
+                tp.teamid, p.playerid, s.year, s.statistics 
+            from players p
+                inner join team_player tp on p.playerid=tp.playerid
+                inner join season_statistics s on p.playerid=s.playerid and tp.teamid=s.teamid
+            where p.playerid="{filters.player_id}"
+        """
+
+        return game_query, season_query
 
     def create_game_statistic(
         self, statistics: GameStatisticsDTO
@@ -159,14 +181,29 @@ class StatisticsDatabaseInterface:
     def get_composite_statistics_for_player(
         self,
         filters: CompositeStatisticsRequestFilters,
-    ) -> Tuple[bool, List] | StatisticsDoNoExist:
-        query = self._build_query_from_composite_statistics_filters(filters)
-        success, result = self.__season_client.execute_query(query, return_results=True)
+    ) -> Tuple[bool, Dict] | StatisticsDoNoExist:
+        game_query, season_query = self._build_query_from_composite_statistics_filters(filters)
+        game_success, game_result = self.__game_client.execute_query(
+            game_query, return_results=True
+        )
+        season_success, season_result = self.__season_client.execute_query(
+            season_query, return_results=True
+        )
 
-        if not success:
-            return False, []
+        query_success = True
 
-        composite_statistics = []
+        if not game_success:
+            query_success = False
+            game_result = None
+
+        if not season_success:
+            query_success = False
+            season_result = None
+
+        game_stats = []
+        season_stats = []
+
+        return query_success, {"games": game_stats, "season": season_stats}
 
     def update_game_statistics(
         self, player_id: str, game_statistics: GameStatisticsDTO

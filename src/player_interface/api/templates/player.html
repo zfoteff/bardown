@@ -1,12 +1,43 @@
 {% extends "index.html" %}
-{% block title %}Player Name{% endblock %}
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="../static/stylesheets/player.css"/>
 {% endblock %}
 {% block content %}
-    <div class="player-content">
-        <h2>{{ data.player.name || "Playername" }}</h2>
-        <h3>{{ data.player.position || "Attack" }}</h3>
+    <div class="player">
+        <div class="player-header">
+            <img src="../static/zac-lax.JPG"/>
+            <div class="player-header-content">
+                <h2 class="player-title"">{{ data.player.name or "Player Name" }}</h2>
+                <h3 class="player-position">{{ data.player.position or "Position" }}</h3>
+            </div>
+        </div>
+        <hr />
+        <div class="player-content">
+            <table id="stats-table">
+                <tbody>
+                    <tr>
+                        <th>S</th>
+                        <th>G</th>
+                        <th>A</th>
+                        <th>CT</th>
+                        <th>GB</th>
+                        <th>PK</th>
+                        <th>T</th>
+                        <th>P</th>
+                    </tr>
+                    <tr>
+                        <td class="num-field">0</td>
+                        <td class="num-field">0</td>
+                        <td class="num-field">0</td>
+                        <td class="num-field">0</td>
+                        <td class="num-field">0</td>
+                        <td class="num-field">0</td>
+                        <td class="num-field">0</td>
+                        <td class="num-field">0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

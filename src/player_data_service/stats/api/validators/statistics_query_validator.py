@@ -202,3 +202,5 @@ def validate_get_composite_statistics_query_parameters(
         _validate_offset(filters, offset)
     if order is not None or order_by is not None:
         _validate_ordering_rules(filters, order, order_by)
+
+    return filters
