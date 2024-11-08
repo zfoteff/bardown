@@ -14,6 +14,8 @@ from errors.statistics_errors import (
     StatisticsDoNoExist,
 )
 from stats import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
+from stats.models.dao.composite_game_statistics import CompositeGameStatistics
+from stats.models.dao.composite_season_statistics import CompositeSeasonStatistics
 from stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
 from stats.models.dao.season_statistics import SeasonStatistics as SeasonStatisticsDAO
 from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
@@ -88,7 +90,7 @@ class StatisticsDatabaseInterface:
     ) -> Tuple[str]:
         game_query = f"""
             select 
-                s.gameid, s.statistics, p.playerid
+                s.gameid, p.playerid, s.statistics
             from players p
                 inner join game_statistics as s on p.playerid=s.playerid
             where p.playerid="{filters.player_id}"
@@ -194,14 +196,24 @@ class StatisticsDatabaseInterface:
 
         if not game_success:
             query_success = False
-            game_result = None
+            game_result = []
 
         if not season_success:
             query_success = False
-            season_result = None
+            season_result = []
 
-        game_stats = []
-        season_stats = []
+        game_stats = [
+            CompositeGameStatistics.from_tuple(
+                composite_statistics_tuple=composite_game_statistics_data
+            )
+            for composite_game_statistics_data in game_result
+        ]
+        season_stats = [
+            CompositeSeasonStatistics.from_tuple(
+                composite_statistics_tuple=composite_season_statistics_data
+            )
+            for composite_season_statistics_data in season_result
+        ]
 
         return query_success, {"games": game_stats, "season": season_stats}
 
