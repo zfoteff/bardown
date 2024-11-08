@@ -1,11 +1,5 @@
-import statistics
-from re import S
-
 from stats.models.dao.composite_game_statistics import (
     CompositeGameStatistics as CompositeGameStatistics,
-)
-from stats.models.dao.composite_season_statistics import (
-    CompositeSeasonStatistics as CompositeSeasonStatisticsDAO,
 )
 from stats.models.dao.composite_statistics import (
     CompositeStatistics as CompositeStatisticsDAO,
@@ -86,30 +80,11 @@ def season_statistics_DAO_to_season_statistics_DTO(
     )
 
 
-def composite_player_game_statistics_DAO_to_DTO() -> PlayerGameStatisticsDTO:
-    pass
-
-
-def composite_player_season_statistics_DAO_to_DTO(
-    player_season_statistics_dao: PlayerSeasonStatisticsDAO,
-) -> PlayerSeasonStatisticsDTO:
-    statistics = Statistics.from_string(player_season_statistics_dao.statistics)
-
-    return PlayerSeasonStatisticsDTO(
-        player_id=player_season_statistics_dao.player_id, statistics=statistics
-    )
-
-
-def composite_statistics_DTO_to_composite_statistics_DAO(
-    composite_stats_dto: CompositeStatisticsDTO,
-) -> CompositeStatisticsDAO:
-    pass
-
-
 def composite_statistics_DAO_to_composite_statistics_DTO(
     composite_stats_dao: CompositeStatisticsDAO,
 ) -> CompositeStatisticsDTO:
     game_data = {}
+    season_data = {}
 
     for game in composite_stats_dao.games:
         if game.game_id not in game_data.keys():
@@ -117,6 +92,16 @@ def composite_statistics_DAO_to_composite_statistics_DTO(
         else:
             game_data[game.game_id].append(
                 {"player_id": game.player_id, "statistics": game.statistics}
+            )
+
+    for season in composite_stats_dao.season:
+        if (season.year, season.team_id) not in game_data.keys():
+            season_data[(season.year, season.team_id)] = [
+                {"player_id": season.player_id, "statistics": season.statistics}
+            ]
+        else:
+            season_data[(season.year, season.team_id)].append(
+                {"player_id": season.player_id, "statistics": season.statistics}
             )
 
     game_stats = [
@@ -133,21 +118,19 @@ def composite_statistics_DAO_to_composite_statistics_DTO(
         for game_id in game_data.keys()
     ]
 
-    season_data = {}
-
-    for season in composite_stats_dao.season:
-        if (season.year, season.team_id) not in game_data.keys():
-            season_data[(season.year, season.team_id)] = [{""}]
-
     season_stats = [
         CompositeSeasonStatisticsDTO(
-            season.year,
+            year,
+            team_id,
             [
-                composite_player_season_statistics_DAO_to_DTO(player_season_statistics)
-                for player_season_statistics in season.players
+                PlayerSeasonStatisticsDTO(
+                    player_id=player_season_info.get("player_id"),
+                    statistics=Statistics.from_string(player_season_info.get("statistics"))
+                )
+                for player_season_info in game_data[(year, team_id)]
             ],
         )
-        for season in composite_stats_dao.season
+        for year, team_id in season_data.keys()
     ]
 
-    return CompositeStatisticsDTO(game=game_stats, season=season_stats)
+    return CompositeStatisticsDTO(games=game_stats, season=season_stats)

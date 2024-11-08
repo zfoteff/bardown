@@ -49,13 +49,9 @@ class CompositeStatisticsController:
             status_code=200,
             content={
                 "status": 200,
-                "data": []
-                if (statistics == []) or (statistics is None)
-                else [
+                "data": 
                     jsonable_encoder(
-                        composite_statistics_DAO_to_composite_statistics_DTO(statistic)
+                        composite_statistics_DAO_to_composite_statistics_DTO(statistics)
                     )
-                    for statistic in statistics
-                ],
             },
         )

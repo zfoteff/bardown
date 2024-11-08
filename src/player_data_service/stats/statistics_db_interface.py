@@ -16,6 +16,7 @@ from errors.statistics_errors import (
 from stats import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
 from stats.models.dao.composite_game_statistics import CompositeGameStatistics
 from stats.models.dao.composite_season_statistics import CompositeSeasonStatistics
+from stats.models.dao.composite_statistics import CompositeStatistics
 from stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
 from stats.models.dao.season_statistics import SeasonStatistics as SeasonStatisticsDAO
 from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
@@ -183,7 +184,7 @@ class StatisticsDatabaseInterface:
     def get_composite_statistics_for_player(
         self,
         filters: CompositeStatisticsRequestFilters,
-    ) -> Tuple[bool, Dict] | StatisticsDoNoExist:
+    ) -> Tuple[bool, CompositeStatistics] | StatisticsDoNoExist:
         game_query, season_query = self._build_query_from_composite_statistics_filters(filters)
         game_success, game_result = self.__game_client.execute_query(
             game_query, return_results=True
@@ -195,10 +196,12 @@ class StatisticsDatabaseInterface:
         query_success = True
 
         if not game_success:
+            logger.warning("Composite game statistics query failed: {filters}, result: {game_result}")
             query_success = False
             game_result = []
 
         if not season_success:
+            logger.warning("Composite season statistics query failed: {filters}, result: {season_result}")
             query_success = False
             season_result = []
 
@@ -215,7 +218,7 @@ class StatisticsDatabaseInterface:
             for composite_season_statistics_data in season_result
         ]
 
-        return query_success, {"games": game_stats, "season": season_stats}
+        return query_success, CompositeStatistics(game_stats=game_stats, season_stats=season_stats)
 
     def update_game_statistics(
         self, player_id: str, game_statistics: GameStatisticsDTO
