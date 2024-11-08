@@ -12,7 +12,4 @@ class CompositeGameStatistics:
         return cls(**{k: v for k, v in zip(cls().to_dict().keys(), composite_statistics_tuple)})
 
     def to_dict(self) -> Dict:
-        return {
-            "game_id": f"{self.game_id}",
-            "statistics": [statistics.to_dict() for statistics in self.statistics],
-        }
+        return {"game_id": self.game_id, "player_id": self.player_id, "statistics": self.statistics}

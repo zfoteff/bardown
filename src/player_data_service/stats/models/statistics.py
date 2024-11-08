@@ -35,7 +35,7 @@ class Statistics(BaseModel):
 
     @classmethod
     def from_string(cls, statistics_string: str):
-        stats = dict(zip(dict(cls).keys(), map(int, statistics_string.split("|"))))
+        stats = dict(zip(cls.model_fields.keys(), map(int, statistics_string.split("|"))))
         return Statistics(**stats)
 
     def __str__(self) -> str:

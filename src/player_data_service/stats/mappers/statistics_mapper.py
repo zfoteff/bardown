@@ -106,11 +106,11 @@ def composite_statistics_DAO_to_composite_statistics_DTO(
 
     game_stats = [
         CompositeGameStatisticsDTO(
-            game_id,
-            [
+            game_id=game_id,
+            statistics=[
                 PlayerGameStatisticsDTO(
-                    player_id=player_game_info.get("player_id"),
-                    statistics=Statistics.from_string(player_game_info.get("statistics")),
+                    player_id=player_game_info["player_id"],
+                    statistics=Statistics.from_string(player_game_info["statistics"]),
                 )
                 for player_game_info in game_data[game_id]
             ],
@@ -120,17 +120,17 @@ def composite_statistics_DAO_to_composite_statistics_DTO(
 
     season_stats = [
         CompositeSeasonStatisticsDTO(
-            year,
-            team_id,
-            [
+            year=year,
+            team_id=team_id,
+            players=[
                 PlayerSeasonStatisticsDTO(
-                    player_id=player_season_info.get("player_id"),
-                    statistics=Statistics.from_string(player_season_info.get("statistics"))
+                    player_id=player_season_info["player_id"],
+                    statistics=Statistics.from_string(player_season_info["statistics"]),
                 )
-                for player_season_info in game_data[(year, team_id)]
+                for player_season_info in season_data[(year, team_id)]
             ],
         )
-        for year, team_id in season_data.keys()
+        for (year, team_id) in season_data.keys()
     ]
 
     return CompositeStatisticsDTO(games=game_stats, season=season_stats)
