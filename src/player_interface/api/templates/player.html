@@ -1,43 +1,133 @@
 {% extends "index.html" %}
 {% block head %}
-    {{ super() }}
-    <link rel="stylesheet" href="../static/stylesheets/player.css"/>
+{{ super() }}
+<link rel="stylesheet" href="../static/stylesheets/player.css" />
 {% endblock %}
 {% block content %}
-    <div class="player">
-        <div class="player-header">
-            <img src="../static/zac-lax.JPG"/>
-            <div class="player-header-content">
-                <h2 class="player-title"">{{ data.player.name or "Player Name" }}</h2>
+<div class="player">
+    <div class="player-header">
+        <img src="../{{data.player.img_url}}" />
+        <div class="player-header-content">
+            <h2 class="player-title"">{{ data.player.name or " Player Name" }}</h2>
                 <h3 class="player-position">{{ data.player.position or "Position" }}</h3>
-            </div>
+                <h3 class="player-grade">{{data.player.grade or "Freshman"}}</h3>
+                <h3 class="player-school">{{data.player.school or "School"}}</h3>
         </div>
-        <hr />
-        <div class="player-content">
-            <table id="stats-table">
+    </div>
+    <hr />
+    <div class="player-content">
+        {% for year_stats in data.statistics.season %}
+        <h4>{{year_stats.year}}</h4>
+        <div class="season-statistics">
+            <table id="statistics-table">
                 <tbody>
                     <tr>
-                        <th>S</th>
-                        <th>G</th>
+                        <th>HSH</th>
+                        <th>MSH</th>
+                        <th>LSH</th>
+                        <th>HG</th>
+                        <th>MG</th>
+                        <th>LG</th>
                         <th>A</th>
-                        <th>CT</th>
                         <th>GB</th>
-                        <th>PK</th>
                         <th>T</th>
+                        <th>CT</th>
                         <th>P</th>
+                        <th>K</th>
+                        <th>MS</th>
+                        <th>HGA</th>
+                        <th>MGA</th>
+                        <th>LGA</th>
+                        <th>HGS</th>
+                        <th>MGS</th>
+                        <th>LGS</th>
+                        <th>FOW</th>
+                        <th>FOL</th>
                     </tr>
+                    {% for stats in year_stats.players %}
                     <tr>
-                        <td class="num-field">0</td>
-                        <td class="num-field">0</td>
-                        <td class="num-field">0</td>
-                        <td class="num-field">0</td>
-                        <td class="num-field">0</td>
-                        <td class="num-field">0</td>
-                        <td class="num-field">0</td>
-                        <td class="num-field">0</td>
+                        <td class="num-field">{{stats.statistics.hsh}}</td>
+                        <td class="num-field">{{stats.statistics.msh}}</td>
+                        <td class="num-field">{{stats.statistics.lsh}}</td>
+                        <td class="num-field">{{stats.statistics.hg}}</td>
+                        <td class="num-field">{{stats.statistics.mg}}</td>
+                        <td class="num-field">{{stats.statistics.lg}}</td>
+                        <td class="num-field">{{stats.statistics.a}}</td>
+                        <td class="num-field">{{stats.statistics.gb}}</td>
+                        <td class="num-field">{{stats.statistics.t}}</td>
+                        <td class="num-field">{{stats.statistics.ct}}</td>
+                        <td class="num-field">{{stats.statistics.p}}</td>
+                        <td class="num-field">{{stats.statistics.k}}</td>
+                        <td class="num-field">{{stats.statistics.ms}}</td>
+                        <td class="num-field">{{stats.statistics.hga}}</td>
+                        <td class="num-field">{{stats.statistics.mga}}</td>
+                        <td class="num-field">{{stats.statistics.lga}}</td>
+                        <td class="num-field">{{stats.statistics.hgs}}</td>
+                        <td class="num-field">{{stats.statistics.mgs}}</td>
+                        <td class="num-field">{{stats.statistics.lgs}}</td>
+                        <td class="num-field">{{stats.statistics.fow}}</td>
+                        <td class="num-field">{{stats.statistics.fol}}</td>
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
+        {% endfor %}
+        <div class="game-statistics">
+            <table id="statistics-table">
+                <tbody>
+                    <tr>
+                        <th>HSH</th>
+                        <th>MSH</th>
+                        <th>LSH</th>
+                        <th>HG</th>
+                        <th>MG</th>
+                        <th>LG</th>
+                        <th>A</th>
+                        <th>GB</th>
+                        <th>T</th>
+                        <th>CT</th>
+                        <th>P</th>
+                        <th>K</th>
+                        <th>MS</th>
+                        <th>HGA</th>
+                        <th>MGA</th>
+                        <th>LGA</th>
+                        <th>HGS</th>
+                        <th>MGS</th>
+                        <th>LGS</th>
+                        <th>FOW</th>
+                        <th>FOL</th>
+                    </tr>
+                    {% for stats in data.statistics.games.statistics%}
+                    <tr>
+                        <td class="num-field">hsh</td>
+                        <td class="num-field">msh</td>
+                        <td class="num-field">lsh</td>
+                        <td class="num-field">hg</td>
+                        <td class="num-field">mg</td>
+                        <td class="num-field">lg</td>
+                        <td class="num-field">a</td>
+                        <td class="num-field">gb</td>
+                        <td class="num-field">t</td>
+                        <td class="num-field">ct</td>
+                        <td class="num-field">p</td>
+                        <td class="num-field">k</td>
+                        <td class="num-field">ms</td>
+                        <td class="num-field">hga</td>
+                        <td class="num-field">mga</td>
+                        <td class="num-field">lga</td>
+                        <td class="num-field">hgs</td>
+                        <td class="num-field">mgs</td>
+                        <td class="num-field">lgs</td>
+                        <td class="num-field">fow</td>
+                        <td class="num-field">fol</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
     </div>
+</div>
 {% endblock %}

@@ -58,6 +58,10 @@ class Player:
         return self._last_name
 
     @property
+    def name(self) -> str:
+        return f"{self._first_name} {self._last_name}"
+
+    @property
     def position(self) -> str:
         return str(self._position)
 

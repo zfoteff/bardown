@@ -1,8 +1,9 @@
-from typing import Self, Optional
+from typing import Optional, Self
 
 from models.statistics import Statistics
 
-class PlayerStatistics: 
+
+class PlayerStatistics:
     _player_id: str
     _statistics: Optional[Statistics] = None
 
@@ -13,13 +14,10 @@ class PlayerStatistics:
     @property
     def player_id(self) -> str:
         return self._player_id
-    
+
     @property
     def statistics(self) -> Statistics:
         return self._statistics
-    
+
     def to_dict(self) -> dict:
-        return {
-            "player_id": self._player_id,
-            "statistics": self._statistics.to_dict()
-        }
+        return {"player_id": self._player_id, "statistics": self._statistics.to_dict()}

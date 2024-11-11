@@ -1,16 +1,16 @@
 from logging import Logger
-from typing import List, Self
+from typing import List, Self, Tuple
 
 from client.cache.cache_client import CacheClient
 from client.client_url import ClientUrl
 from client.playerdataservice.player_data_service_client import PlayerDataServiceClient
 from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
 from mappers.player_response_mapper import PlayerDataServiceResponseMapper
+from models.composite_statistics import CompositeStatistics
 from models.game import Game
 from models.game_filters import GameFilters
 from models.player import Player
 from models.player_data_service_request import PlayerDataServiceRequest
-from models.player_with_statistics import PlayerWithStatistics
 from models.players_filters import PlayersFilters
 from models.team import Team
 from models.team_filters import TeamFilters
@@ -58,7 +58,7 @@ class PlayerDataServiceProvider:
 
         return players
 
-    async def get_player_by_filters(self, player_id: str) -> PlayerWithStatistics:
+    async def get_player_by_filters(self, player_id: str) -> Tuple[Player, CompositeStatistics]:
         """
         Get player with associated statistics for games and seasons
         """
@@ -67,30 +67,32 @@ class PlayerDataServiceProvider:
             config=PlayerDataServiceEndpointConfig(base_path="players", app_pathname="player"),
         )
         get_statistics_url = ClientUrl(
-            "GET", config=PlayerDataServiceEndpointConfig(base_path="statistics", app_pathname=None)
+            "GET", config=PlayerDataServiceEndpointConfig(base_path="statistics", app_pathname="statistics")
         )
         player_request = PlayerDataServiceRequest(
-            url=get_player_url, query_parameters={"player_id": player_id}
+            url=get_player_url, query_parameters={"filter.playerId": player_id}
         )
         statistics_request = PlayerDataServiceRequest(
-            url=get_player_url, query_parameters={"player_id": player_id}
+            url=get_statistics_url, query_parameters={"filter.player.playerId": player_id}
         )
         full_get_player_request_url = get_player_url.url + player_request.query_string()
         full_get_statistics_request_url = get_statistics_url.url + statistics_request.query_string()
 
-        result, get_player_response = self._cache_client.retrieve_response(
+        player_cache_result, get_player_response = self._cache_client.retrieve_response(
             full_get_player_request_url
         )
-        result, get_statistics_response = self._cache_client.retrieve_response(
+        statistics_cache_result, get_statistics_response = self._cache_client.retrieve_response(
             full_get_statistics_request_url
         )
 
-        if not result:
+        if not player_cache_result:
             get_player_response = (
                 await self._player_data_service_client.exchange_with_query_parameters(
                     player_request
                 )
             )
+
+        if not statistics_cache_result:
             get_statistics_response = (
                 await self._player_data_service_client.exchange_with_query_parameters(
                     statistics_request
@@ -99,17 +101,17 @@ class PlayerDataServiceProvider:
 
         player_data = None
         statistics_data = None
-        if get_player_response is not None and get_player_response.status is 200:
+        if get_player_response is not None and get_player_response.status == 200:
             player_data = PlayerDataServiceResponseMapper.player_data_service_response_to_players(
                 get_player_response.data
             )
 
-        if get_statistics_response is not None and get_statistics_response is 200:
+        if get_statistics_response is not None and get_statistics_response.status == 200:
             statistics_data = PlayerDataServiceResponseMapper.player_data_service_response_to_composite_statistics(
                 get_statistics_response.data
             )
 
-        return PlayerWithStatistics(player_data, statistics_data)
+        return (player_data, statistics_data)
 
     async def get_teams_by_filters(self, filters: TeamFilters) -> List[Team]:
         """

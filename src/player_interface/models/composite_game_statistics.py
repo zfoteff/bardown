@@ -2,6 +2,7 @@ from typing import List, Self
 
 from models.player_statistics import PlayerStatistics
 
+
 class CompositeGameStatistics:
     _game_id: str
     _statistics: List[PlayerStatistics]
@@ -13,14 +14,13 @@ class CompositeGameStatistics:
     @property
     def game_id(self) -> str:
         return self._game_id
-    
+
     @property
     def statistics(self) -> List[PlayerStatistics]:
         return self._statistics
-    
+
     def to_dict(self) -> dict:
         return {
             "game_id": self._game_id,
-            "statistics": [player_stats.to_dict() for player_stats in self.statistics]
+            "statistics": [player_stats.to_dict() for player_stats in self.statistics],
         }
-
