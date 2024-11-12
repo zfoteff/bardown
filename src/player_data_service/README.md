@@ -1,19 +1,14 @@
 <h1 class="service-title" style="text-align: center;">
 Player Data Service
 </h1>
-===
 
-<div class="service-shields" style="text-align: center;">
 ![Python3](https://img.shields.io/badge/Python3.11-3776AB?style=flat&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-005571?logo=fastapi)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1.svg?&logo=mysql&logoColor=white)
-</div>
 
 ----
 
 Source of truth for all player, game, team, coach, and statistic data
-
-- Future: Refactor Statistics data to its own data service
 
 ## Usage
 

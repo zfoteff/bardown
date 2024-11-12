@@ -42,6 +42,7 @@ class CompositeSeasonStatisticsFull(CompositeSeasonStatistics):
             "players": [player_stats.to_dict() for player_stats in self.players],
         }
 
+
 class CompositeSeasonByYear(CompositeSeasonStatistics):
     _year: int
     _data: List[CompositeSeasonStatisticsFull]
@@ -53,11 +54,11 @@ class CompositeSeasonByYear(CompositeSeasonStatistics):
     @property
     def year(self) -> int:
         return self._year
-    
+
     @property
     def data(self) -> List[CompositeSeasonStatisticsFull]:
         return self._data
-    
+
     def to_dict(self) -> dict:
         return {
             "year": self._year,

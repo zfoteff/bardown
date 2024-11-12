@@ -1,6 +1,3 @@
-__version__ = "0.1.0"
-__author__ = "Zac Foteff"
-
 from errors.coaches_errors import (
     CoachAlreadyExists,
     CoachDoesNotExist,

@@ -1,6 +1,3 @@
-__version__ = "1.0.0"
-__author__ = "Zac Foteff"
-
 from stats.models.dto.game_statistics import GameStatistics
 from tests.bin.decorators.timed import timed
 from tests.constants import VALID_GAME_STATISTICS

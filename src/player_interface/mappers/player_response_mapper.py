@@ -1,7 +1,10 @@
 from typing import Iterable, List
 
 from models.composite_game_statistics import CompositeGameStatistics
-from models.composite_season_statistics_full import CompositeSeasonByYear, CompositeSeasonStatisticsFull
+from models.composite_season_statistics_full import (
+    CompositeSeasonByYear,
+    CompositeSeasonStatisticsFull,
+)
 from models.composite_statistics import CompositeStatistics
 from models.game import Game
 from models.player import Player
@@ -12,13 +15,18 @@ from models.team import Team
 def player_data_service_response_to_players(data: Iterable) -> List[Player]:
     return [Player(**player) for player in data]
 
+
 def player_data_sevice_response_to_teams(data: Iterable) -> List[Team]:
     return [Team(**team) for team in data]
+
 
 def player_data_service_response_to_games(data: Iterable) -> List[Game]:
     return [Game(**game) for game in data]
 
-def composite_season_to_composite_season_by_year(seasons: List[CompositeSeasonStatisticsFull]) -> List[CompositeSeasonByYear]:
+
+def composite_season_to_composite_season_by_year(
+    seasons: List[CompositeSeasonStatisticsFull],
+) -> List[CompositeSeasonByYear]:
     result = {}
 
     for season in seasons:
@@ -27,10 +35,21 @@ def composite_season_to_composite_season_by_year(seasons: List[CompositeSeasonSt
         else:
             result[season["year"]].append(season)
 
-    return [CompositeSeasonByYear(year, [CompositeSeasonStatisticsFull(**year_composite_stats) for year_composite_stats in result[year]]) for year in result.keys()]
+    return [
+        CompositeSeasonByYear(
+            year,
+            [
+                CompositeSeasonStatisticsFull(**year_composite_stats)
+                for year_composite_stats in result[year]
+            ],
+        )
+        for year in result.keys()
+    ]
 
 
-def player_data_service_response_to_composite_statistics(data: Iterable, order_by_year: bool = False) -> CompositeStatistics:
+def player_data_service_response_to_composite_statistics(
+    data: Iterable, order_by_year: bool = False
+) -> CompositeStatistics:
     return CompositeStatistics(
         games=[
             CompositeGameStatistics(
@@ -60,6 +79,7 @@ def player_data_service_response_to_composite_statistics(data: Iterable, order_b
                 ],
             )
             for season in data["season"]
-        ] if not order_by_year else composite_season_to_composite_season_by_year(data["season"]),
+        ]
+        if not order_by_year
+        else composite_season_to_composite_season_by_year(data["season"]),
     )
-

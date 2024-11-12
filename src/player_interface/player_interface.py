@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 __author__ = "Zac Foteff"
-__version__ = "0.0.2"
+__version__ = "0.1.0"
 
+import argparse
 from contextlib import asynccontextmanager
 
 from api.player_interface_router import PLAYER_INTERFACE_ROUTER
@@ -80,10 +81,28 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 if __name__ == "__main__":
     from uvicorn import run
 
-    run(
-        app="player_interface:app",
-        log_level="debug",
-        host="0.0.0.0",
-        port=3000,
-        reload=True,
+    parser = argparse.ArgumentParser(
+        description="""
+        Front end for the Bardown application. Interfaces with the Player
+        Data Service to display information to the user. Run with no arguments
+        to start API for CRUD operations
+    """
     )
+    parser.add_argument(
+        "-v",
+        "--version",
+        help="Display the version of the service",
+        action="store_true",
+    )
+    args = parser.parse_args()
+
+    if args.version is True:
+        print(app.version)
+    else:
+        run(
+            app="player_interface:app",
+            log_level="debug",
+            host="0.0.0.0",
+            port=3000,
+            reload=True,
+        )

@@ -1,6 +1,3 @@
-__version__ = "1.0.0"
-__author__ = "Zac Foteff"
-
 from models.players_filters import PlayersFilters
 from tests.bin.decorators.timed import timed
 

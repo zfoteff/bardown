@@ -1,6 +1,3 @@
-__version__ = "1.0.0"
-__author__ = "Zac Foteff"
-
 from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
