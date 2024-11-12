@@ -1,4 +1,3 @@
-from bin.logger import Logger
 from errors.players_errors import (
     PlayerAlreadyExists,
     PlayerDoesNotExist,
@@ -13,6 +12,8 @@ from players.api.validators.players_query_validator import (
 from players.mappers.player_mapper import player_DAO_to_player_DTO
 from players.models.dto.player import Player
 from players.player_db_interface import PlayerDatabaseInterface
+
+from bin.logger import Logger
 
 logger = Logger("player-data-service-controller")
 db_interface = PlayerDatabaseInterface()

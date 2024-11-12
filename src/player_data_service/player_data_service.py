@@ -5,13 +5,14 @@ __version__ = "0.0.3"
 from contextlib import asynccontextmanager
 from logging import Logger
 
-from bin.metadata import servers, tags_metadata
 from fastapi import APIRouter, FastAPI
 from fastapi.responses import JSONResponse
 from games.api.games_router import GAMES_ROUTER
 from players.api.player_router import PLAYER_ROUTER
 from stats.api.statistics_router import STATISTICS_ROUTER
 from teams.api.teams_router import TEAMS_ROUTER
+
+from bin.metadata import servers, tags_metadata
 
 logger = Logger("player-data-service")
 

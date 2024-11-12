@@ -4,6 +4,7 @@ __author__ = "Zac Foteff"
 from typing import List, Self, Tuple
 
 import mysql.connector as mysql
+
 from bin.logger import Logger
 
 logger = Logger("mysql-client")
@@ -58,7 +59,7 @@ class MySQLClient:
     def execute_query(
         self, query: str, commit_candidate: bool = False, return_results: bool = False
     ) -> Tuple[bool, List]:
-        logger.info(f"Executing query: {query}")
+        logger.debug(f"Executing query: {query}")
         data = []
         try:
             self.__cursor.execute(query + ";")

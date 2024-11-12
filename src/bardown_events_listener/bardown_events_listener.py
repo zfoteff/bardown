@@ -3,9 +3,10 @@ __version__ = "0.0.1"
 
 from contextlib import asynccontextmanager
 
-from bin.logger import Logger
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+
+from bin.logger import Logger
 
 logger = Logger("bardown-events-listener.txt")
 

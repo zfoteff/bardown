@@ -11,4 +11,5 @@ class PlayerGameStatistics(BaseModel):
 
 class CompositeGameStatistics(BaseModel):
     game_id: str = None
+    title: str = None
     statistics: List[PlayerGameStatistics] = None

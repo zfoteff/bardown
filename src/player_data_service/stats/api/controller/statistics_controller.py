@@ -1,6 +1,5 @@
 from typing import List, Tuple
 
-from bin.logger import Logger
 from errors.statistics_errors import (
     StatisticsAlreadyExist,
     StatisticsDoNoExist,
@@ -20,6 +19,8 @@ from stats.mappers.statistics_mapper import (
 from stats.models.dto.game_statistics import GameStatistics
 from stats.models.dto.season_statistics import SeasonStatistics
 from stats.statistics_db_interface import StatisticsDatabaseInterface
+
+from bin.logger import Logger
 
 logger = Logger("player-data-service-controller")
 db_interface = StatisticsDatabaseInterface()

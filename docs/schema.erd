@@ -4,7 +4,7 @@
   "settings": {
     "width": 2400,
     "height": 2400,
-    "scrollTop": -899.5508,
+    "scrollTop": -179.5508,
     "scrollLeft": -216.9586,
     "zoomLevel": 0.8,
     "show": 431,
@@ -3615,18 +3615,18 @@
         "tableId": "RxUndbt754M8igIZM04cM",
         "name": "year",
         "comment": "year of the season",
-        "dataType": "YEAR",
+        "dataType": "INTEGER",
         "default": "",
-        "options": 10,
+        "options": 8,
         "ui": {
-          "keys": 1,
+          "keys": 0,
           "widthName": 60,
           "widthComment": 135,
           "widthDataType": 60,
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1718240684801,
+          "updateAt": 1731351520266,
           "createAt": 1716687406472
         }
       },
@@ -6757,10 +6757,10 @@
       -1,
       {
         "name": 1716687410024,
-        "dataType": 1718240684800,
+        "dataType": 1731351520266,
         "comment": 1716687435540,
         "options(notNull)": 1716687439840,
-        "options(primaryKey)": 1716688176470
+        "options(primaryKey)": 1731351501575
       }
     ],
     "-EBGDuCS778NF5JtcXs-0": [

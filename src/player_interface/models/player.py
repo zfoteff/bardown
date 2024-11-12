@@ -63,7 +63,7 @@ class Player:
 
     @property
     def position(self) -> str:
-        return str(self._position)
+        return str(self._position).replace("_", " ")
 
     @property
     def grade(self) -> str:

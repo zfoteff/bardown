@@ -1,4 +1,3 @@
-from bin.logger import Logger
 from errors.statistics_errors import StatisticsDoNoExist, StatisticsValidationError
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
@@ -12,6 +11,8 @@ from stats.mappers.statistics_mapper import (
 from stats.models.dto.composite_statistics import CompositeStatistics
 from stats.models.statistics_request_filters import CompositeStatisticsRequestFilters
 from stats.statistics_db_interface import StatisticsDatabaseInterface
+
+from bin.logger import Logger
 
 logger = Logger("player-data-service-controller")
 db_interface = StatisticsDatabaseInterface()

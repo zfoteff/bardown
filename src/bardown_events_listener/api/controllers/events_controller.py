@@ -2,7 +2,6 @@ import datetime
 from typing import Optional
 from uuid import NAMESPACE_OID, uuid5
 
-from bin.logger import Logger
 from event_builder import EventBuilder
 from event_service import EventService
 from fastapi import Header
@@ -13,6 +12,8 @@ from models.event import Event
 from models.metadata import Metadata
 from models.new_coach_document import NewCoachDocument
 from models.new_player_document import NewPlayerDocument
+
+from bin.logger import Logger
 
 logger = Logger("bardown-events-listener")
 event_service = EventService()

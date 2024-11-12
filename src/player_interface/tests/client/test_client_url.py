@@ -1,11 +1,12 @@
 __version__ = "1.0.0"
 __author__ = "Zac Foteff"
 
-from bin.logger import Logger
 from client.client_url import ClientURL
 from config.endpoint_config import EndpointConfig
 from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
 from tests.bin.decorators.timed import timed
+
+from bin.logger import Logger
 
 logger = Logger("test")
 

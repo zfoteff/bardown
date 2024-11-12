@@ -1,8 +1,9 @@
-from bin.logger import Logger
 from models.player_data_service_request import PlayerDataServiceRequest
 from models.player_data_service_response import PlayerDataServiceResponse
 from requests import request
 from requests.exceptions import ConnectionError, InvalidSchema
+
+from bin.logger import Logger
 
 logger = Logger("player-data-service-client")
 

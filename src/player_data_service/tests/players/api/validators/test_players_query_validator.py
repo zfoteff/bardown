@@ -1,11 +1,12 @@
 import pytest
-from bin.logger import Logger
 from errors.players_errors import PlayerRequestValidationError
 from players.api.validators.players_query_validator import (
     validate_get_players_query_parameters as validate,
 )
 from tests.bin.decorators.timed import timed
 from tests.constants import VALID_PLAYER
+
+from bin.logger import Logger
 
 logger = Logger("test")
 

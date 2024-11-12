@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from bin.logger import Logger
 from stats.mappers.statistics_mapper import (
     game_statistics_DAO_to_game_statistics_DTO,
     game_statistics_DTO_to_game_statistics_DAO,
@@ -15,6 +14,8 @@ from tests.constants import (
     VALID_UUID_0,
     VALID_UUID_1,
 )
+
+from bin.logger import Logger
 
 logger = Logger("test")
 

@@ -1,6 +1,7 @@
-from bin.logger import Logger
 from models.event import Event
 from mq_client import RMQClient
+
+from bin.logger import Logger
 
 
 class EventService:

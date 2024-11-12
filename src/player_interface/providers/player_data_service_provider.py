@@ -5,7 +5,7 @@ from client.cache.cache_client import CacheClient
 from client.client_url import ClientUrl
 from client.playerdataservice.player_data_service_client import PlayerDataServiceClient
 from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
-from mappers.player_response_mapper import PlayerDataServiceResponseMapper
+from mappers.player_response_mapper import player_data_service_response_to_composite_statistics, player_data_service_response_to_games, player_data_service_response_to_players, player_data_sevice_response_to_teams 
 from models.composite_statistics import CompositeStatistics
 from models.game import Game
 from models.game_filters import GameFilters
@@ -49,7 +49,7 @@ class PlayerDataServiceProvider:
         if response is None or response.status != 200:
             players = []
         else:
-            players = PlayerDataServiceResponseMapper.player_data_service_response_to_players(
+            players = player_data_service_response_to_players(
                 response.data
             )
             if not result:
@@ -67,7 +67,10 @@ class PlayerDataServiceProvider:
             config=PlayerDataServiceEndpointConfig(base_path="players", app_pathname="player"),
         )
         get_statistics_url = ClientUrl(
-            "GET", config=PlayerDataServiceEndpointConfig(base_path="statistics", app_pathname="statistics")
+            "GET",
+            config=PlayerDataServiceEndpointConfig(
+                base_path="statistics", app_pathname="statistics"
+            ),
         )
         player_request = PlayerDataServiceRequest(
             url=get_player_url, query_parameters={"filter.playerId": player_id}
@@ -102,13 +105,13 @@ class PlayerDataServiceProvider:
         player_data = None
         statistics_data = None
         if get_player_response is not None and get_player_response.status == 200:
-            player_data = PlayerDataServiceResponseMapper.player_data_service_response_to_players(
+            player_data = player_data_service_response_to_players(
                 get_player_response.data
             )
 
         if get_statistics_response is not None and get_statistics_response.status == 200:
-            statistics_data = PlayerDataServiceResponseMapper.player_data_service_response_to_composite_statistics(
-                get_statistics_response.data
+            statistics_data = player_data_service_response_to_composite_statistics(
+                get_statistics_response.data, order_by_year=True
             )
 
         return (player_data, statistics_data)
@@ -136,7 +139,7 @@ class PlayerDataServiceProvider:
             # TODO: Create error response handler
             teams = []
         else:
-            teams = PlayerDataServiceResponseMapper.player_data_sevice_response_to_teams(
+            teams = player_data_sevice_response_to_teams(
                 response.data
             )
             if not result:
@@ -162,7 +165,7 @@ class PlayerDataServiceProvider:
         if response is None or response.status != 200:
             games = []
         else:
-            games = PlayerDataServiceResponseMapper.player_data_service_response_to_games(
+            games = player_data_service_response_to_games(
                 response.data
             )
             if not result:

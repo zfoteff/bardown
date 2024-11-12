@@ -2,11 +2,12 @@ from typing import List, Self
 
 from models.composite_game_statistics import CompositeGameStatistics
 from models.composite_season_statistics import CompositeSeasonStatistics
+from models.composite_season_statistics_full import CompositeSeasonStatisticsFull
 
 
 class CompositeStatistics:
     _games: List[CompositeGameStatistics]
-    _season: List[CompositeSeasonStatistics]
+    _season: List[CompositeSeasonStatisticsFull]
 
     def __init__(
         self, games: List[CompositeGameStatistics], season: List[CompositeSeasonStatistics]

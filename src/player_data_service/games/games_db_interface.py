@@ -2,7 +2,6 @@ from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
-from bin.logger import Logger
 from config.db_config import GAMES_TABLE_DB_CONFIG
 from connectors.mysql import MySQLClient
 from errors.games_errors import GameAlreadyExists, GameDoesNotExist
@@ -10,6 +9,8 @@ from games import GAMES_TABLE_NAME
 from games.models.dao.game import Game as GameDAO
 from games.models.dto.game import Game as GameDTO
 from games.models.game_request_filters import GameRequestFilters
+
+from bin.logger import Logger
 
 logger = Logger("db")
 

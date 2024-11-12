@@ -1,11 +1,12 @@
 import json
 from typing import Self, Tuple
 
-from bin.logger import Logger
 from config.cache_config import CacheConfig
 from models.player_data_service_response import PlayerDataServiceResponse
 from redis import Redis
 from redis.exceptions import ConnectionError, DataError
+
+from bin.logger import Logger
 
 logger = Logger("cache")
 

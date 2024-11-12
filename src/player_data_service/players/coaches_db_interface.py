@@ -5,7 +5,6 @@ from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
-from bin.logger import Logger
 from config.db_config import COACHES_TABLE_DB_CONFIG
 from connectors.mysql import MySQLClient
 from errors.coaches_errors import CoachAlreadyExists, CoachDoesNotExist
@@ -13,6 +12,8 @@ from players import COACHES_TABLE_NAME
 from players.models.coaches_request_filters import CoachesRequestFilters
 from players.models.dao.coach import Coach as CoachDAO
 from players.models.dto.coach import Coach as CoachDTO
+
+from bin.logger import Logger
 
 logger = Logger("db")
 

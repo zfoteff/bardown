@@ -1,4 +1,3 @@
-from bin.logger import Logger
 from players.mappers.player_mapper import (
     player_DAO_to_player_DTO,
     player_DTO_to_player_DAO,
@@ -7,6 +6,8 @@ from players.models.dao.player import Player as PlayerDAO
 from players.models.dto.player import Player as PlayerDTO
 from tests.bin.decorators.timed import timed
 from tests.constants import VALID_PLAYER
+
+from bin.logger import Logger
 
 logger = Logger("test")
 

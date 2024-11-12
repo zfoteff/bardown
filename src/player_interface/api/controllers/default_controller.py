@@ -26,9 +26,6 @@ class DefaultController:
             "games.html", context={"request": request, "games": games}
         )
 
-    async def render_game_stats_page(request: Request) -> HTMLResponse:
-        return templates.TemplateResponse("statistics.html", context={"request": request})
-
     async def render_season_stats_page(request: Request) -> HTMLResponse:
         return templates.TemplateResponse("season_stats_page.html")
 
@@ -49,5 +46,6 @@ class DefaultController:
     async def render_player_page(request: Request, player_id: str) -> HTMLResponse:
         player, statistics = await player_data_service_provider.get_player_by_filters(player_id)
         return templates.TemplateResponse(
-            "player.html", context={"request": request, "data": {"player": player[0], "statistics": statistics}}
+            "player.html",
+            context={"request": request, "data": {"player": player[0], "statistics": statistics}},
         )

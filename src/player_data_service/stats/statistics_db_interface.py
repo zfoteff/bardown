@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import Dict, List, Tuple
 
-from bin.logger import Logger
 from config.db_config import (
     SEASON_STATISTICS_TABLE_DB_CONFIG,
     STATISTICS_TABLE_DB_CONFIG,
@@ -26,6 +25,8 @@ from stats.models.statistics_request_filters import (
     GameStatisticsRequestFilters,
     SeasonStatisticsRequestFilters,
 )
+
+from bin.logger import Logger
 
 logger = Logger("db")
 
@@ -90,20 +91,27 @@ class StatisticsDatabaseInterface:
         self, filters: CompositeStatisticsRequestFilters
     ) -> Tuple[str]:
         game_query = f"""
-            select 
-                s.gameid, p.playerid, s.statistics
+            select
+                s.gameid, g.title, p.playerid, s.statistics
             from players p
                 inner join game_statistics as s on p.playerid=s.playerid
-            where p.playerid="{filters.player_id}"
+                inner join games as g on s.gameid=g.gameid
+            where 
+                p.playerid="{filters.player_id}"
+            order by g.created ASC
         """
 
         season_query = f"""
-            select 
-                tp.teamid, p.playerid, s.year, s.statistics 
-            from players p
-                inner join team_player tp on p.playerid=tp.playerid
-                inner join season_statistics s on p.playerid=s.playerid and tp.teamid=s.teamid
-            where p.playerid="{filters.player_id}"
+            select
+                tp.teamid, t.name, p.playerid, s.year, s.statistics
+            from
+                players p
+                inner join team_player tp on p.playerid = tp.playerid
+                inner join teams t on t.teamid=tp.teamid
+                inner join season_statistics s on p.playerid = s.playerid and tp.teamid = s.teamid
+            where 
+                p.playerid="{filters.player_id}"
+            order by year DESC
         """
 
         return game_query, season_query

@@ -8,7 +8,7 @@ body {
     max-width: fit-content - 1em;
     max-height: fit-content - 1em;
     justify-content: center;
-    background-color: #312d2d;
+    background-color: #222222;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -19,10 +19,10 @@ body {
     padding-top: 2em;
     padding-bottom: 2em;
     margin: 0;
-    background-color: #F1DABF;
+    background-color: #e6e6e6ef;
     min-width: 90vw;
     max-width: fit-content;
-    border: 5px solid #8a1f1f;
+    border: 5px solid #5e5b57;
     border-radius: 1rem;
 }
 
@@ -31,8 +31,8 @@ body {
     display: flex;
     flex-direction: column;
     vertical-align: top;
-    background-color: whitesmoke;
-    border: 1px solid darkslategrey;
+    background-color: #EEEEEE;
+    border: 2.5px solid #3b32327c;
     border-radius: 1rem;
     padding: 1em;
     margin-bottom: 1em;
@@ -45,7 +45,7 @@ body {
 }
 
 body h1 {
-    color: white;
+    color: #E63946;
     font-size: 10vw;
     font-style: italic;
     animation: title-slide 3s 0s ease-in-out;
@@ -76,6 +76,43 @@ header {
     margin-bottom: 1rem;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+  background-color: #57494c;
+  color: whitesmoke;
+}
+
+tr:nth-child(even) {
+  background-color: lightgrey;
+}
+
+td {
+  height: 1.50em;
+}
+
+
+.text-field {
+  width: fit-content;
+}
+
+.num-field {
+  text-align: center;
+  width: 1.5em;
+}
+
+.info-link {
+    text-align: center;
+    color: #6b1313;
+}
+
+.info-link:hover {
+    color: red;
+}
+
 .nav-content {
     display: flex;
     flex-direction: row;
@@ -96,7 +133,7 @@ header {
     background-position: 100%;
     background-color: #991d1d;
     background-size: 400%;
-    transition: background 450ms ease-in-out;
+    transition: background 650ms ease-in;
 
     &:hover {
         background-position: 0;
