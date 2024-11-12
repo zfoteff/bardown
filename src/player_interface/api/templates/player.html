@@ -80,7 +80,6 @@
     {% endfor %}
     <h4>Previous Game Statistics</h4>
     <div class="game-statistics">
-      {% for game in data.statistics.games %}
       <table class="statistics-table">
         <tbody>
           <tr>
@@ -107,6 +106,7 @@
             <th>FOW</th>
             <th>FOL</th>
           </tr>
+          {% for game in data.statistics.games %}
           {% for stats in game.statistics%}
           <tr>
             <td class="text-field">{{game.title}}</td>
@@ -133,9 +133,9 @@
             <td class="num-field">{{stats.statistics.fol}}</td>
           </tr>
           {% endfor %}
-        </tbody>
+          {% endfor %}
+          </tbody>
       </table>
-      {% endfor %}
     </div>
   </div>
 </div>

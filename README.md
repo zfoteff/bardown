@@ -1,4 +1,6 @@
+<h1 class="service-title" style="text-align: center;">
 BARDOWN
+</h1>
 ===
 
 ![](https://img.shields.io/github/commit-activity/t/zfoteff/clackamas-lacrosse-application)
