@@ -1,7 +1,6 @@
 __version__ = "0.1.0"
 __author__ = "Zac Foteff"
 
-from bin.logger import Logger
 from errors.coaches_errors import (
     CoachAlreadyExists,
     CoachDoesNotExist,
@@ -16,6 +15,8 @@ from players.api.validators.coaches_query_validator import (
 from players.coaches_db_interface import CoachesDatabaseInterface
 from players.mappers.coach_mapper import coach_DAO_to_coach_DTO
 from players.models.dto.coach import Coach
+
+from bin.logger import Logger
 
 logger = Logger("coach-controller")
 db_interface = CoachesDatabaseInterface()

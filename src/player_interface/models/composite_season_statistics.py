@@ -1,0 +1,2 @@
+class CompositeSeasonStatistics:
+    pass

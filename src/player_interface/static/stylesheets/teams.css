@@ -2,47 +2,7 @@
     flex-direction: row;
 }
 
-#teams-table {
-    margin: auto;
-}
-
 #teams-filters input {
     width: 8em;
     margin-right: 0.5em;
-}
-
-#teams-table {
-    width: 100%;
-}
-
-.text-field {
-    width: fit-content;
-    font-size: 1.25rem;
-}
-
-.link-field {
-    text-align: center;
-    width: 10.35rem;
-}
-
-.info-link {
-    text-align: center;
-    color: #6b1313;
-}
-
-.info-link:hover {
-    color: red;
-}
-
-.info-link:active {
-    color: darkslategrey;
-}
-
-
-tr {
-    border-bottom: 1px solid black;
-}
-
-tr:nth-child(even) {
-    background-color: lightgrey;
 }

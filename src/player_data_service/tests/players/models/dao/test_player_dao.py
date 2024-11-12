@@ -1,7 +1,8 @@
-from bin.logger import Logger
 from players.models.dao.player import Player
 from tests.bin.decorators.timed import timed
 from tests.constants import VALID_PLAYER, VALID_PLAYER_TUPLE
+
+from bin.logger import Logger
 
 logger = Logger("test")
 

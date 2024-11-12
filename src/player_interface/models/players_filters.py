@@ -1,7 +1,7 @@
 from typing import Dict, List, Self
 
 
-class PlayerFilters:
+class PlayersFilters:
     def __init__(
         self,
         player_ids: List[str] = None,

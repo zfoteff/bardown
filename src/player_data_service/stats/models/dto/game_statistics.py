@@ -9,5 +9,5 @@ class GameStatistics(BaseModel):
     player_id: Optional[str] = None
     game_id: Optional[str] = None
     statistics: Optional[Statistics] = None
-    created: datetime = None
-    modified: datetime = None
+    created: Optional[datetime] = None
+    modified: Optional[datetime] = None

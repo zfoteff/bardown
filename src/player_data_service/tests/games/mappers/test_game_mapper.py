@@ -1,9 +1,10 @@
-from bin.logger import Logger
 from games.mappers.game_mapper import game_DAO_to_game_DTO, game_DTO_to_game_DAO
 from games.models.dao.game import Game as GameDAO
 from games.models.dto.game import Game as GameDTO
 from tests.bin.decorators.timed import timed
 from tests.constants import VALID_GAME
+
+from bin.logger import Logger
 
 logger = Logger("test")
 

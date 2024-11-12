@@ -2,7 +2,6 @@ from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
-from bin.logger import Logger
 from config.db_config import PLAYER_TABLE_DB_CONFIG
 from connectors.mysql import MySQLClient
 from errors.players_errors import PlayerAlreadyExists, PlayerDoesNotExist
@@ -10,6 +9,8 @@ from players import PLAYERS_TABLE_NAME
 from players.models.dao.player import Player as PlayerDAO
 from players.models.dto.player import Player as PlayerDTO
 from players.models.players_request_filters import PlayersRequestFilters
+
+from bin.logger import Logger
 
 logger = Logger("db")
 

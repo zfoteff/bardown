@@ -33,8 +33,9 @@ class Statistics(BaseModel):
     fow: Optional[int] = 0
     fol: Optional[int] = 0
 
-    def statistics_from_string(self, statistics_string: str) -> None:
-        stats = dict(zip(dict(self).keys(), map(int, statistics_string.split("|"))))
+    @classmethod
+    def from_string(cls, statistics_string: str):
+        stats = dict(zip(cls.model_fields.keys(), map(int, statistics_string.split("|"))))
         return Statistics(**stats)
 
     def __str__(self) -> str:

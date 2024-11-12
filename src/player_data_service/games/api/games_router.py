@@ -2,11 +2,11 @@ from fastapi import APIRouter
 from games.api.controllers.game_controller import GameController
 
 API_VERSION = "v0"
-GAMES_ROUTER = APIRouter(prefix=f"/players/{API_VERSION}")
+GAMES_ROUTER = APIRouter(prefix=f"/game/{API_VERSION}")
 
 # GAME ROUTES
 GAMES_ROUTER.add_api_route(
-    path="/game",
+    path="/",
     endpoint=GameController.get_games,
     description="Retrieve game data from the database",
     methods=["GET"],
@@ -50,7 +50,7 @@ GAMES_ROUTER.add_api_route(
     },
 )
 GAMES_ROUTER.add_api_route(
-    path="/game",
+    path="/",
     endpoint=GameController.create_game,
     description="Create game record in the database",
     methods=["POST"],
@@ -77,7 +77,7 @@ GAMES_ROUTER.add_api_route(
     },
 )
 GAMES_ROUTER.add_api_route(
-    path="/game",
+    path="/",
     endpoint=GameController.update_game,
     description="Update a game record in the database",
     methods=["PATCH"],
@@ -104,7 +104,7 @@ GAMES_ROUTER.add_api_route(
     },
 )
 GAMES_ROUTER.add_api_route(
-    path="/game",
+    path="/",
     endpoint=GameController.delete_game,
     description="Delete a game record from the database",
     methods=["DELETE"],

@@ -2,7 +2,6 @@ from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
-from bin.logger import Logger
 from config.db_config import TEAMS_TABLE_DB_CONFIG
 from connectors.mysql import MySQLClient
 from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
@@ -10,6 +9,8 @@ from teams import TEAMS_TABLE_NAME
 from teams.models.dao.team import Team as TeamDAO
 from teams.models.dto.team import Team as TeamDTO
 from teams.models.team_request_filters import TeamRequestFilters
+
+from bin.logger import Logger
 
 logger = Logger("db")
 

@@ -1,4 +1,3 @@
-from bin.logger import Logger
 from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist, TeamValidationError
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
@@ -9,6 +8,8 @@ from teams.api.validators.teams_query_validator import (
 from teams.mappers.team_mapper import team_DAO_to_team_DTO
 from teams.models.dto.team import Team
 from teams.teams_db_interface import TeamsDBInterface
+
+from bin.logger import Logger
 
 logger = Logger("team-controller")
 db_interface = TeamsDBInterface()

@@ -4,14 +4,9 @@ from config.player_data_service_endpoint_config import EndpointConfig
 
 
 class ClientUrl:
-    def __init__(self, path: str, method: str, config: EndpointConfig) -> Self:
-        self.__path = path
+    def __init__(self, method: str, config: EndpointConfig) -> Self:
         self.__method = method
         self.__config = config
-
-    @property
-    def path(self) -> str:
-        return self.__path
 
     @property
     def method(self) -> str:
@@ -23,4 +18,4 @@ class ClientUrl:
 
     @property
     def url(self) -> str:
-        return self.__config.compose_path() + self.__path
+        return self.__config.compose_path()

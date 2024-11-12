@@ -58,8 +58,12 @@ class Player:
         return self._last_name
 
     @property
+    def name(self) -> str:
+        return f"{self._first_name} {self._last_name}"
+
+    @property
     def position(self) -> str:
-        return str(self._position)
+        return str(self._position).replace("_", " ")
 
     @property
     def grade(self) -> str:
@@ -80,3 +84,19 @@ class Player:
     @property
     def modified(self) -> str:
         return str(self._modified)
+
+    def to_dict(self, full_definition: bool = False) -> dict:
+        player_dict = {
+            "player_id": self._player_id,
+            "first_name": self._first_name,
+            "last_name": self._last_name,
+            "position": self._position,
+            "grade": self._grade,
+            "school": self._school,
+            "img_url": self._img_url,
+        }
+
+        if full_definition:
+            player_dict.update({"created": self._created, "modified": self._modified})
+
+        return player_dict

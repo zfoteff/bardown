@@ -1,4 +1,3 @@
-from bin.logger import Logger
 from errors.games_errors import GameAlreadyExists, GameDoesNotExist, GameValidationError
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
@@ -9,6 +8,8 @@ from games.api.validators.games_query_validator import (
 from games.games_db_interface import GamesDBInterface
 from games.mappers.game_mapper import game_DAO_to_game_DTO
 from games.models.dto.game import Game
+
+from bin.logger import Logger
 
 logger = Logger("player-data-service-controller")
 db_interface = GamesDBInterface()
