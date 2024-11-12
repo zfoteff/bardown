@@ -1,6 +1,3 @@
-__version__ = "0.0.1"
-__author__ = "Zac Foteff"
-
 from typing import List, Self, Tuple
 
 import mysql.connector as mysql
@@ -20,8 +17,9 @@ class MySQLClient:
         self.__database = "LaxDB"
         self.__cursor = None
 
-    def open_connection(self) -> bool:
-        logger.log(f"Attempting connection to {self.__table} at {self.__host} . . .")
+    def open_connection(
+        self,
+    ) -> bool:
         try:
             self.__connection = mysql.connect(
                 user=self.__user,
@@ -32,10 +30,8 @@ class MySQLClient:
 
             if self.__cursor is None:
                 self.__cursor = self.__connection.cursor(buffered=True)
-                logger.log(f"Successfully connected to {self.__table}")
                 return True
 
-            logger.log(f"Found existing connection to {self.__table}")
             return True
         except mysql.Error as err:
             logger.error(
@@ -51,7 +47,6 @@ class MySQLClient:
         try:
             self.__cursor.close()
             self.__connection.close()
-            logger.info("Connection closed")
             return True
         except mysql.Error as err:
             logger.error(f"Database error when closing connection: {err} . . . Quitting")

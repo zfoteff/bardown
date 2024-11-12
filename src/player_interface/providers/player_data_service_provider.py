@@ -5,7 +5,12 @@ from client.cache.cache_client import CacheClient
 from client.client_url import ClientUrl
 from client.playerdataservice.player_data_service_client import PlayerDataServiceClient
 from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
-from mappers.player_response_mapper import player_data_service_response_to_composite_statistics, player_data_service_response_to_games, player_data_service_response_to_players, player_data_sevice_response_to_teams 
+from mappers.player_response_mapper import (
+    player_data_service_response_to_composite_statistics,
+    player_data_service_response_to_games,
+    player_data_service_response_to_players,
+    player_data_sevice_response_to_teams,
+)
 from models.composite_statistics import CompositeStatistics
 from models.game import Game
 from models.game_filters import GameFilters
@@ -49,9 +54,7 @@ class PlayerDataServiceProvider:
         if response is None or response.status != 200:
             players = []
         else:
-            players = player_data_service_response_to_players(
-                response.data
-            )
+            players = player_data_service_response_to_players(response.data)
             if not result:
                 # If a there was a cache miss then cache the url and response
                 self._cache_client.cache_response(url=full_request_url, response=response)
@@ -105,9 +108,7 @@ class PlayerDataServiceProvider:
         player_data = None
         statistics_data = None
         if get_player_response is not None and get_player_response.status == 200:
-            player_data = player_data_service_response_to_players(
-                get_player_response.data
-            )
+            player_data = player_data_service_response_to_players(get_player_response.data)
 
         if get_statistics_response is not None and get_statistics_response.status == 200:
             statistics_data = player_data_service_response_to_composite_statistics(
@@ -139,9 +140,7 @@ class PlayerDataServiceProvider:
             # TODO: Create error response handler
             teams = []
         else:
-            teams = player_data_sevice_response_to_teams(
-                response.data
-            )
+            teams = player_data_sevice_response_to_teams(response.data)
             if not result:
                 self._cache_client.cache_response(url=full_request_url, response=response)
 
@@ -165,9 +164,7 @@ class PlayerDataServiceProvider:
         if response is None or response.status != 200:
             games = []
         else:
-            games = player_data_service_response_to_games(
-                response.data
-            )
+            games = player_data_service_response_to_games(response.data)
             if not result:
                 self._cache_client.cache_response(url=full_request_url, response=response)
         return games

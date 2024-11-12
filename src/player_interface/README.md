@@ -1,11 +1,10 @@
 <h1 class="service-title" style="text-align: center;">
 Player Interface
 </h1>
-===
 
 ![Python3](https://img.shields.io/badge/Python3.11-3776AB?style=flat&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-005571?logo=fastapi)
-![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?logo=redis)
+![Redis](https://img.shields.io/badge/Redis-%23DD0031.svg?logo=redis&logoColor=white)
 
 ----
 Interface for the Player Data Service to query for players/teams/coaches and statistics data

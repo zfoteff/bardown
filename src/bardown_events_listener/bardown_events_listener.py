@@ -1,12 +1,12 @@
 __author__ = "Zac Foteff"
 __version__ = "0.0.1"
 
+import argparse
 from contextlib import asynccontextmanager
+from logging import Logger
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-
-from bin.logger import Logger
 
 logger = Logger("bardown-events-listener.txt")
 
@@ -40,10 +40,27 @@ app = FastAPI(
 if __name__ == "__main__":
     from uvicorn import run
 
-    run(
-        app="bardown_event_listener:app",
-        log_level="debug",
-        host="0.0.0.0",
-        port=3002,
-        reload=True,
+    parser = argparse.ArgumentParser(
+        description="""
+        PubSub API for events in the Bardown application. Run with no arguments
+        to start this service
+    """
     )
+    parser.add_argument(
+        "-v",
+        "--version",
+        help="Display the version of the service",
+        action="store_true",
+    )
+    args = parser.parse_args()
+
+    if args.version is True:
+        print(app.version)
+    else:
+        run(
+            app="bardown_event_listener:app",
+            log_level="debug",
+            host="0.0.0.0",
+            port=3002,
+            reload=True,
+        )
