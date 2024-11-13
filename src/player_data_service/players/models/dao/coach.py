@@ -8,8 +8,7 @@ class Coach:
         coach_id: str = None,
         first_name: str = None,
         last_name: str = None,
-        role: str = None,
-        since: str = None,
+        since: int = None,
         email: str = None,
         phone_number: str = None,
         imgurl: str = None,
@@ -19,7 +18,6 @@ class Coach:
         self.coach_id = coach_id
         self.first_name = first_name
         self.last_name = last_name
-        self.role = role
         self.since = since
         self.email = email
         self.phone_number = phone_number
@@ -38,8 +36,8 @@ class Coach:
 
     def __str__(self) -> str:
         return (
-            f"{self.last_name}, {self.first_name} [{self.role} since {self.since}] "
-            + "| phone: {self.phone_number}, email: {self.email}"
+            f"{self.last_name}, {self.first_name}"
+            + f"| phone: {self.phone_number}, email: {self.email}"
         )
 
     def to_dict(self) -> str:
@@ -47,8 +45,7 @@ class Coach:
             "coach_id": f"{self.coach_id}",
             "first_name": f"{self.first_name}",
             "last_name": f"{self.last_name}",
-            "role": f"{self.role}",
-            "since": f"{self.since}",
+            "since": self.since,
             "email": f"{self.email}",
             "phone_number": f"{self.phone_number}",
             "imgurl": f"{self.imgurl}",

@@ -35,7 +35,6 @@
     <table id="players-table">
         <tbody>
             <tr>
-                <th>#</th>
                 <th>Name</th>
                 <th>Grade</th>
                 <th>Position</th>
@@ -44,7 +43,6 @@
             </tr>
             {% for player in players %}
             <tr>
-                <td class="num-field">{{ player.number }}</td>
                 <td class="text-field">{{ player.first_name + " " + player.last_name }}</td>
                 <td class="text-field">{{ player.grade }}</td>
                 <td class="text-field">{{ player.position }}</td>

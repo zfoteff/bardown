@@ -67,13 +67,6 @@ def _validate_name_filter(filters: PlayersRequestFilters, first_name: str, last_
     filters.last_name = last_name
 
 
-def _validate_number_filter(filters: PlayersRequestFilters, number: int) -> None:
-    if int(number) < 0:
-        raise PlayerRequestValidationError("filter.number must be a positive integer")
-
-    filters.number = number
-
-
 def _validate_grade_filter(filters: PlayersRequestFilters, grade: str) -> None:
     # TODO: Complete grade validation
     """
@@ -141,7 +134,6 @@ def validate_get_players_query_parameters(
     player_id = query_params.get("filter.playerId")
     first_name = query_params.get("filter.firstName")
     last_name = query_params.get("filter.lastName")
-    number = query_params.get("filter.number")
     grade = query_params.get("filter.grade")
     position = query_params.get("filter.position")
     limit = query_params.get("limit")
@@ -154,9 +146,6 @@ def validate_get_players_query_parameters(
 
     if first_name is not None or last_name is not None:
         _validate_name_filter(filters, first_name, last_name)
-
-    if number is not None:
-        _validate_number_filter(filters, number)
 
     if limit is not None:
         _validate_limit(filters, limit)

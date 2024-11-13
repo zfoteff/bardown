@@ -73,7 +73,6 @@ class PlayerDatabaseInterface:
             INSERT INTO {PLAYERS_TABLE_NAME}
             VALUES (
                 "{new_player_id}",
-                {player.number},
                 "{player.first_name}",
                 "{player.last_name}",
                 "{player.position}",

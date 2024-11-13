@@ -11,7 +11,6 @@ def player_DTO_to_player_DAO(player_dto: PlayerDTO) -> PlayerDAO:
 def player_DAO_to_player_DTO(player_dao: PlayerDAO) -> PlayerDTO:
     return PlayerDTO(
         player_id=player_dao.player_id,
-        number=player_dao.number,
         first_name=player_dao.first_name,
         last_name=player_dao.last_name,
         position=Position(player_dao.position),

@@ -7,7 +7,6 @@ from .enums.position import Position
 
 class Player:
     _player_id: str
-    _number: int
     _first_name: str
     _last_name: str
     _position: Position
@@ -20,7 +19,6 @@ class Player:
     def __init__(
         self,
         player_id: str,
-        number: int,
         first_name: str,
         last_name: str,
         position: str,
@@ -31,7 +29,6 @@ class Player:
         modified: str,
     ) -> Self:
         self._player_id = player_id
-        self._number = number
         self._first_name = first_name
         self._last_name = last_name
         self._position = Position(position)
@@ -44,10 +41,6 @@ class Player:
     @property
     def player_id(self) -> str:
         return self._player_id
-
-    @property
-    def number(self) -> int:
-        return self._number
 
     @property
     def first_name(self) -> str:
