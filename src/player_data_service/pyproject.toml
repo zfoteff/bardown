@@ -43,6 +43,5 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://example.com"
-Repository = "https://github.com/me/spam.git"
-Issues = "https://github.com/me/spam/issues"
+Repository = "https://github.com/zfoteff/clackamas-lacrosse-application/tree/develop/src/player_data_service"
+Issues = "https://github.com/zfoteff/clackamas-lacrosse-application/issues"
