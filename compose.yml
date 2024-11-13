@@ -25,23 +25,23 @@ services:
     depends_on:
       - db
 
-  # mq:
-  #   image: rabbitmq:latest
-  #   restart: always
-  #   ports: 
-  #     - "15691:15691"
-  #     - "15692:15692"
-  #     - "25672:25672"
-  #     - "4369:4369"
-  #     - "5671:5671"
-  #     - "5672:5672"
-  #   expose:
-  #     - "15691"
-  #     - "15692"
-  #     - "25672"
-  #     - "4369"
-  #     - "5671"
-  #     - "5672"
+  mq:
+    image: rabbitmq:latest
+    restart: always
+    ports:
+      - "15691:15691"
+      - "15692:15692"
+      - "25672:25672"
+      - "4369:4369"
+      - "5671:5671"
+      - "5672:5672"
+    expose:
+      - "15691"
+      - "15692"
+      - "25672"
+      - "4369"
+      - "5671"
+      - "5672"
 
   player-interface:
     image: player-interface
@@ -49,7 +49,7 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - cache 
+      - cache
 
   player-data-service:
     image: player-data-service
@@ -58,3 +58,11 @@ services:
       - "3001:3001"
     depends_on:
       - player-interface
+
+  bardown_events_listener:
+    image: bardown-events-listener
+    build: ./src/bardown_events_listener
+    ports:
+      - "3002:3002"
+    depends_on:
+      - mq

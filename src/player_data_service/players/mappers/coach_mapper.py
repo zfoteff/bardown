@@ -11,7 +11,6 @@ def coach_DAO_to_coach_DTO(coach_dao: CoachDAO) -> CoachDTO:
         coach_id=coach_dao.coach_id,
         first_name=coach_dao.first_name,
         last_name=coach_dao.last_name,
-        role=coach_dao.role,
         since=coach_dao.since,
         email=coach_dao.email,
         phone_number=coach_dao.phone_number,

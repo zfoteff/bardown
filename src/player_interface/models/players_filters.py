@@ -12,8 +12,8 @@ class PlayersFilters:
         grades: List[str] = None,
         limit: int = 40,
         offset: int = 0,
-        order: str = "ASC",
-        order_by: str = "number",
+        order: str = None,
+        order_by: str = None,
     ) -> Self:
         self.player_ids = player_ids
         self.first_names = first_names
@@ -45,9 +45,13 @@ class PlayersFilters:
         if self._should_add_contents_of_list(self.grades):
             filters["filter.grade"] = str.join(",", self.grades)
 
-        filters["limit"] = self.limit
-        filters["offset"] = self.offset
-        filters["order"] = self.order
-        filters["orderBy"] = self.order_by
+        if self.limit is not None:
+            filters["limit"] = self.limit
+        if self.offset is not None:
+            filters["offset"] = self.offset
+        if self.order is not None:
+            filters["order"] = self.order
+        if self.order_by is not None:
+            filters["orderBy"] = self.order_by
 
         return filters

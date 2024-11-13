@@ -4,7 +4,7 @@ from datetime import datetime
 class Game:
     _game_id: str
     _title: str
-    _date: datetime
+    _date: str 
     _score: str
     _location: str
     _created: datetime
@@ -38,7 +38,8 @@ class Game:
 
     @property
     def date(self) -> str:
-        return str(self._date)
+        date = datetime.fromisoformat(self._date)
+        return f"{date.month}/{date.day} - {date.hour % 12}:{date.minute}"
 
     @property
     def score(self) -> str:

@@ -6,7 +6,6 @@ from pydantic import BaseModel
 
 class Player(BaseModel):
     player_id: Optional[str] = None
-    number: Optional[int] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     position: Optional[str] = None
