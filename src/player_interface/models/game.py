@@ -4,7 +4,7 @@ from datetime import datetime
 class Game:
     _game_id: str
     _title: str
-    _date: str 
+    _date: str
     _score: str
     _location: str
     _created: datetime

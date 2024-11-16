@@ -100,18 +100,6 @@ PLAYER_ROUTER.add_api_route(
     responses={
         204: {
             "description": "Players successfully deleted from database",
-            "content": {
-                "application/json": {
-                    "example": [
-                        {
-                            "status": 204,
-                            "data": {
-                                "player_id": "fb344330-0e2a-4348-9665-9061cae42aab",
-                            },
-                        }
-                    ],
-                }
-            },
         }
     },
 )
@@ -211,5 +199,9 @@ PLAYER_ROUTER.add_api_route(
     endpoint=CoachController.delete_coach,
     methods=["DELETE"],
     tags=["coaches"],
-    responses={204: {"description": "Coach successfully deleted"}},
+    responses={
+        204: {
+            "description": "Coach successfully deleted from database",
+        }
+    },
 )

@@ -80,7 +80,6 @@ class CoachesDatabaseInterface:
         return True, coaches
 
     def update_coach(self, coach_id: str, coach: CoachDTO) -> str | CoachDoesNotExist:
-        # TODO: Make update evalute only fields that exist in DTO
         coach_id = self.coach_exists(coach_id)
         query = f"""
             UPDATE {COACHES_TABLE_NAME}
