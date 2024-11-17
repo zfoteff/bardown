@@ -114,19 +114,21 @@ PLAYER_ROUTER.add_api_route(
         201: {
             "description": "Coach successfully created",
             "content": {
-                "example": {
-                    "status": 201,
-                    "data": {
-                        "coach_id": "bfba2ab0-227c-4d80-8ec8-b80da9f0806d",
-                        "first_name": "First",
-                        "last_name": "Last",
-                        "since": 2018,
-                        "email": "email@domain.com",
-                        "phone_number": "1234567890",
-                        "imgurl": "static/blank.jpg",
-                        "created": "2024-04-16T09:25:37",
-                        "modified": "2024-04-16T09:25:37",
-                    },
+                "application/json": {
+                    "example": {
+                        "status": 201,
+                        "data": {
+                            "coach_id": "bfba2ab0-227c-4d80-8ec8-b80da9f0806d",
+                            "first_name": "First",
+                            "last_name": "Last",
+                            "since": 2018,
+                            "email": "email@domain.com",
+                            "phone_number": "1234567890",
+                            "imgurl": "static/blank.jpg",
+                            "created": "2024-04-16T09:25:37",
+                            "modified": "2024-04-16T09:25:37",
+                        },
+                    }
                 }
             },
         }
@@ -141,8 +143,8 @@ PLAYER_ROUTER.add_api_route(
         200: {
             "description": "Coaches successfully found",
             "content": {
-                "example": [
-                    {
+                "application/json": {
+                    "example": {
                         "status": 200,
                         "data": [
                             {
@@ -158,7 +160,7 @@ PLAYER_ROUTER.add_api_route(
                             }
                         ],
                     }
-                ]
+                }
             },
         }
     },
@@ -172,8 +174,8 @@ PLAYER_ROUTER.add_api_route(
         201: {
             "description": "Coach successfully updated",
             "content": {
-                "example": [
-                    {
+                "application/json": {
+                    "example": {
                         "status": 201,
                         "data": [
                             {
@@ -189,7 +191,7 @@ PLAYER_ROUTER.add_api_route(
                             }
                         ],
                     }
-                ]
+                }
             },
         },
     },
