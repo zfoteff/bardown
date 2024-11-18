@@ -9,19 +9,9 @@ on:
       - "src/player_data_service/**"
 
 jobs:
-  get_version_number:
-    runs-on: ubuntu-22.04
-    timeout-minutes: 5
-
   build_player_data_service:
-    uses: ./.github/workflows/ci_python.yaml
+    uses: zfoteff/clackamas-lacrosse-application/.github/workflows/ci_python.yaml@develop
     with:
-      working_dir: ./src/player_interface
-      image_name: player_interface
-      image_tag:
-
+      WORKING_DIR: ./src/player_data_service
+      IMAGE_NAME: player_data_service
     secrets: inherit
-
-    electric fall air
-    an uncertain world prepares,
-    fantasy football

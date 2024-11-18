@@ -5,7 +5,7 @@ from errors.coaches_errors import (
 )
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from players.api.validators.coaches_query_validator import (
     validate_get_coaches_query_parameters,
 )
@@ -65,9 +65,9 @@ class CoachController:
                     - DESC
                 orderBy (str, optional): Field to order retrieved entries by. Acceptable
                 values include:
-                    - number
                     - first_name
                     - last_name
+                    - grade
                     - position
 
         Returns:\n
@@ -78,6 +78,8 @@ class CoachController:
             result, coaches = db_interface.get_coaches(filters)
         except CoachValidationError as err:
             return JSONResponse(status_code=400, content={"status": 400, "error": f"{err}"})
+        except CoachDoesNotExist as err:
+            return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
 
         if not result:
             return JSONResponse(status_code=400, content={"status": 400, "error": "Database error"})
@@ -121,7 +123,7 @@ class CoachController:
             coach_id (str): Coach ID of the coach record to delete from the database
 
         Returns:\n
-            JSONResponse: Coach ID of deleted record
+            Response: Response with no content
         """
         try:
             result = db_interface.delete_coach(coach_id)
@@ -131,6 +133,4 @@ class CoachController:
         if not result:
             return JSONResponse(status_code=422, content={"status": 422, "error": "Database error"})
 
-        return JSONResponse(
-            status_code=200, content={"status": 200, "data": {"coach_id": coach_id}}
-        )
+        return Response(status_code=204)

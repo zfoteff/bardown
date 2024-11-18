@@ -2,25 +2,31 @@ import re
 
 from errors.players_errors import PlayerRequestValidationError
 from players.api.validators import NAME_REGEX_PATTERN, UUID_REGEX_PATTERN
+from players.models.enums.grade import Grade
+from players.models.enums.position import Position
 from players.models.players_request_filters import PlayersRequestFilters
 
 
 def _order_equals_allowed_value(order: str) -> bool:
+    # Verify order is one of the allowed values
     return order == "ASC" or order == "DESC"
 
 
 def _order_by_equals_allowed_value(order_by: str) -> bool:
-    valid_values = ["number", "first_name", "last_name", "grade", "school"]
+    # Verify order by value is one of the allowed values
+    valid_values = ["first_name", "last_name", "position", "grade", "school"]
     return str.lower(order_by) in valid_values
 
 
 def _order_missing_pair(order: str, order_by: str) -> bool:
+    # Verify order is paired with the order by field
     return not (
         (order is None and order_by is None) or (order is not None and order_by is not None)
     )
 
 
 def _name_missing_pair(first_name: str, last_name: str) -> bool:
+    # Verify both first and last name are present
     return not (
         (first_name is None and last_name is None)
         or (first_name is not None and last_name is not None)
@@ -30,12 +36,16 @@ def _name_missing_pair(first_name: str, last_name: str) -> bool:
 def _validate_player_id_filter(filters: PlayersRequestFilters, player_id: str) -> None:
     # PlayerID validation, if provided. Must be Non-null str and match UUI4 format
     if type(player_id) is not str:
-        raise PlayerRequestValidationError("PlayerId must be a string in UUIDv5 format")
+        raise PlayerRequestValidationError(
+            "PlayerId must be a string in UUIDv5 format. The type provided is not a string"
+        )
 
     regex = re.compile(UUID_REGEX_PATTERN)
     player_id_matches = regex.match(player_id)
     if player_id_matches is None:
-        raise PlayerRequestValidationError("PlayerId must be a string in UUIDv5 format")
+        raise PlayerRequestValidationError(
+            "PlayerId must be a string in UUIDv5 format. The type provided does not fit the format of a UUID"
+        )
 
     filters.player_id = player_id
 
@@ -58,42 +68,66 @@ def _validate_name_filter(filters: PlayersRequestFilters, first_name: str, last_
     last_name_matches = regex.match(str.capitalize(last_name))
 
     if first_name_matches is None:
-        raise PlayerRequestValidationError("filter.firstName is invalid.")
+        raise PlayerRequestValidationError(
+            f"filter.firstName is invalid: {first_name}", ["filter.firstName"]
+        )
 
     if last_name_matches is None:
-        raise PlayerRequestValidationError("filter.lastName is invalid.")
+        raise PlayerRequestValidationError(
+            f"filter.lastName is invalid: {last_name}", ["filter.lastName"]
+        )
 
     filters.first_name = first_name
     filters.last_name = last_name
 
 
 def _validate_grade_filter(filters: PlayersRequestFilters, grade: str) -> None:
-    # TODO: Complete grade validation
     """
-    Grade validation. Should accept full name, or the acronym (e.g. 'senior', 'SR')
+    Grade validation. Should accept full name, or the acronym (e.g. 'SENIOR', 'SR')
     and should always set the filters with the enumerated value
     """
-    pass
+    filtered_grade = grade.strip().upper()
+    if filtered_grade not in Grade._member_names_:
+        try:
+            filters.grade = Grade(filtered_grade)
+        except ValueError:
+            raise PlayerRequestValidationError(
+                "Invalid value for filter.grade. Allowed values [FR, SO, JR, SR, GD]",
+                ["filter.grade"],
+            )
+
+    else:
+        filters.grade = Grade._member_map_[filtered_grade]
 
 
 def _validate_position_filter(filters: PlayersRequestFilters, position: str) -> None:
-    # TODO: Complete position validations
     """
     Position validation. Should accept full name, or the acronym (e.g. 'attack', 'A')
     and should always set the filters with the enumerated value
     """
-    pass
+    filtered_position = position.strip().upper()
+    if filtered_position not in Position._member_names_:
+        try:
+            filters.position = Position(filtered_position)
+        except ValueError:
+            raise PlayerRequestValidationError(
+                "Invalid value for filter.position. Allowed values [FR, SO, JR, SR, GD]",
+                ["filter.position"],
+            )
+    else:
+        filters.position = Position._member_map_[filtered_position]
 
 
 def _validate_limit(filters: PlayersRequestFilters, limit: int) -> None:
+    # Limit validation, if provided. Must be a non-null, positive integer
     if int(limit) < 0:
-        # Limit validation, if provided. Must be a non-null, positive integer
         filters.limit = 25
     else:
         filters.limit = limit
 
 
 def _validate_offset(filters: PlayersRequestFilters, offset: int) -> None:
+    # Validate the offset is a positive integer
     if int(offset) < 0:
         offset = None
 
@@ -119,7 +153,7 @@ def _validate_ordering_rules(filters: PlayersRequestFilters, order: str, order_b
 
     if not _order_by_equals_allowed_value(order_by):
         raise PlayerRequestValidationError(
-            "order query must be one of the allowed values ['first_name'. 'last_name', 'number']"
+            "order query must be one of the allowed values ['first_name'. 'last_name', 'position', 'grade', 'school']"
         )
 
     filters.order_by = str.lower(order_by)
@@ -128,6 +162,17 @@ def _validate_ordering_rules(filters: PlayersRequestFilters, order: str, order_b
 def validate_get_players_query_parameters(
     query_params: dict,
 ) -> PlayersRequestFilters | PlayerRequestValidationError:
+    """Validate unfiltered query parameters and return filtered values in PlayerRequestFilters object
+
+    Args:
+        query_params (dict): Unvalidated query parameters from the client request
+
+    Raises:
+        PlayerRequestValidationError: Validation error raised from unvalidated query parameters
+
+    Returns:
+        PlayersRequestFilters
+    """
     filters = PlayersRequestFilters()
 
     # Get all query param values, or none if none provided
