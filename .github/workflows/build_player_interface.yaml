@@ -10,7 +10,7 @@ on:
 
 jobs:
   build_player_interface:
-    uses: zfoteff/clackamas-lacrosse-application/.github/workflows/ci_python.yaml
+    uses: zfoteff/clackamas-lacrosse-application/.github/workflows/ci_python.yaml@develop
     with:
       WORKING_DIR: ./src/player_interface/
       IMAGE_NAME: player_interface
