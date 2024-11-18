@@ -10,7 +10,7 @@ on:
 
 jobs:
   build_bardown_events_listener:
-    uses: ./.github/workflows/ci_python.yaml
+    uses: zfoteff/clackamas-lacrosse-application/.github/workflows/ci_python.yaml
     with:
       WORKING_DIR: ./src/bardown_events_listener
       IMAGE_NAME: bardown_events_listener
