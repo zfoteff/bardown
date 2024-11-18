@@ -3,19 +3,17 @@ name: Python CI
 on:
   workflow_call:
     inputs:
-      working_dir:
+      WORKING_DIR:
         required: true
         type: string
-      install-packages:
+      INSTALL_PACKAGES:
         description: "Space-separated list of packages to install using apt-get."
         default: ""
         type: string
-      image_name:
+      IMAGE_NAME:
         description: "Name of the image to be published"
         type: string
-      image_tag:
-        description: "Version tag to apply to the image"
-        type: string
+        required: true
 
 env:
   REGISTRY: ghcr.io
@@ -24,11 +22,11 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     timeout-minutes: 15
-
     defaults:
       run:
-        working-directory: ${{ inputs.working-dir }}
-    
+        working-directory: ${{ inputs.WORKING_DIR }}
+    outputs:
+      version: ${{ steps.version.outputs.version}}
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
@@ -44,23 +42,28 @@ jobs:
           cache-dependency-path: requirements.txt
 
       - name: Install extra packages
-        if: ${{ inputs.install-packages != ''}}
+        if: ${{ inputs.INSTALL_PACKAGES != ''}}
         run: |
-          sudo apt-get install -y ${{ inputs.install-packages }}
+          sudo apt-get install -y ${{ inputs.INSTALL_PACKAGES }}
 
       - name: Pip install dependencies
         run: |
           pip install -r requirements.txt
 
+      - name: Generate Version Tag
+        id: version
+        run: |
+          python3 -v ${{ inputs.IMAGE_NAME }}.py
+          VERSION=$(python3 -v ${{inputs.IMAGE_NAME}}.py)
+          SHORT_SHA=$(echo ${GITHUB_SHA} | cut -c1-8)
+          VERSION_TAG="${VERSION}-{SHORT_SHA}"
+          echo ${VERSION_TAG}
+          echo "version=$VERSION_TAG" >> GITHUB_OUTPUT
+
       - name: Test Python service
         run: |
           python3 -m pytest tests/
 
-  containerize:
-    runs-on: ubuntu-22.04
-    timeout-minutes: 5
-
-  
   publish:
     timeout-minutes: 10
     runs-on: ubuntu-22.04
@@ -70,23 +73,23 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Log into Container registry
-        users: docker/login-action
+        uses: docker/login-action
         with:
           registry: ${{ env.REGISTRY }}
-          username: $${{ github.actor }}
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate metadata for Docker
+      - name: Generate Metadata for Docker
         id: metadata
         uses: docker/metadata-action
         with:
-          images: ${{ env.REGISTRY }}/${{ inputs.image_name }}
+          images: ${{ env.REGISTRY }}/${{ inputs.IMAGE_NAME }}
 
       - name: Push Docker Image
         id: push
         uses: docker/build-push-action
         with:
           context: .
-          file: ${{ inputs.working_dir }}/dockerfile
+          file: ${{ inputs.WORKING_DIR }}/dockerfile
           push: true
-          tags: ${{ inputs.tags }}
+          tags: bardown/${{inputs.IMAGE_NAME}}:${{ needs.build.outputs.version }}

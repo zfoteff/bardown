@@ -2,6 +2,7 @@ name: clackamas-lacrosse-application
 
 services:
   db:
+    container_name: "bardown_database"
     image: mysql:latest
     restart: always
     environment:
@@ -16,6 +17,7 @@ services:
       - "3306"
 
   cache:
+    container_name: "bardown_cache"
     image: valkey/valkey
     restart: always
     ports:
@@ -26,6 +28,7 @@ services:
       - db
 
   mq:
+    container_name: "bardown_mq"
     image: rabbitmq:latest
     restart: always
     ports:
@@ -44,6 +47,7 @@ services:
       - "5672"
 
   player-interface:
+    container_name: "bardown_mq"
     image: player-interface
     build: ./src/player_interface/
     ports:
@@ -52,6 +56,7 @@ services:
       - cache
 
   player-data-service:
+    container_name: "bardown_mq"
     image: player-data-service
     build: ./src/player_data_service/
     ports:
@@ -60,6 +65,7 @@ services:
       - player-interface
 
   bardown_events_listener:
+    container_name: "bardown_mq"
     image: bardown-events-listener
     build: ./src/bardown_events_listener
     ports:

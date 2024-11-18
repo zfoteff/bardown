@@ -1,17 +1,17 @@
 ---
-name: Build Player Interface
+name: Build Bardown Events Listener
 on:
   workflow_dispatch:
   pull_request:
     paths:
       - ".github/workflows/ci_python.yaml"
       - "dev-requirements.txt"
-      - "src/player_interface/**"
+      - "src/bardown_events_lsitener/**"
 
 jobs:
-  build_player_interface:
+  build_bardown_events_listener:
     uses: ./.github/workflows/ci_python.yaml
     with:
-      WORKING_DIR: ./src/player_interface/
-      IMAGE_NAME: player_interface
+      WORKING_DIR: ./src/bardown_events_listener
+      IMAGE_NAME: bardown_events_listener
     secrets: inherit

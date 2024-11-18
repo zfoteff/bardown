@@ -126,7 +126,7 @@ class PlayerController:
             player_id (str): Player ID of the player record to delete from the database
 
         Returns:\n
-            Response: No content
+            Response: Response with no content
         """
         try:
             result = db_interface.delete_players(player_id)

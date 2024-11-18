@@ -22,6 +22,8 @@ TEAMS_ROUTER.add_api_route(
                                 {
                                     "team_id": "fb344330-0e2a-4348-9665-9061cae42aab",
                                     "name": "La Salle Falcons",
+                                    "location": "La Salle Catholic College Preparatory",
+                                    "imgurl": "url",
                                 }
                             ],
                         }
@@ -48,6 +50,8 @@ TEAMS_ROUTER.add_api_route(
                                 {
                                     "team_id": "fb344330-0e2a-4348-9665-9061cae42aab",
                                     "name": "La Salle Falcons",
+                                    "location": "La Salle Catholic College Preparatory",
+                                    "imgurl": "url",
                                     "created": "2024-06-05 16:02:14.588405",
                                     "modified": "2024-06-05 16:02:14.588405",
                                 }
@@ -74,7 +78,12 @@ TEAMS_ROUTER.add_api_route(
                             "status": 200,
                             "data": [
                                 {
+                                    "team_id": "fb344330-0e2a-4348-9665-9061cae42aab",
                                     "name": "La Salle Catholic College Preparatory Falcons",
+                                    "location": "La Salle Catholic College Preparatory",
+                                    "imgurl": "url",
+                                    "created": "2024-06-05 16:02:14.588405",
+                                    "modified": "2024-06-05 16:02:14.588405",
                                 }
                             ],
                         }
@@ -92,20 +101,6 @@ TEAMS_ROUTER.add_api_route(
     responses={
         204: {
             "description": "Teams successfully deleted from the database",
-            "content": {
-                "application/json": {
-                    "example": [
-                        {
-                            "status": 204,
-                            "data": [
-                                {
-                                    "team_id": "fb344330-0e2a-4348-9665-9061cae42aab",
-                                }
-                            ],
-                        }
-                    ]
-                }
-            },
         }
     },
 )

@@ -205,14 +205,14 @@ class StatisticsDatabaseInterface:
 
         if not game_success:
             logger.warning(
-                "Composite game statistics query failed: {filters}, result: {game_result}"
+                f"Composite game statistics query failed: {filters}, result: {game_result}"
             )
             query_success = False
             game_result = []
 
         if not season_success:
             logger.warning(
-                "Composite season statistics query failed: {filters}, result: {season_result}"
+                f"Composite season statistics query failed: {filters}, result: {season_result}"
             )
             query_success = False
             season_result = []
