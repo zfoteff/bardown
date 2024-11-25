@@ -2,6 +2,7 @@
 #+author: zfoteff
 
 
+#+BEGIN_SRC yaml
 data:
   games:
     game_id: str
@@ -15,3 +16,34 @@ data:
     year: int
     team:
     players:
+#+END_SRC
+
+#+BEGIN_SRC yaml
+data:
+  team_id: str
+  team_name: str
+  location: str
+  imgurl: str
+  rosters:
+    year: int
+    players:
+      player_id: str
+      first: str
+      last: str
+      position: Position
+      grade: Grade
+      number: int
+#+END_SRC
+
+#+BEGIN_SRC yaml
+data:
+  game_id: str
+  title: str
+  date: datetime
+  score: str
+  location: str
+  home_team:
+    Composite Team
+  away_team:
+    Composite Team
+#+END_SRC
