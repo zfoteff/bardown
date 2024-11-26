@@ -1,16 +1,16 @@
-from typing import List
+from typing import Optional, List
 
 from pydantic import BaseModel
 from stats.models.statistics import Statistics
 
 
 class PlayerSeasonStatistics(BaseModel):
-    player_id: str = None
-    statistics: Statistics = None
+    player_id: Optional[str] = None
+    statistics: Optional[Statistics] = None
 
 
 class CompositeSeasonStatistics(BaseModel):
-    year: int = None
-    team_id: str = None
-    team_name: str = None
-    players: List[PlayerSeasonStatistics] = None
+    year: Optional[int] = None
+    team_id: Optional[str] = None
+    team_name: Optional[str] = None
+    players: Optional[List[PlayerSeasonStatistics]] = None

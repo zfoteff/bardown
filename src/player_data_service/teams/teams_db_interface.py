@@ -72,7 +72,7 @@ class TeamsDBInterface:
                 "{new_team_id}",
                 "{team.name}",
                 "{team.location}",
-                "{team.imgurl}",
+                "{team.img_url}",
                 "{create_modify_time}",
                 "{create_modify_time}"
             )
@@ -98,6 +98,8 @@ class TeamsDBInterface:
         teams = [TeamDAO.from_tuple(team_data) for team_data in result]
 
         return True, teams
+
+    def get_composite_teams(self, filters: CompositeTeamRequestFilters) -> Tuple[bool, List]
 
     def update_team(self, team: TeamDTO, team_id: str) -> str | TeamDoesNotExist:
         exists, team_id = self.team_exists(team_id)

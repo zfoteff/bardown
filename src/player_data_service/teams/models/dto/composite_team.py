@@ -1,8 +1,16 @@
+from typing import Optional, List
 from pydantic import BaseModel
 
+from players.models.dto.player import PlayerWithNumber
+
+class Roster(BaseModel):
+    year: Optional[int]
+    players: Optional[List[PlayerWithNumber]]
 
 class CompositeTeam(BaseModel):
-    team_id: str = None
-    team_name: str = None
-    img_url: str = None
+    team_id: Optional[str] = None
+    name: Optional[str] = None 
+    location: Optional[str] = None
+    img_url: Optional[str] = None
+    rosters: Optional[List[Roster]]
     
