@@ -12,7 +12,7 @@ class CompositeStatistics:
         self,
         game_stats: List[CompositeGameStatistics],
         season_stats: List[CompositeSeasonStatistics],
-    ) -> None:
+    ) -> Self:
         self.games = game_stats
         self.season = season_stats
 

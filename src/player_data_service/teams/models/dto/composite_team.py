@@ -12,5 +12,5 @@ class CompositeTeam(BaseModel):
     name: Optional[str] = None 
     location: Optional[str] = None
     img_url: Optional[str] = None
-    rosters: Optional[List[Roster]]
+    roster: Optional[List[Roster]]
     
