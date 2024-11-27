@@ -6,7 +6,7 @@ from teams.api.validators import (
     NAME_REGEX_PATTERN,
     UUID_REGEX_PATTERN,
 )
-from teams.models.team_request_filters import TeamRequestFilters
+from teams.models.team_request_filters import CompositeTeamRequestFilters, TeamRequestFilters
 
 
 def _validate_limit(filters: TeamRequestFilters, limit: int) -> None:
@@ -27,7 +27,7 @@ def _validate_offset(filters: TeamRequestFilters, offset: int) -> None:
     filters.offset = offset
 
 
-def _validate_ordering_rules(filters: TeamRequestFilters, order: str, order_by: str) -> None:
+def _validate_ordering_rules(filters: TeamRequestFilters, order: str, order_by: str) -> None | TeamValidationError:
     if _order_missing_pair(order, order_by):
         if order is None:
             raise TeamValidationError(
@@ -111,7 +111,7 @@ def validate_get_teams_query_parameters(
 ) -> TeamRequestFilters | TeamValidationError:
     filters = TeamRequestFilters()
 
-    # Get all query param values, or none if none provided
+    # Get all query param values, or none if absent
     team_id = query_params.get("filter.teamId")
     name = query_params.get("filter.name")
     limit = query_params.get("limit")
@@ -133,5 +133,22 @@ def validate_get_teams_query_parameters(
 
     if order is not None or order_by is not None:
         _validate_ordering_rules(filters, order, order_by)
+
+    return filters
+
+def validate_get_composite_team_query_parameters(query_params: dict) -> CompositeTeamRequestFilters | TeamValidationError:
+    filters = CompositeTeamRequestFilters()
+
+    # Get all query param values, or none if absent
+    team_id = query_params.get("filter.team.teamId")
+    player_id = query_params.get("filter.player.playerId")
+    name = query_params.get("filter.team.name")
+    year = query_params.get("filters.team.year")
+
+    if team_id is not None:
+        _validate_team_id_filter(filters, team_id)
+
+    if name is not None:
+        _validate_name_filter(filters, name)
 
     return filters
