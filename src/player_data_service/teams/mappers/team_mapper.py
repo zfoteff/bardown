@@ -20,5 +20,5 @@ def team_DAO_to_team_DTO(team_dao: TeamDAO) -> TeamDTO:
 def composite_team_DTO_to_composite_team_DAO(composite_team_dto: CompositeTeamDTO):
     pass
 
-def composite_team_DAO_to_composite_team_DTO(composite_team_dao: CompositeTeamDAO):
-    pass
+# def composite_team_DAO_to_composite_team_DTO(composite_team_dao: CompositeTeamDAO):
+#     pass

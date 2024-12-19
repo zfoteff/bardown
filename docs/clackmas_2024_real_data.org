@@ -1,0 +1,10 @@
+#+title: Clackmas 2024 Real Data
+#+author: zfoteff
+-----
+[[https://drive.proton.me/u/2/uSO9oEqNeVWVrWlYioBhP8iyayHME2IZX2ycrj81siIii8g7L1nV5TQ3cBSUJvWBeDGrCD0AXy92P6QHckdB2A==/file/HKaudr4unsPPFfJcZJXYF-WsmVgdMZrFkScwh_9d3E93TuczQBtRc8-N92z-c1-XBbLS0gAFLkMk-pepni7lxw==?r=/uSO9oEqNeVWVrWlYioBhP8iyayHME2IZX2ycrj81siIii8g7L1nV5TQ3cBSUJvWBeDGrCD0AXy92P6QHckdB2A==/folder/f6BrnjPglvgKTFANorl0QJ-33BSZ-98-4PZd-Hkvr9yzalZzSUzJP-Drgcc9p_2wq1WtWCWXK0bYqhIwMFhglg==][Source]]
+
+| Player Id                            | Player         | Number |                 Stats | GameId |
+|--------------------------------------+----------------+--------+-----------------------+--------|
+| 4e7486d1-7586-5621-bf51-f1c9e232d2d3 | Cooper Neilsen |      2 | 111010021100000000000 |        |
+|                                      |                |        | 040000053010000000000 |        |
+|                                      |                |        | 101001041100000000000 |        |

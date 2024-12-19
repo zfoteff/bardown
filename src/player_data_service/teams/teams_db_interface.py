@@ -99,7 +99,7 @@ class TeamsDBInterface:
 
         return True, teams
 
-    def get_composite_teams(self, filters: CompositeTeamRequestFilters) -> Tuple[bool, List]
+    # def get_composite_teams(self, filters: CompositeTeamRequestFilters) -> Tuple[bool, List]
 
     def update_team(self, team: TeamDTO, team_id: str) -> str | TeamDoesNotExist:
         exists, team_id = self.team_exists(team_id)
