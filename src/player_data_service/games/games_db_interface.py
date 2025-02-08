@@ -56,7 +56,7 @@ class GamesDBInterface:
 
     def create_game(self, game: GameDTO) -> bool | GameAlreadyExists:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        new_game_id = str(uuid5(namespace=NAMESPACE_OID, name=str(game.date) + game.title))
+        new_game_id = str(uuid5(namespace=NAMESPACE_OID, name=f"{str(game.date)} {game.title}"))
 
         exists, game_id = self.game_exists(title=game.title, date=game.date)
 

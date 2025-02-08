@@ -5,11 +5,11 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /player_interface
 
-COPY requirements.txt /player_interface/requirements.txt
+COPY requirements.txt .
 
 RUN pip install --no-cache-dir --upgrade -r /player_interface/requirements.txt
 
-COPY . /player_interface/
+COPY . .
 
 EXPOSE 3000
 

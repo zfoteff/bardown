@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 __author__ = "Zac Foteff"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 import argparse
+import os
 import time
 from contextlib import asynccontextmanager
 from logging import Logger
 
+from dotenv import load_dotenv
 from fastapi import APIRouter, FastAPI
 from fastapi.responses import JSONResponse
 from games.api.games_router import GAMES_ROUTER
@@ -15,6 +17,8 @@ from stats.api.statistics_router import STATISTICS_ROUTER
 from teams.api.teams_router import TEAMS_ROUTER
 
 from bin.metadata import servers, tags_metadata
+
+load_dotenv()
 
 logger = Logger("player-data-service")
 
@@ -100,6 +104,7 @@ if __name__ == "__main__":
             app="player_data_service:app",
             log_level="debug",
             host="0.0.0.0",
-            port=3001,
+            port=os.environ["PORT"],
+            workers=1,
             reload=True,
         )
