@@ -1,6 +1,7 @@
 import re
 
 from errors.statistics_errors import StatisticsValidationError
+
 from src.stats.api.validators import UUID_REGEX_PATTERN
 from src.stats.models.statistics_request_filters import (
     CompositeStatisticsRequestFilters,

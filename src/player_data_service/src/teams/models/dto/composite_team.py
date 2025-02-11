@@ -1,7 +1,8 @@
 from typing import List, Optional
 
-from src.players.models.dto.player import PlayerWithNumber
 from pydantic import BaseModel
+
+from src.players.models.dto.player import PlayerWithNumber
 
 
 class Roster(BaseModel):

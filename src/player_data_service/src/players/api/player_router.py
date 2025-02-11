@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+
 from src.players.api.controllers.coach_controller import CoachController
 from src.players.api.controllers.player_controller import PlayerController
 

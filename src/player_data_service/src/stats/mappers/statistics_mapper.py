@@ -5,7 +5,9 @@ from src.stats.models.dao.composite_statistics import (
     CompositeStatistics as CompositeStatisticsDAO,
 )
 from src.stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
-from src.stats.models.dao.season_statistics import SeasonStatistics as SeasonStatisticsDAO
+from src.stats.models.dao.season_statistics import (
+    SeasonStatistics as SeasonStatisticsDAO,
+)
 from src.stats.models.dto.composite_game_statistics import (
     CompositeGameStatistics as CompositeGameStatisticsDTO,
 )
@@ -22,7 +24,9 @@ from src.stats.models.dto.composite_statistics import (
     CompositeStatistics as CompositeStatisticsDTO,
 )
 from src.stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
-from src.stats.models.dto.season_statistics import SeasonStatistics as SeasonStatisticsDTO
+from src.stats.models.dto.season_statistics import (
+    SeasonStatistics as SeasonStatisticsDTO,
+)
 from src.stats.models.statistics import Statistics
 
 

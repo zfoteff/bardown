@@ -5,12 +5,12 @@ from uuid import NAMESPACE_OID, uuid5
 from config.db_config import TEAMS_TABLE_DB_CONFIG
 from connectors.mysql import MySQLClient
 from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
+
+from bin.logger import Logger
 from src.teams import TEAMS_TABLE_NAME
 from src.teams.models.dao.team import Team as TeamDAO
 from src.teams.models.dto.team import Team as TeamDTO
 from src.teams.models.team_request_filters import TeamRequestFilters
-
-from bin.logger import Logger
 
 logger = Logger("db")
 

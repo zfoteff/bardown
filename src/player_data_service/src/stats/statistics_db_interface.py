@@ -12,21 +12,25 @@ from errors.statistics_errors import (
     StatisticsAlreadyExist,
     StatisticsDoNoExist,
 )
+
+from bin.logger import Logger
 from src.stats import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
 from src.stats.models.dao.composite_game_statistics import CompositeGameStatistics
 from src.stats.models.dao.composite_season_statistics import CompositeSeasonStatistics
 from src.stats.models.dao.composite_statistics import CompositeStatistics
 from src.stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
-from src.stats.models.dao.season_statistics import SeasonStatistics as SeasonStatisticsDAO
+from src.stats.models.dao.season_statistics import (
+    SeasonStatistics as SeasonStatisticsDAO,
+)
 from src.stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
-from src.stats.models.dto.season_statistics import SeasonStatistics as SeasonStatisticsDTO
+from src.stats.models.dto.season_statistics import (
+    SeasonStatistics as SeasonStatisticsDTO,
+)
 from src.stats.models.statistics_request_filters import (
     CompositeStatisticsRequestFilters,
     GameStatisticsRequestFilters,
     SeasonStatisticsRequestFilters,
 )
-
-from bin.logger import Logger
 
 logger = Logger("db")
 

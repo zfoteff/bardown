@@ -6,14 +6,14 @@ from errors.players_errors import (
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
+
+from bin.logger import Logger
 from src.players.api.validators.players_query_validator import (
     validate_get_players_query_parameters,
 )
 from src.players.mappers.player_mapper import player_DAO_to_player_DTO
 from src.players.models.dto.player import Player
 from src.players.player_db_interface import PlayerDatabaseInterface
-
-from bin.logger import Logger
 
 logger = Logger("player-data-service-controller")
 db_interface = PlayerDatabaseInterface()

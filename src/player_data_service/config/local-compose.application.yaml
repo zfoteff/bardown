@@ -1,7 +1,7 @@
 ---
 profile: local-compose
 db:
-  host: localhost
+  host: db
   username: admin
   password: ${MYSQL_PASSWORD}
   root_password: ${MYSQL_ROOT_PASSWORD}

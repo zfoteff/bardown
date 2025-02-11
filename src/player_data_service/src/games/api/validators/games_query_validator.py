@@ -2,6 +2,7 @@ import re
 from datetime import datetime
 
 from errors.games_errors import GameValidationError
+
 from src.games.api.validators import BASIC_TEXT_REGEX_PATTERN, UUID_REGEX_PATTERN
 from src.games.models.game_request_filters import GameRequestFilters
 
