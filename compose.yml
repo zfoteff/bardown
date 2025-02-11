@@ -56,7 +56,7 @@ services:
   player-data-service:
     container_name: "player-data-service"
     image: player-data-service
-    build: ./src/player_data_service/
+    build: ./player_data_service/
     environment:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
@@ -71,7 +71,7 @@ services:
   player-interface:
     container_name: "player-interface"
     image: player-interface
-    build: ./src/player_interface/
+    build: ./player_interface/
     environment:
       CACHE_HOST: ${CACHE_HOST}
     ports:
