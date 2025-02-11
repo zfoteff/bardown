@@ -1,7 +1,6 @@
 import re
 
 from errors.players_errors import PlayerRequestValidationError
-
 from src.players.api.validators import NAME_REGEX_PATTERN, UUID_REGEX_PATTERN
 from src.players.models.enums.grade import Grade
 from src.players.models.enums.position import Position

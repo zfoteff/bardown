@@ -1,7 +1,6 @@
 import re
 
 from errors.teams_errors import TeamValidationError
-
 from src.teams.api.validators import (
     BASIC_TEXT_REGEX_PATTERN,
     NAME_REGEX_PATTERN,

@@ -5,12 +5,12 @@ from uuid import NAMESPACE_OID, uuid5
 from config.db_config import PLAYER_TABLE_DB_CONFIG
 from connectors.mysql import MySQLClient
 from errors.players_errors import PlayerAlreadyExists, PlayerDoesNotExist
-
-from bin.logger import Logger
 from src.players import PLAYERS_TABLE_NAME
 from src.players.models.dao.player import Player as PlayerDAO
 from src.players.models.dto.player import Player as PlayerDTO
 from src.players.models.players_request_filters import PlayersRequestFilters
+
+from bin.logger import Logger
 
 logger = Logger("db")
 

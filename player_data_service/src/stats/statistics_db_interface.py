@@ -12,8 +12,6 @@ from errors.statistics_errors import (
     StatisticsAlreadyExist,
     StatisticsDoNoExist,
 )
-
-from bin.logger import Logger
 from src.stats import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
 from src.stats.models.dao.composite_game_statistics import CompositeGameStatistics
 from src.stats.models.dao.composite_season_statistics import CompositeSeasonStatistics
@@ -31,6 +29,8 @@ from src.stats.models.statistics_request_filters import (
     GameStatisticsRequestFilters,
     SeasonStatisticsRequestFilters,
 )
+
+from bin.logger import Logger
 
 logger = Logger("db")
 

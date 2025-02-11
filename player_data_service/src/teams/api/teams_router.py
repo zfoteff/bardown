@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-
 from src.teams.api.controllers.teams_controller import TeamController
 
 API_VERSION = "v0"

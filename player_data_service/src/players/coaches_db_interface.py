@@ -5,12 +5,12 @@ from uuid import NAMESPACE_OID, uuid5
 from config.db_config import COACHES_TABLE_DB_CONFIG
 from connectors.mysql import MySQLClient
 from errors.coaches_errors import CoachAlreadyExists, CoachDoesNotExist
-
-from bin.logger import Logger
 from src.players import COACHES_TABLE_NAME
 from src.players.models.coaches_request_filters import CoachesRequestFilters
 from src.players.models.dao.coach import Coach as CoachDAO
 from src.players.models.dto.coach import Coach as CoachDTO
+
+from bin.logger import Logger
 
 logger = Logger("db")
 

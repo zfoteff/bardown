@@ -1,7 +1,6 @@
+from api.controllers.player_controller import PlayerController
 from fastapi import APIRouter
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
-
-from api.controllers.player_controller import PlayerController
 
 PLAYER_INTERFACE_ROUTER = APIRouter()
 

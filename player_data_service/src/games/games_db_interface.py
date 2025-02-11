@@ -5,12 +5,12 @@ from uuid import NAMESPACE_OID, uuid5
 from config.db_config import GAMES_TABLE_DB_CONFIG
 from connectors.mysql import MySQLClient
 from errors.games_errors import GameAlreadyExists, GameDoesNotExist
-
-from bin.logger import Logger
 from src.games import GAMES_TABLE_NAME
 from src.games.models.dao.game import Game as GameDAO
 from src.games.models.dto.game import Game as GameDTO
 from src.games.models.game_request_filters import GameRequestFilters
+
+from bin.logger import Logger
 
 logger = Logger("db")
 

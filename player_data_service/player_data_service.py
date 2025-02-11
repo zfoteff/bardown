@@ -14,12 +14,12 @@ import yaml
 from dotenv import load_dotenv
 from fastapi import APIRouter, FastAPI
 from fastapi.responses import JSONResponse
-
-from bin.metadata import servers, tags
 from src.games.api.games_router import GAMES_ROUTER
 from src.players.api.player_router import PLAYER_ROUTER
 from src.stats.api.statistics_router import STATISTICS_ROUTER
 from src.teams.api.teams_router import TEAMS_ROUTER
+
+from bin.metadata import servers, tags
 
 load_dotenv()
 

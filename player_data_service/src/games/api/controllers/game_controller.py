@@ -2,14 +2,14 @@ from errors.games_errors import GameAlreadyExists, GameDoesNotExist, GameValidat
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-
-from bin.logger import Logger
 from src.games.api.validators.games_query_validator import (
     validate_get_games_query_parameters,
 )
 from src.games.games_db_interface import GamesDBInterface
 from src.games.mappers.game_mapper import game_DAO_to_game_DTO
 from src.games.models.dto.game import Game
+
+from bin.logger import Logger
 
 logger = Logger("player-data-service-controller")
 db_interface = GamesDBInterface()

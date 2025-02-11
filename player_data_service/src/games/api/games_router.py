@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-
 from src.games.api.controllers.game_controller import GameController
 
 API_VERSION = "v0"
