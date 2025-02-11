@@ -1,0 +1,10 @@
+cache:
+  host: localhost
+  username: admin
+  password: ${MYSQL_PASSWORD}
+  root_password: ${MYSQL_ROOT_PASSWORD}
+
+api:
+  playerdataservice:
+    host: "0.0.0.0"
+    port: 3001

@@ -6,7 +6,10 @@ from teams.api.validators import (
     NAME_REGEX_PATTERN,
     UUID_REGEX_PATTERN,
 )
-from teams.models.team_request_filters import CompositeTeamRequestFilters, TeamRequestFilters
+from teams.models.team_request_filters import (
+    CompositeTeamRequestFilters,
+    TeamRequestFilters,
+)
 
 
 def _validate_limit(filters: TeamRequestFilters, limit: int) -> None:
@@ -27,7 +30,9 @@ def _validate_offset(filters: TeamRequestFilters, offset: int) -> None:
     filters.offset = offset
 
 
-def _validate_ordering_rules(filters: TeamRequestFilters, order: str, order_by: str) -> None | TeamValidationError:
+def _validate_ordering_rules(
+    filters: TeamRequestFilters, order: str, order_by: str
+) -> None | TeamValidationError:
     if _order_missing_pair(order, order_by):
         if order is None:
             raise TeamValidationError(
@@ -136,7 +141,10 @@ def validate_get_teams_query_parameters(
 
     return filters
 
-def validate_get_composite_team_query_parameters(query_params: dict) -> CompositeTeamRequestFilters | TeamValidationError:
+
+def validate_get_composite_team_query_parameters(
+    query_params: dict,
+) -> CompositeTeamRequestFilters | TeamValidationError:
     filters = CompositeTeamRequestFilters()
 
     # Get all query param values, or none if absent

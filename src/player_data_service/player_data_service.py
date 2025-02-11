@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 __author__ = "Zac Foteff"
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 import argparse
 import os
+import re
 import time
 from contextlib import asynccontextmanager
 from logging import Logger
+from typing import Dict
 
+import yaml
 from dotenv import load_dotenv
 from fastapi import APIRouter, FastAPI
 from fastapi.responses import JSONResponse
@@ -16,11 +19,12 @@ from players.api.player_router import PLAYER_ROUTER
 from stats.api.statistics_router import STATISTICS_ROUTER
 from teams.api.teams_router import TEAMS_ROUTER
 
-from bin.metadata import servers, tags_metadata
+from bin.metadata import servers, tags
 
 load_dotenv()
 
 logger = Logger("player-data-service")
+start_time = time.time()
 
 
 async def get_health() -> JSONResponse:
@@ -30,7 +34,10 @@ async def get_health() -> JSONResponse:
     Returns:
         JSONResponse: Healthcheck response
     """
-    return JSONResponse(status_code=200, content={"status": 200, "response": "Running"})
+    return JSONResponse(
+        status_code=200,
+        content={"status": "UP", "version": __version__, "uptime": time.time() - start_time},
+    )
 
 
 default_router = APIRouter()
@@ -59,9 +66,39 @@ default_router.add_api_route(
 )
 
 
+def _load_profile_configurations() -> Dict[str, str]:
+    profile = os.environ["PROFILE"].strip().lower()
+    print(profile)
+
+    if profile == "local":
+        config_file = "./config/local.application.yaml"
+    if profile == "local-compose":
+        config_file = "./config/local-compose.application.yaml"
+    if profile == "dev":
+        config_file = "./config/dev.application.yaml"
+    if profile == "prod":
+        config_file = "./config/prod.application.yaml"
+
+    with open(config_file) as f:
+        config_content = f.read()
+
+    def replace_env_vars(match):
+        env_var_name = match.group(1)
+        return os.environ.get(env_var_name, match.group(0))
+
+    pattern = re.compile(r"\${(\w+)}")
+    updated_content = re.sub(pattern, replace_env_vars, config_content)
+
+    return yaml.safe_load(updated_content)
+
+
 @asynccontextmanager
 async def lifespan(api: FastAPI):
-    # Startup events
+    # --- Startup events ---
+    # Load profile
+    config = _load_profile_configurations()
+
+    # Load routes
     api.include_router(default_router)
     api.include_router(PLAYER_ROUTER)
     api.include_router(STATISTICS_ROUTER)
@@ -77,7 +114,7 @@ app = FastAPI(
     lifespan=lifespan,
     version=__version__,
     license_info={"name": "MIT", "url": "https://opensource.org/license/mit"},
-    openapi_tags=tags_metadata,
+    openapi_tags=tags,
     servers=servers,
 )
 

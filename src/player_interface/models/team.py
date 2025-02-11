@@ -15,14 +15,14 @@ class Team:
         team_id: str,
         name: str,
         location: str,
-        imgurl: str,
+        img_url: str,
         created: str,
         modified: str,
     ) -> Self:
         self._team_id = team_id
         self._name = name
         self._location = location
-        self._img_url = imgurl
+        self._img_url = img_url
         self._created = datetime.fromisoformat(created)
         self._modified = datetime.fromisoformat(modified)
 

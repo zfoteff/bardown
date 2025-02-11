@@ -1,5 +1,5 @@
 import json
-from typing import Self, Tuple
+from typing import Dict, Self, Tuple
 
 from config.cache_config import CacheConfig
 from models.player_data_service_response import PlayerDataServiceResponse
@@ -57,3 +57,13 @@ class CacheClient:
         except ConnectionError as e:
             logger.error(f"Connection error to cache: {e}")
             return (False, PlayerDataServiceResponse(500, data={"message": f"{e}"}))
+
+    def cache_health(self) -> Dict[str, str]:
+        try:
+            res = self._client.ping()
+            if res:
+                return {"status": "UP", "response": res}
+            else:
+                return {"status": "DOWN", "response": res}
+        except ConnectionError as e:
+            return {"status": "DOWN", "error": str(e)}

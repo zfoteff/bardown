@@ -1,10 +1,13 @@
-from bin.logger import Logger
 from errors.teams_errors import TeamDoesNotExist, TeamValidationError
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from teams.api.validators.teams_query_validator import validate_get_composite_team_query_parameters
+from teams.api.validators.teams_query_validator import (
+    validate_get_composite_team_query_parameters,
+)
 from teams.teams_db_interface import TeamsDBInterface
+
+from bin.logger import Logger
 
 logger = Logger("player-data-service-controller")
 db_interface = TeamsDBInterface()

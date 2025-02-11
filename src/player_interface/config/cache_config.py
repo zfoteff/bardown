@@ -4,7 +4,7 @@ from typing import Self
 
 class CacheConfig:
     def __init__(self) -> Self:
-        self._host = "0.0.0.0"
+        self._host = "cache"
         self._port = 6379
         self._ttl = 300  # Cache ttl in seconds. Default: 5 minutes
 

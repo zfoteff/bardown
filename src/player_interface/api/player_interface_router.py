@@ -1,6 +1,6 @@
 from api.controllers.default_controller import DefaultController
 from fastapi import APIRouter
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 
 PLAYER_INTERFACE_ROUTER = APIRouter()
 
@@ -43,4 +43,21 @@ PLAYER_INTERFACE_ROUTER.add_api_route(
     description="Render games page",
     methods=["GET"],
     response_class=HTMLResponse,
+)
+
+PLAYER_INTERFACE_ROUTER.add_api_route(
+    path="/health",
+    endpoint=DefaultController.get_health,
+    description="Healthcheck endpoint for Player Interface",
+    methods=["GET"],
+    response_class=JSONResponse,
+)
+
+PLAYER_INTERFACE_ROUTER.add_api_route(
+    path="/favicon.ico",
+    endpoint=DefaultController.get_favicon,
+    description="Retrieve favicon",
+    methods=["GET"],
+    response_class=FileResponse,
+    include_in_schema=False,
 )

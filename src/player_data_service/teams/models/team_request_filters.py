@@ -11,8 +11,9 @@ class TeamRequestFilters(BaseModel):
     order: Optional[str] = None
     order_by: Optional[str] = None
 
+
 class CompositeTeamRequestFilters(BaseModel):
     team_id: Optional[str] = None
-    player_id: Optional[str] = None 
+    player_id: Optional[str] = None
     year: Optional[int] = None
     name: Optional[str] = None

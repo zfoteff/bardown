@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-tags_metadata = [
+tags = [
     {
         "name": "players",
         "description": "CRUD logic for interacting with the players table",

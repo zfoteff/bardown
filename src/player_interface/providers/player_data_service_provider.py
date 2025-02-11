@@ -1,6 +1,7 @@
 from logging import Logger
-from typing import List, Self, Tuple
+from typing import Dict, List, Self, Tuple
 
+import requests
 from client.cache.cache_client import CacheClient
 from client.client_url import ClientUrl
 from client.playerdataservice.player_data_service_client import PlayerDataServiceClient
@@ -168,3 +169,11 @@ class PlayerDataServiceProvider:
             if not result:
                 self._cache_client.cache_response(url=full_request_url, response=response)
         return games
+
+    async def get_health(self) -> Dict:
+        config = PlayerDataServiceEndpointConfig(base_path="/health")
+        response = requests.get(config.base_url + config.base_path)
+        return response.json()
+
+    async def get_cache_health(self) -> Dict:
+        return self._cache_client.cache_health()

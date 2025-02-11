@@ -1,13 +1,19 @@
+import time
 from typing import Self
 
 from fastapi import Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from mappers.game_filters_mapper import GameFiltersMapper
 from mappers.player_filters_mapper import PlayerFiltersMapper
 from mappers.team_filters_mapper import TeamFiltersMapper
 from providers.player_data_service_provider import PlayerDataServiceProvider
 
+from player_interface import __version__ as player_interface_version
+
+FAVICON_PATH = "static/favicon.ico"
+
+start_time = time.time()
 templates = Jinja2Templates(directory="api/templates")
 player_data_service_provider = PlayerDataServiceProvider()
 
@@ -15,6 +21,9 @@ player_data_service_provider = PlayerDataServiceProvider()
 class DefaultController:
     def __init__(self) -> Self:
         self._player_data_service_provider = PlayerDataServiceProvider()
+
+    async def get_favicon():
+        return FileResponse(FAVICON_PATH)
 
     async def render_homepage(request: Request) -> HTMLResponse:
         return templates.TemplateResponse("home.html", context={"request": request})
@@ -48,4 +57,24 @@ class DefaultController:
         return templates.TemplateResponse(
             "player.html",
             context={"request": request, "data": {"player": player[0], "statistics": statistics}},
+        )
+
+    async def get_health() -> JSONResponse:
+        """Healthcheck for the Player Interface service. Asserts the service is running and has
+        connection to the Player Data Service
+
+        Returns:
+            JSONResponse: Healthcheck response
+        """
+        return JSONResponse(
+            status_code=200,
+            content={
+                "status": "UP",
+                "version": player_interface_version,
+                "uptime": time.time() - start_time,
+                "dependencies": {
+                    "player_data_service": await player_data_service_provider.get_health(),
+                    "cache": await player_data_service_provider.get_cache_health(),
+                },
+            },
         )

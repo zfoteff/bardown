@@ -22,6 +22,4 @@ class CompositeTeam:
         self.roster = roster
 
     def to_dict(self) -> Dict:
-        return {
-            "team_id": ""
-        }
+        return {"team_id": ""}

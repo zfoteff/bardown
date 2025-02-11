@@ -15,6 +15,7 @@ class Player(BaseModel):
     created: Optional[datetime] = None
     modified: Optional[datetime] = None
 
+
 class PlayerWithNumber(BaseModel):
     player_id: Optional[str] = None
     first_name: Optional[str] = None
