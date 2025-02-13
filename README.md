@@ -17,8 +17,8 @@ Player management and statistic tracking application designed for the Clackamas 
 
 ## Contents
 
-### Bardown Interface (Name W.I.P.)
-Front end interface for the Player Data Service to query for players/teams/coaches and statistics data. Renders HTML pages using data from the Bardown Data Service
+### Player Interface
+Front end interface for the Player Data Service to query for players/teams/coaches and statistics data. Renders HTML pages using data from the Player Data Service
 
 ![More info here](./src/player_interface/README.md)
 

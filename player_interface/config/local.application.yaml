@@ -1,10 +1,7 @@
 cache:
   host: localhost
-  username: admin
-  password: ${MYSQL_PASSWORD}
-  root_password: ${MYSQL_ROOT_PASSWORD}
 
 api:
   playerdataservice:
-    host: "localhost"
+    host: "localhost:3001"
     port: 3001

@@ -5,6 +5,7 @@ import requests
 from client.cache.cache_client import CacheClient
 from client.client_url import ClientUrl
 from client.playerdataservice.player_data_service_client import PlayerDataServiceClient
+from config.endpoint_config import EndpointConfig
 from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
 from mappers.player_response_mapper import (
     player_data_service_response_to_composite_statistics,
@@ -28,9 +29,9 @@ class PlayerDataServiceProvider:
     _player_data_service_client: PlayerDataServiceClient
     _cache_client: CacheClient
 
-    def __init__(self) -> Self:
-        self._player_data_service_client = PlayerDataServiceClient
-        self._cache_client = CacheClient()
+    def __init__(self, cache_client: CacheClient, endpoint_config: EndpointConfig) -> Self:
+        self._player_data_service_client = PlayerDataServiceClient()
+        self._cache_client = cache_client
 
     async def get_players_by_filters(self, filters: PlayersFilters) -> List[Player]:
         """
@@ -38,7 +39,7 @@ class PlayerDataServiceProvider:
         """
         url = ClientUrl(
             "GET",
-            config=PlayerDataServiceEndpointConfig(base_path="players", app_pathname="player"),
+            config=PlayerDataServiceEndpointConfig(config=endpoint_config, base_path="players", app_pathname="player"),
         )
         request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
         full_request_url = url.url + request.query_string()

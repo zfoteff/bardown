@@ -1,16 +1,21 @@
 from random import randint
-from typing import Self
+from typing import Self, Dict
 
 
 class CacheConfig:
-    def __init__(self) -> Self:
-        self._host = "localhost"
-        self._port = 6379
-        self._ttl = 300  # Cache ttl in seconds. Default: 5 minutes
+    _config: Dict[str, str] = {}
+
+    def __init__(self, config: Dict[str, str]) -> Self:
+        self._config = config
+        self._host = self._config["CACHE_HOST"]
+        self._port = self._config["CACHE_PORT"]
+        self._ttl = self._config["CACHE_TTL"]
+        self._read_timeout = self._config["CACHE_TIMEOUT"]
+        self._connect_timeout = self._config["CACHE_CONNECT_TIMEOUT"]
 
     @property
     def url(self) -> str:
-        return f"rediss://{self._host}:{self._port}"
+        return f"rediss://{self.host}:{self.port}"
 
     @property
     def host(self) -> str:
@@ -18,7 +23,11 @@ class CacheConfig:
 
     @property
     def port(self) -> int:
-        return self._port
+        return int(self._port)
+    
+    @property
+    def connect_timeout(self) -> int:
+        return int(self._connect_timeout)
 
     @property
     def ttl(self) -> int:
@@ -28,4 +37,4 @@ class CacheConfig:
             int: Cache entry TTL [-30, 30] second modifier applied
         """
         modifier = randint(-30, 30)
-        return self._ttl + modifier
+        return int(self._ttl) + modifier

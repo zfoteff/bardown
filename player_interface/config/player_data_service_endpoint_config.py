@@ -12,3 +12,6 @@ class PlayerDataServiceEndpointConfig(EndpointConfig):
         app_pathname: str = "players",
     ) -> Self:
         super().__init__(base_url, base_path, api_version, app_pathname)
+
+
+    def __init__(self, config: EndpointConfig, base_path, api_version) -> Self:

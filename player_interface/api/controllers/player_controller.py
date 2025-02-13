@@ -9,7 +9,7 @@ from mappers.player_filters_mapper import PlayerFiltersMapper
 from mappers.team_filters_mapper import TeamFiltersMapper
 from providers.player_data_service_provider import PlayerDataServiceProvider
 
-from player_interface import __version__ as player_interface_version
+from main import __version__ as player_interface_version
 
 FAVICON_PATH = "static/favicon.ico"
 

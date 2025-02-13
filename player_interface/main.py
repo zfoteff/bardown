@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 __author__ = "Zac Foteff"
-__version__ = "0.1.2"
+__version__ = "0.1.1"
 
 import argparse
 import os
@@ -11,16 +11,12 @@ from typing import Dict
 import yaml
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from main import PlayerDataService
-from src.api.default_router import DEFAULT_ROUTER
-from src.games.api.games_router import GAMES_ROUTER
-from src.players.api.player_router import PLAYER_ROUTER
-from src.stats.api.statistics_router import STATISTICS_ROUTER
-from src.teams.api.teams_router import TEAMS_ROUTER
+from fastapi.staticfiles import StaticFiles
 
-from bin.metadata import servers, tags
+from bin import metadata
+from player_interface import PlayerInterface
 
-load_dotenv()
+load_dotenv
 
 
 def _load_profile_configurations() -> Dict[str, str]:
@@ -53,32 +49,39 @@ async def lifespan(api: FastAPI):
     # --- Startup events ---
     # Load profile
     config = _load_profile_configurations()
+    app = PlayerInterface(config=config)
 
     # Load routes
-    app = PlayerDataService(config=config)
     for route in app.routes:
         api.include_router(route)
-        
+
+    # Mount static route
+    app.mount("/static", StaticFiles(directory="static"), name="static")
+
     yield
-    # Shutdown events
+    # --- Shutdown events ---
+    app.shutdown()
 
 
 app = FastAPI(
-    title="Player Data Service",
-    description="Interface for player data for the Bardown application",
+    title="Player Interface",
+    description="Player Interface for the Bardown application",
     lifespan=lifespan,
     version=__version__,
     license_info={"name": "MIT", "url": "https://opensource.org/license/mit"},
-    openapi_tags=tags,
-    servers=servers,
+    openapi_tags=metadata.tags,
+    servers=metadata.servers,
 )
+
 
 if __name__ == "__main__":
     from uvicorn import run
 
     parser = argparse.ArgumentParser(
         description="""
-        Data interface for the Bardown application. Run with no arguments to start API for CRUD operations
+        Front end for the Bardown application. Interfaces with the Player
+        Data Service to display information to the user. Run with no arguments
+        to start API for CRUD operations
     """
     )
     parser.add_argument(
@@ -93,7 +96,7 @@ if __name__ == "__main__":
         print(app.version)
     else:
         run(
-            app="player_data_service:app",
+            app="player_interface:app",
             log_level="debug",
             host="0.0.0.0",
             port=os.environ["PORT"],

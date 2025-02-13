@@ -14,13 +14,14 @@ logger = Logger("cache")
 class CacheClient:
     _config: CacheConfig
 
-    def __init__(self) -> Self:
-        self._config = CacheConfig()
+    def __init__(self, config: Dict[str, str]) -> Self:
+        self._config = CacheConfig(config=config)
         self._client = Redis(
             host=self._config.host,
             port=self._config.port,
             health_check_interval=10,
-            socket_connect_timeout=5,
+            socket_connect_timeout=self._config.connect_timeout,
+            socket_timeout=self._config.connect_timeout,
             retry_on_timeout=False,
             socket_keepalive=True,
         )
