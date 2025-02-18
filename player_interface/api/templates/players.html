@@ -1,0 +1,58 @@
+{% extends "index.html" %}
+{% block title %}Players{% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="../static/stylesheets/players.css" />
+{% endblock %}
+{% block content %}
+<h2>Players</h2>
+<div class="content-card" id="player-filters">
+    <form method="GET" id="player-filters" action="/players">
+        <input type="text" id="firstname" name="filters.firstname" placeholder="First Name" />
+        <input type="text" id="lastname" name="filters.lastname" placeholder="Last Name" />
+        <input type="text" id="number" name="filters.number" placeholder="Number" />
+        <input list="grades" id="grade" name="filters.grade" placeholder="Grade" multiple />
+        <datalist id="grades">
+            <option value="Freshman">
+            <option value="Sophomore">
+            <option value="Junior">
+            <option value="Senior">
+            <option value="Graduate">
+        </datalist>
+        <input list="positions" id="position" name="position" placeholder="Position" multiple />
+        <datalist id="positions">
+            <option value="Attack">
+            <option value="Midfield">
+            <option value="Defense">
+            <option value="Goalie">
+            <option value="LSM">
+            <option value="FOGO">
+        </datalist>
+        <input type="submit" name="submit" value="Filter" />
+    </form>
+</div>
+<div class="content-card" id="players-output">
+    <table id="players-table">
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <th>Grade</th>
+                <th>Position</th>
+                <th>School</th>
+                <th>Details</th>
+            </tr>
+            {% for player in players %}
+            <tr>
+                <td class="text-field">{{ player.first_name + " " + player.last_name }}</td>
+                <td class="text-field">{{ player.grade }}</td>
+                <td class="text-field">{{ player.position }}</td>
+                <td class="text-field">{{ player.school }}</td>
+                <td class="link-field">
+                    <b><a class="info-link" href="/players/{{player.player_id}}">More Information</a></b>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

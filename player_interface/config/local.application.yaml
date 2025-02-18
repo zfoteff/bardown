@@ -1,0 +1,7 @@
+cache:
+  host: localhost
+
+api:
+  playerdataservice:
+    host: "localhost:3001"
+    port: 3001

@@ -1,5 +1,6 @@
+<h1 class="service-title" style="text-align: center;">
 BARDOWN
-===
+</h1>
 
 ![](https://img.shields.io/github/commit-activity/t/zfoteff/clackamas-lacrosse-application)
 ![](https://img.shields.io/github/commits-difference/zfoteff/clackamas-lacrosse-application?base=main&head=develop&color=red)  
@@ -16,20 +17,18 @@ Player management and statistic tracking application designed for the Clackamas 
 
 ## Contents
 
-### Player Interface (Name W.I.P.)
-Interface for the Player Data Service to query for players/teams/coaches and statistics data
+### Player Interface
+Front end interface for the Player Data Service to query for players/teams/coaches and statistics data. Renders HTML pages using data from the Player Data Service
 
-![More info here.](./src/player_interface/README.md)
+![More info here](./src/player_interface/README.md)
 
 ### Player Data Service
 Source of truth for all player, team, coach, and statistic data
 
-![More info here.](./src/player_data_service/README.md)
+![More info here](./src/player_data_service/README.md)
 
-### Future State
-- Bardown Events Listener: PubSub API for website triggered events
-- Include dependency on RMQ instance
-- Statistics Data Service
+### Bardown Events Listener
+PubSub API for website triggered events
 
 ## Dependencies
 - MySQL

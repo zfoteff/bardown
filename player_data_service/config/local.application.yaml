@@ -1,0 +1,7 @@
+---
+profile: local
+db:
+  host: "localhost"
+  username: admin
+  password: ${MYSQL_PASSWORD}
+  root_password: ${MYSQL_ROOT_PASSWORD}

@@ -1,7 +1,10 @@
-name: clackamas-lacrosse-application
+name: bardown
 
+volumes:
+  bardown_db:
 services:
   db:
+    container_name: "bardown-database"
     image: mysql:latest
     restart: always
     environment:
@@ -14,21 +17,28 @@ services:
       - "33060:33060"
     expose:
       - "3306"
+    volumes:
+      - bardown_db:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 5
 
   cache:
+    container_name: "bardown_cache"
     image: valkey/valkey
     restart: always
     ports:
       - "6379:6379"
     expose:
       - "6379"
-    depends_on:
-      - db
 
   # mq:
+  #   container_name: "bardown_mq"
   #   image: rabbitmq:latest
   #   restart: always
-  #   ports: 
+  #   ports:
   #     - "15691:15691"
   #     - "15692:15692"
   #     - "25672:25672"
@@ -43,18 +53,41 @@ services:
   #     - "5671"
   #     - "5672"
 
-  player-interface:
-    image: player-interface
-    build: ./src/player_interface/
-    ports:
-      - "3000:3000"
-    depends_on:
-      - cache 
-
   player-data-service:
+    container_name: "player-data-service"
     image: player-data-service
-    build: ./src/player_data_service/
+    build: ./player_data_service/
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_DATABASE: LaxDB
     ports:
       - "3001:3001"
     depends_on:
-      - player-interface
+      db:
+        condition: service_healthy
+
+  player-interface:
+    container_name: "player-interface"
+    image: player-interface
+    build: ./player_interface/
+    environment:
+      CACHE_HOST: ${CACHE_HOST}
+    ports:
+      - "3000:3000"
+    depends_on:
+      cache:
+        condition: service_started
+      player-data-service:
+        condition: service_started
+
+
+  # bardown_events_listener:
+  #   container_name: "bardown-events-listener"
+  #   image: bardown-events-listener
+  #   build: ./src/bardown_events_listener
+  #   ports:
+  #     - "3002:3002"
+  #   depends_on:
+  #     - mq

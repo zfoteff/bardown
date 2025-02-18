@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-from generate_team_players import generate_team_players
 from generate_game_statistics import generate_game_statistics
 from generate_season_statistics import generate_season_statistics
+from generate_team_players import generate_team_players
 
 la_salle_team_id = "75674569-9493-4636-827c-dd9788f93423"
 clackamas_jv_team_id = "aff3ed7e-b4ce-53d8-9cb3-42cf365620c5"
@@ -30,7 +30,7 @@ clackamas_jv_player_ids = [
     "5d3fcfd3-7695-5593-b4ff-f645fb2914d8",
     "0374960d-3806-5823-9b68-32e7f8afb3a9",
     "87ac6fa6-02b0-5d65-9e91-df7fbfcd0e6c",
-    "67e0c3ea-4321-5a72-a88b-4d8863b4833f"
+    "67e0c3ea-4321-5a72-a88b-4d8863b4833f",
 ]
 
 clackamas_varsity_player_ids = [
@@ -54,7 +54,7 @@ clackamas_varsity_player_ids = [
     "f2706293-73bb-53ee-99a6-761eae6c36e4",
     "61617eb7-5252-523b-a5dd-bc10c0d84cb7",
     "c05f6019-a865-5b0a-b9fd-72702cd6e5e6",
-    "28f5b610-9df6-5c68-af61-5ddd22b3e4ed"
+    "28f5b610-9df6-5c68-af61-5ddd22b3e4ed",
 ]
 
 la_salle_player_ids = [
@@ -104,5 +104,5 @@ game_ids = [
 
 print(generate_team_players(clackamas_jv_team_id, clackamas_jv_player_ids))
 
-print ("var --")
+print("var --")
 print(generate_team_players(clackamas_varsity_team_id, clackamas_jv_player_ids))
