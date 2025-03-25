@@ -1,23 +1,20 @@
 from datetime import datetime
-from typing import List, Tuple
+from typing import List, Self, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
-from config.db_config import PLAYER_TABLE_DB_CONFIG
+from config.db_config import DatabaseConfig
 from connectors.mysql import MySQLClient
 from errors.players_errors import PlayerAlreadyExists, PlayerDoesNotExist
-from src.players import PLAYERS_TABLE_NAME
-from src.players.models.dao.player import Player as PlayerDAO
-from src.players.models.dto.player import Player as PlayerDTO
-from src.players.models.players_request_filters import PlayersRequestFilters
-
-from bin.logger import Logger
-
-logger = Logger("db")
+from fastapi import Depends
+from players import PLAYERS_TABLE_NAME
+from players.models.dao.player import Player as PlayerDAO
+from players.models.dto.player import Player as PlayerDTO
+from players.models.players_request_filters import PlayersRequestFilters
 
 
 class PlayerDatabaseInterface:
-    def __init__(self):
-        self.__client = MySQLClient(**PLAYER_TABLE_DB_CONFIG)
+    def __init__(self, config: DatabaseConfig = Depends(DatabaseConfig.__init__)) -> Self:
+        self.__client = MySQLClient(**config.PLAYER_TABLE_DB)
         self.__client.open_connection()
 
     def _build_query_from_filters(self, filters: PlayersRequestFilters) -> str:

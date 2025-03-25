@@ -2,22 +2,18 @@ from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
-from config.db_config import COACHES_TABLE_DB_CONFIG
+from config.db_config import DatabaseConfig
 from connectors.mysql import MySQLClient
 from errors.coaches_errors import CoachAlreadyExists, CoachDoesNotExist
-from src.players import COACHES_TABLE_NAME
-from src.players.models.coaches_request_filters import CoachesRequestFilters
-from src.players.models.dao.coach import Coach as CoachDAO
-from src.players.models.dto.coach import Coach as CoachDTO
-
-from bin.logger import Logger
-
-logger = Logger("db")
+from players import COACHES_TABLE_NAME
+from players.models.coaches_request_filters import CoachesRequestFilters
+from players.models.dao.coach import Coach as CoachDAO
+from players.models.dto.coach import Coach as CoachDTO
 
 
 class CoachesDatabaseInterface:
-    def __init__(self):
-        self.__client = MySQLClient(**COACHES_TABLE_DB_CONFIG)
+    def __init__(self, config: DatabaseConfig):
+        self.__client = MySQLClient(**config.COACHES_TABLE_DB_CONFIG)
         self.__client.open_connection()
 
     def close_connection(self):

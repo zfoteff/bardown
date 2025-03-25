@@ -1,10 +1,11 @@
 from typing import List, Self, Tuple
 
 import mysql.connector as mysql
+from mysql.connector import Error as ConnectorError
 
 from bin.logger import Logger
 
-logger = Logger("mysql-client")
+logger = Logger("db")
 
 
 class MySQLClient:
@@ -28,7 +29,7 @@ class MySQLClient:
             )
 
             return True
-        except mysql.Error as err:
+        except ConnectorError as err:
             logger.error(
                 f"""
                 Database error when establishing connection to {self.__host}@{self.__database}:{self.__table}: {err} . . . Quitting
@@ -38,12 +39,16 @@ class MySQLClient:
 
     def close_connection(self) -> bool:
         """Save changes and close connection to database"""
-        logger.info(f"Closing connection to {self.__table} . . .")
+        logger.info(f"Closing connection to {self.__host}@{self.__database}:{self.__table}. . .")
         try:
             self.__connection.close()
             return True
         except mysql.Error as err:
-            logger.error(f"Database error when closing connection: {err} . . . Quitting")
+            logger.error(
+                f"""
+                Database error when closing connection to {self.__host}@{self.__database}:{self.__table}: {err} . . . Quitting
+                """
+            )
             return False
 
     def execute_query(
@@ -55,7 +60,9 @@ class MySQLClient:
         try:
             cursor.execute(query + ";")
         except mysql.Error as err:
-            logger.error(f"Database error when running query: {query}\nError:{err}")
+            logger.error(
+                f"Database error from {self.__host}@{self.__database}:{self.__table} when running query: {query}\nError:{err}"
+            )
             return (False, err)
 
         if commit_candidate:

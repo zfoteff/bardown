@@ -2,22 +2,29 @@ from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
+import config.player_data_service_config as application_config
 from config.db_config import DatabaseConfig
 from connectors.mysql import MySQLClient
 from errors.games_errors import GameAlreadyExists, GameDoesNotExist
+from fastapi import Depends
 from games import GAMES_TABLE_NAME
 from games.models.dao.game import Game as GameDAO
 from games.models.dto.game import Game as GameDTO
 from games.models.game_request_filters import GameRequestFilters
-
-from bin.logger import Logger
-
-logger = Logger("db")
+from typing_extensions import Annotated
 
 
 class GamesDBInterface:
-    def __init__(self, config: DatabaseConfig):
-        self.__client = MySQLClient(**config.GAMES_TABLE_DB_CONFIG)
+    def __init__(
+        self,
+        config: application_config.PlayerDataServiceBaseConfig = Annotated[
+            application_config.get_config(), Depends(application_config.get_config)
+        ],
+    ) -> None:
+        print(config)
+        self.__client = MySQLClient(
+            host=config.mysql_host, user=config.mysql_user, password=config.mysql_password, table=GAMES_TABLE_NAME
+        )
         self.__client.open_connection()
 
     def _build_query_from_filters(self, filters: GameRequestFilters) -> str:

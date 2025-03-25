@@ -1,5 +1,5 @@
-from src.players.models.dao.coach import Coach as CoachDAO
-from src.players.models.dto.coach import Coach as CoachDTO
+from players.models.dao.coach import Coach as CoachDAO
+from players.models.dto.coach import Coach as CoachDTO
 
 
 def coach_DTO_to_coach_DAO(coach_dto: CoachDTO) -> CoachDAO:

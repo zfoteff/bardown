@@ -14,12 +14,11 @@ from games.models.dto.game import Game
 from bin.logger import Logger
 
 logger = Logger("player-data-service-controller")
+db_interface = GamesDBInterface()
 
 
 class GameController:
-    async def create_game(
-        game: Game, db_interface: Annotated[GamesDBInterface, Depends(GamesDBInterface)]
-    ) -> JSONResponse:
+    async def create_game(game: Game) -> JSONResponse:
         try:
             result = db_interface.create_game(game)
         except GameAlreadyExists as err:

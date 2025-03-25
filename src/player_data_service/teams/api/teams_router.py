@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from src.teams.api.controllers.teams_controller import TeamController
+from teams.api.controllers.teams_controller import TeamController
 
 API_VERSION = "v0"
 TEAMS_ROUTER = APIRouter(prefix=f"/team/{API_VERSION}")

@@ -1,6 +1,7 @@
-from fastapi import APIRouter
-from src.players.api.controllers.coach_controller import CoachController
-from src.players.api.controllers.player_controller import PlayerController
+from fastapi import APIRouter, Depends
+from players.api.controllers.coach_controller import CoachController
+from players.api.controllers.player_controller import PlayerController
+from players.player_db_interface import PlayerDatabaseInterface
 
 API_VERSION = "v0"
 PLAYER_ROUTER = APIRouter(prefix=f"/players/{API_VERSION}")

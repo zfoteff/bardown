@@ -1,8 +1,7 @@
 import time
 
 from fastapi.responses import JSONResponse
-
-from player_data_service import __version__ as player_data_service_version
+from main import __version__ as player_data_service_version
 
 start_time = time.time()
 

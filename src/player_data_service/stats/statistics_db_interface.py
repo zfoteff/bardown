@@ -1,10 +1,7 @@
 from datetime import datetime
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
-from config.db_config import (
-    SEASON_STATISTICS_TABLE_DB_CONFIG,
-    STATISTICS_TABLE_DB_CONFIG,
-)
+from config.db_config import DatabaseConfig
 from connectors.mysql import MySQLClient
 from errors.statistics_errors import (
     GameStatisticsAlreadyExist,
@@ -12,33 +9,38 @@ from errors.statistics_errors import (
     StatisticsAlreadyExist,
     StatisticsDoNoExist,
 )
-from src.stats import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
-from src.stats.models.dao.composite_game_statistics import CompositeGameStatistics
-from src.stats.models.dao.composite_season_statistics import CompositeSeasonStatistics
-from src.stats.models.dao.composite_statistics import CompositeStatistics
-from src.stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
-from src.stats.models.dao.season_statistics import (
-    SeasonStatistics as SeasonStatisticsDAO,
-)
-from src.stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
-from src.stats.models.dto.season_statistics import (
-    SeasonStatistics as SeasonStatisticsDTO,
-)
-from src.stats.models.statistics_request_filters import (
+from fastapi import Depends
+from stats import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
+from stats.models.dao.composite_game_statistics import CompositeGameStatistics
+from stats.models.dao.composite_season_statistics import CompositeSeasonStatistics
+from stats.models.dao.composite_statistics import CompositeStatistics
+from stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
+from stats.models.dao.season_statistics import SeasonStatistics as SeasonStatisticsDAO
+from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
+from stats.models.dto.season_statistics import SeasonStatistics as SeasonStatisticsDTO
+from stats.models.statistics_request_filters import (
     CompositeStatisticsRequestFilters,
     GameStatisticsRequestFilters,
     SeasonStatisticsRequestFilters,
 )
 
-from bin.logger import Logger
-
-logger = Logger("db")
-
 
 class StatisticsDatabaseInterface:
-    def __init__(self):
-        self.__game_client = MySQLClient(**STATISTICS_TABLE_DB_CONFIG)
-        self.__season_client = MySQLClient(**SEASON_STATISTICS_TABLE_DB_CONFIG)
+    def __init__(
+        self, config: Dict[str, str] = Depends(DatabaseConfig.get_combined_statistics_table_db)
+    ) -> None:
+        self.__game_client = MySQLClient(
+            user=config["user"],
+            password=config["password"],
+            host=config["host"],
+            table=GAME_STATISTICS_TABLE_NAME,
+        )
+        self.__season_client = MySQLClient(
+            user=config["user"],
+            password=config["password"],
+            host=config["host"],
+            table=SEASON_STATISTICS_TABLE_NAME,
+        )
         self.__game_client.open_connection()
         self.__season_client.open_connection()
 
@@ -208,16 +210,10 @@ class StatisticsDatabaseInterface:
         query_success = True
 
         if not game_success:
-            logger.warning(
-                f"Composite game statistics query failed: {filters}, result: {game_result}"
-            )
             query_success = False
             game_result = []
 
         if not season_success:
-            logger.warning(
-                f"Composite season statistics query failed: {filters}, result: {season_result}"
-            )
             query_success = False
             season_result = []
 
