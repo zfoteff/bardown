@@ -1,7 +1,7 @@
-from src.players.models.dao.player import Player as PlayerDAO
-from src.players.models.dto.player import Player as PlayerDTO
-from src.players.models.enums.grade import Grade
-from src.players.models.enums.position import Position
+from players.models.dao.player import Player as PlayerDAO
+from players.models.dto.player import Player as PlayerDTO
+from players.models.enums.grade import Grade
+from players.models.enums.position import Position
 
 
 def player_DTO_to_player_DAO(player_dto: PlayerDTO) -> PlayerDAO:

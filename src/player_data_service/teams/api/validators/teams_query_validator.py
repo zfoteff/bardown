@@ -1,12 +1,12 @@
 import re
 
 from errors.teams_errors import TeamValidationError
-from src.teams.api.validators import (
+from teams.api.validators import (
     BASIC_TEXT_REGEX_PATTERN,
     NAME_REGEX_PATTERN,
     UUID_REGEX_PATTERN,
 )
-from src.teams.models.team_request_filters import (
+from teams.models.team_request_filters import (
     CompositeTeamRequestFilters,
     TeamRequestFilters,
 )

@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Dict, Self, Tuple
 
-from src.players.models.enums.grade import Grade
-from src.players.models.enums.position import Position
+from players.models.enums.grade import Grade
+from players.models.enums.position import Position
 
 
 class Player:

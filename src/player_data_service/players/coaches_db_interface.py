@@ -2,18 +2,30 @@ from datetime import datetime
 from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
-from config.db_config import DatabaseConfig
+import config.player_data_service_config as application_config
 from connectors.mysql import MySQLClient
 from errors.coaches_errors import CoachAlreadyExists, CoachDoesNotExist
+from fastapi import Depends
 from players import COACHES_TABLE_NAME
 from players.models.coaches_request_filters import CoachesRequestFilters
 from players.models.dao.coach import Coach as CoachDAO
 from players.models.dto.coach import Coach as CoachDTO
+from typing_extensions import Annotated
 
 
 class CoachesDatabaseInterface:
-    def __init__(self, config: DatabaseConfig):
-        self.__client = MySQLClient(**config.COACHES_TABLE_DB_CONFIG)
+    def __init__(
+        self,
+        config: application_config.PlayerDataServiceBaseConfig = Annotated[
+            application_config.get_config(), Depends(application_config.get_config())
+        ],
+    ) -> None:
+        self.__client = MySQLClient(
+            host=config.mysql_host,
+            user=config.mysql_user,
+            password=config.mysql_password,
+            table=COACHES_TABLE_NAME,
+        )
         self.__client.open_connection()
 
     def close_connection(self):

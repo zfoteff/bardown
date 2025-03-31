@@ -1,7 +1,7 @@
 from typing import List
 
 from pydantic import BaseModel
-from src.stats.models.statistics import Statistics
+from stats.models.statistics import Statistics
 
 
 class PlayerGameStatistics(BaseModel):

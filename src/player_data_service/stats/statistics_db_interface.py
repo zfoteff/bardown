@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import Dict, List, Tuple
+from typing import List, Tuple
 
-from config.db_config import DatabaseConfig
+import config.player_data_service_config as application_config
 from connectors.mysql import MySQLClient
 from errors.statistics_errors import (
     GameStatisticsAlreadyExist,
@@ -23,22 +23,26 @@ from stats.models.statistics_request_filters import (
     GameStatisticsRequestFilters,
     SeasonStatisticsRequestFilters,
 )
+from typing_extensions import Annotated
 
 
 class StatisticsDatabaseInterface:
     def __init__(
-        self, config: Dict[str, str] = Depends(DatabaseConfig.get_combined_statistics_table_db)
+        self,
+        config: application_config.PlayerDataServiceBaseConfig = Annotated[
+            application_config.get_config(), Depends(application_config.get_config())
+        ],
     ) -> None:
         self.__game_client = MySQLClient(
-            user=config["user"],
-            password=config["password"],
-            host=config["host"],
+            user=config.mysql_user,
+            password=config.mysql_password,
+            host=config.mysql_host,
             table=GAME_STATISTICS_TABLE_NAME,
         )
         self.__season_client = MySQLClient(
-            user=config["user"],
-            password=config["password"],
-            host=config["host"],
+            user=config.mysql_user,
+            password=config.mysql_password,
+            host=config.mysql_host,
             table=SEASON_STATISTICS_TABLE_NAME,
         )
         self.__game_client.open_connection()

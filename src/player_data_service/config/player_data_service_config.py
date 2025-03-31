@@ -11,6 +11,8 @@ class PlayerDataServiceBaseConfig(BaseSettings):
     mysql_user: str
     mysql_password: str
     mysql_root_password: str
+    version: str
+    log_level: str = "info"
 
     model_config = SettingsConfigDict(env_file=".env")
 

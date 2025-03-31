@@ -4,7 +4,8 @@ __version__ = "0.1.3"
 
 import argparse
 
-from player_data_service import PlayerDataService
+from player_data_service_application import PlayerDataServiceApplication
+
 
 if __name__ == "__main__":
     from uvicorn import run
@@ -22,14 +23,14 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    app = PlayerDataService(version=__version__)
+    player_data_service = PlayerDataServiceApplication()
 
     if args.version is True:
-        print(app.version)
+        print(player_data_service.version)
     else:
         run(
-            app=app.app,
-            log_level=app.config.get("LOG_LEVEL", "info"),
+            app=player_data_service.app,
+            log_level=player_data_service.log_level,
             host="0.0.0.0",
             port="3001",
             workers=1,

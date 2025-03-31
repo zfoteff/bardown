@@ -2,12 +2,12 @@ from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist, TeamValidat
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from src.teams.api.validators.teams_query_validator import (
+from teams.api.validators.teams_query_validator import (
     validate_get_teams_query_parameters,
 )
-from src.teams.mappers.team_mapper import team_DAO_to_team_DTO
-from src.teams.models.dto.team import Team
-from src.teams.teams_db_interface import TeamsDBInterface
+from teams.mappers.team_mapper import team_DAO_to_team_DTO
+from teams.models.dto.team import Team
+from teams.teams_db_interface import TeamsDBInterface
 
 from bin.logger import Logger
 

@@ -2,17 +2,15 @@ from errors.statistics_errors import StatisticsDoNoExist, StatisticsValidationEr
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from src.stats.api.validators.statistics_query_validator import (
+from stats.api.validators.statistics_query_validator import (
     validate_get_composite_statistics_query_parameters,
 )
-from src.stats.mappers.statistics_mapper import (
+from stats.mappers.statistics_mapper import (
     composite_statistics_DAO_to_composite_statistics_DTO,
 )
-from src.stats.models.dto.composite_statistics import CompositeStatistics
-from src.stats.models.statistics_request_filters import (
-    CompositeStatisticsRequestFilters,
-)
-from src.stats.statistics_db_interface import StatisticsDatabaseInterface
+from stats.models.dto.composite_statistics import CompositeStatistics
+from stats.models.statistics_request_filters import CompositeStatisticsRequestFilters
+from stats.statistics_db_interface import StatisticsDatabaseInterface
 
 from bin.logger import Logger
 

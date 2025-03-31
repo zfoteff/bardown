@@ -9,9 +9,9 @@ from fastapi.responses import JSONResponse, Response
 from players.api.validators.coaches_query_validator import (
     validate_get_coaches_query_parameters,
 )
-from coaches_db_interface import CoachesDatabaseInterface
-from mappers.coach_mapper import coach_DAO_to_coach_DTO
-from models.dto.coach import Coach
+from players.coaches_db_interface import CoachesDatabaseInterface
+from players.mappers.coach_mapper import coach_DAO_to_coach_DTO
+from players.models.dto.coach import Coach
 
 from bin.logger import Logger
 

@@ -1,7 +1,7 @@
 from typing import Dict, List, Self
 
-from src.stats.models.dao.composite_game_statistics import CompositeGameStatistics
-from src.stats.models.dao.composite_season_statistics import CompositeSeasonStatistics
+from stats.models.dao.composite_game_statistics import CompositeGameStatistics
+from stats.models.dao.composite_season_statistics import CompositeSeasonStatistics
 
 
 class CompositeStatistics:

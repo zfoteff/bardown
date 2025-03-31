@@ -3,7 +3,6 @@ from typing import List, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
 import config.player_data_service_config as application_config
-from config.db_config import DatabaseConfig
 from connectors.mysql import MySQLClient
 from errors.games_errors import GameAlreadyExists, GameDoesNotExist
 from fastapi import Depends
@@ -21,9 +20,11 @@ class GamesDBInterface:
             application_config.get_config(), Depends(application_config.get_config)
         ],
     ) -> None:
-        print(config)
         self.__client = MySQLClient(
-            host=config.mysql_host, user=config.mysql_user, password=config.mysql_password, table=GAMES_TABLE_NAME
+            host=config.mysql_host,
+            user=config.mysql_user,
+            password=config.mysql_password,
+            table=GAMES_TABLE_NAME,
         )
         self.__client.open_connection()
 

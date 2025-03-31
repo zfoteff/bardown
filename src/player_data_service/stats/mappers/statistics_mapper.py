@@ -1,33 +1,29 @@
-from src.stats.models.dao.composite_game_statistics import (
+from stats.models.dao.composite_game_statistics import (
     CompositeGameStatistics as CompositeGameStatistics,
 )
-from src.stats.models.dao.composite_statistics import (
+from stats.models.dao.composite_statistics import (
     CompositeStatistics as CompositeStatisticsDAO,
 )
-from src.stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
-from src.stats.models.dao.season_statistics import (
-    SeasonStatistics as SeasonStatisticsDAO,
-)
-from src.stats.models.dto.composite_game_statistics import (
+from stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
+from stats.models.dao.season_statistics import SeasonStatistics as SeasonStatisticsDAO
+from stats.models.dto.composite_game_statistics import (
     CompositeGameStatistics as CompositeGameStatisticsDTO,
 )
-from src.stats.models.dto.composite_game_statistics import (
+from stats.models.dto.composite_game_statistics import (
     PlayerGameStatistics as PlayerGameStatisticsDTO,
 )
-from src.stats.models.dto.composite_season_statistics import (
+from stats.models.dto.composite_season_statistics import (
     CompositeSeasonStatistics as CompositeSeasonStatisticsDTO,
 )
-from src.stats.models.dto.composite_season_statistics import (
+from stats.models.dto.composite_season_statistics import (
     PlayerSeasonStatistics as PlayerSeasonStatisticsDTO,
 )
-from src.stats.models.dto.composite_statistics import (
+from stats.models.dto.composite_statistics import (
     CompositeStatistics as CompositeStatisticsDTO,
 )
-from src.stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
-from src.stats.models.dto.season_statistics import (
-    SeasonStatistics as SeasonStatisticsDTO,
-)
-from src.stats.models.statistics import Statistics
+from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
+from stats.models.dto.season_statistics import SeasonStatistics as SeasonStatisticsDTO
+from stats.models.statistics import Statistics
 
 
 def game_statistics_DTO_to_game_statistics_DAO(

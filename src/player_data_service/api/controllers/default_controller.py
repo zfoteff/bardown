@@ -1,7 +1,6 @@
 import time
 
 from fastapi.responses import JSONResponse
-from main import __version__ as player_data_service_version
 
 start_time = time.time()
 
@@ -18,7 +17,6 @@ class DefaultController:
             status_code=200,
             content={
                 "status": "UP",
-                "version": player_data_service_version,
                 "uptime": time.time() - start_time,
             },
         )

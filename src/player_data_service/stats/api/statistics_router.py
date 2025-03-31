@@ -1,8 +1,8 @@
 from fastapi import APIRouter
-from src.stats.api.controller.composite_statistics_controller import (
+from stats.api.controller.composite_statistics_controller import (
     CompositeStatisticsController,
 )
-from src.stats.api.controller.statistics_controller import StatisticsController
+from stats.api.controller.statistics_controller import StatisticsController
 
 from bin.logger import Logger
 

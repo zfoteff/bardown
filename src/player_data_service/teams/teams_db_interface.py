@@ -1,14 +1,16 @@
 from datetime import datetime
-from typing import List, Tuple
+from typing import List, Self, Tuple
+from fastapi import Depends
+from typing_extensions import Annotated
 from uuid import NAMESPACE_OID, uuid5
 
-from config.db_config import TEAMS_TABLE_DB_CONFIG
+import config.player_data_service_config as application_config
 from connectors.mysql import MySQLClient
 from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
-from src.teams import TEAMS_TABLE_NAME
-from src.teams.models.dao.team import Team as TeamDAO
-from src.teams.models.dto.team import Team as TeamDTO
-from src.teams.models.team_request_filters import TeamRequestFilters
+from teams import TEAMS_TABLE_NAME
+from teams.models.dao.team import Team as TeamDAO
+from teams.models.dto.team import Team as TeamDTO
+from teams.models.team_request_filters import TeamRequestFilters
 
 from bin.logger import Logger
 
@@ -16,8 +18,17 @@ logger = Logger("db")
 
 
 class TeamsDBInterface:
-    def __init__(self):
-        self.__client = MySQLClient(**TEAMS_TABLE_DB_CONFIG)
+    def __init__(self,
+        config: application_config.PlayerDataServiceBaseConfig = Annotated[
+            application_config.get_config(), Depends(application_config.get_config())
+        ]
+        ) -> Self:
+        self.__client = MySQLClient(
+            host=config.mysql_host,
+            user=config.mysql_user,
+            password=config.mysql_password,
+            table=TEAMS_TABLE_NAME,
+        )
         self.__client.open_connection()
 
     def _build_query_from_filters(self, filters: TeamRequestFilters) -> str:
