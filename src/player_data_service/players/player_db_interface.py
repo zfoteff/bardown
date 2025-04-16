@@ -1,25 +1,30 @@
 from datetime import datetime
 from typing import List, Self, Tuple
-from typing_extensions import Annotated
 from uuid import NAMESPACE_OID, uuid5
 
+import config.player_data_service_config as application_config
 from connectors.mysql import MySQLClient
 from errors.players_errors import PlayerAlreadyExists, PlayerDoesNotExist
-import config.player_data_service_config as application_config
 from fastapi import Depends
 from players import PLAYERS_TABLE_NAME
 from players.models.dao.player import Player as PlayerDAO
 from players.models.dto.player import Player as PlayerDTO
 from players.models.players_request_filters import PlayersRequestFilters
+from typing_extensions import Annotated
 
 
 class PlayerDatabaseInterface:
     def __init__(
-            self, 
-            config: application_config.PlayerDataServiceBaseConfig = Annotated[application_config.get_config(), Depends(application_config.get_config())]
+        self,
+        config: application_config.PlayerDataServiceBaseConfig = Annotated[
+            application_config.get_config(), Depends(application_config.get_config())
+        ],
     ) -> Self:
         self.__client = MySQLClient(
-            host=config.mysql_host, user=config.mysql_user, password=config.mysql_password, table=PLAYERS_TABLE_NAME
+            host=config.mysql_host,
+            user=config.mysql_user,
+            password=config.mysql_password,
+            table=PLAYERS_TABLE_NAME,
         )
         self.__client.open_connection()
 

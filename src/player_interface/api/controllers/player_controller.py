@@ -1,5 +1,4 @@
 import time
-from typing import Self
 
 from fastapi import Request
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
@@ -18,9 +17,6 @@ player_data_service_provider = PlayerDataServiceProvider()
 
 
 class PlayerController:
-    def __init__(self) -> Self:
-        self._player_data_service_provider = PlayerDataServiceProvider()
-
     async def get_favicon():
         return FileResponse(FAVICON_PATH)
 

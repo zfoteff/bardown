@@ -29,20 +29,19 @@ class PlayerDataServiceProvider:
     _player_data_service_client: PlayerDataServiceClient
     _cache_client: CacheClient
 
-    def __init__(self, cache_client: CacheClient, endpoint_config: EndpointConfig) -> Self:
+    def __init__(
+        self,
+        endpoint_config: EndpointConfig = PlayerDataServiceEndpointConfig(),
+    ) -> Self:
         self._player_data_service_client = PlayerDataServiceClient()
-        self._cache_client = cache_client
+        self._cache_client = CacheClient()
+        self._endpoint_config = endpoint_config
 
     async def get_players_by_filters(self, filters: PlayersFilters) -> List[Player]:
         """
         Create request for the get by filters endpoint of the player interface:
         """
-        url = ClientUrl(
-            "GET",
-            config=PlayerDataServiceEndpointConfig(
-                config=endpoint_config, base_path="players", app_pathname="player"
-            ),
-        )
+        url = ClientUrl("GET", config=self._endpoint_config)
         request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
         full_request_url = url.url + request.query_string()
 

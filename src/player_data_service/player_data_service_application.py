@@ -32,7 +32,7 @@ class PlayerDataServiceApplication:
             STATISTICS_ROUTER,
             TEAMS_ROUTER,
         ]
-        self._app  = FastAPI(
+        self._app = FastAPI(
             title="Player Data Service",
             description="Interface for player data for the Bardown application",
             lifespan=PlayerDataServiceApplication.lifespan,
@@ -60,7 +60,6 @@ class PlayerDataServiceApplication:
         yield
         # Shutdown events
         app.state.shutdown_called = True
-
 
     # Future work to load config from yaml file
     # def _load_profile_configurations(self) -> Dict[str, str]:

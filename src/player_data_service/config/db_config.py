@@ -24,14 +24,6 @@ class DatabaseConfig:
         self.host = environ["MYSQL_HOST"]
         self.table = table
 
-    def _to_dict(self) -> Dict[str, str]:
-        return {
-            "user": self.user,
-            "password": self.password,
-            "host": self.host,
-            "table": self.table,
-        }
-
 
 def get_player_table_db() -> DatabaseConfig:
     return DatabaseConfig(PLAYERS_TABLE_NAME)

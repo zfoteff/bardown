@@ -1,7 +1,9 @@
 import json
-from typing import Dict, Self, Tuple
+from typing import Annotated, Dict, Self, Tuple
 
+from config import cache_config
 from config.cache_config import CacheConfig
+from fastapi import Depends
 from models.player_data_service_response import PlayerDataServiceResponse
 from redis import Redis
 from redis.exceptions import ConnectionError, DataError
@@ -12,16 +14,18 @@ logger = Logger("cache")
 
 
 class CacheClient:
-    _config: CacheConfig
-
-    def __init__(self, config: Dict[str, str]) -> Self:
-        self._config = CacheConfig(config=config)
+    def __init__(
+        self,
+        config: CacheConfig = Annotated[
+            cache_config.get_cache_config(), Depends(cache_config.get_cache_config())
+        ],
+    ) -> Self:
         self._client = Redis(
-            host=self._config.host,
-            port=self._config.port,
+            host=config.host,
+            port=config.port,
+            socket_connect_timeout=config.connect_timeout,
+            socket_timeout=config.read_timeout,
             health_check_interval=10,
-            socket_connect_timeout=self._config.connect_timeout,
-            socket_timeout=self._config.connect_timeout,
             retry_on_timeout=False,
             socket_keepalive=True,
         )
