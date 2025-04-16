@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from typing import Dict, List, Self
+from typing import List, Self
 
 from api.default_router import DEFAULT_ROUTER
 from config.player_data_service_config import PlayerDataServiceBaseConfig
@@ -12,8 +12,9 @@ from teams.api.teams_router import TEAMS_ROUTER
 from bin.metadata import servers, tags
 
 
-class PlayerDataServiceApplication():
+class PlayerDataServiceApplication:
     _application_config: PlayerDataServiceBaseConfig
+    _app: FastAPI
     _routes: List[APIRouter]
 
     def __init__(
@@ -31,27 +32,35 @@ class PlayerDataServiceApplication():
             STATISTICS_ROUTER,
             TEAMS_ROUTER,
         ]
-        self.app  = FastAPI(
+        self._app  = FastAPI(
             title="Player Data Service",
             description="Interface for player data for the Bardown application",
-            lifespan=self.lifespan,
+            lifespan=PlayerDataServiceApplication.lifespan,
             version=self._application_config.version,
             debug=self._application_config.debug,
-            routes=self._routes,
             license_info={"name": "MIT", "url": "https://opensource.org/license/mit"},
             openapi_tags=tags,
             servers=servers,
         )
 
+        for route in self._routes:
+            self._app.include_router(route)
+
+    @property
+    def app(self) -> FastAPI:
+        return self._app
+
+    @staticmethod
     @asynccontextmanager
-    async def lifespan(self):
+    async def lifespan(app):
         # --- Startup events ---
         # Startup events
-        self.startup()
+        app.state.startup_called = True
         # Event Loop
         yield
         # Shutdown events
-        self.shutdown()
+        app.state.shutdown_called = True
+
 
     # Future work to load config from yaml file
     # def _load_profile_configurations(self) -> Dict[str, str]:
@@ -80,6 +89,3 @@ class PlayerDataServiceApplication():
 
     #     content = yaml.safe_load(updated_content)
     #     return content
-
-    def shutdown(self) -> None:
-        pass

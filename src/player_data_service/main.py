@@ -6,6 +6,7 @@ import argparse
 
 from player_data_service_application import PlayerDataServiceApplication
 
+player_data_service = PlayerDataServiceApplication()
 
 if __name__ == "__main__":
     from uvicorn import run
@@ -22,8 +23,6 @@ if __name__ == "__main__":
         action="store_true",
     )
     args = parser.parse_args()
-
-    player_data_service = PlayerDataServiceApplication()
 
     if args.version is True:
         print(player_data_service.version)
