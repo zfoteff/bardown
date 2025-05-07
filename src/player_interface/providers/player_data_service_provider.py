@@ -84,14 +84,11 @@ class PlayerDataServiceProvider:
         statistics_request = PlayerDataServiceRequest(
             url=get_statistics_url, query_parameters={"filter.player.playerId": player_id}
         )
-        full_get_player_request_url = get_player_url.url + player_request.query_string()
-        full_get_statistics_request_url = get_statistics_url.url + statistics_request.query_string()
-
         player_cache_result, get_player_response = self._cache_client.retrieve_response(
-            full_get_player_request_url
+            get_player_url + player_request.query_stringg()
         )
         statistics_cache_result, get_statistics_response = self._cache_client.retrieve_response(
-            full_get_statistics_request_url
+            get_statistics_url.url + statistics_request.query_string()
         )
 
         if not player_cache_result:
