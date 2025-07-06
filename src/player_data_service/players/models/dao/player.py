@@ -12,6 +12,7 @@ class Player:
         first_name: str = None,
         last_name: str = None,
         position: Position = None,
+        number: int = None,
         grade: Grade = None,
         school: str = None,
         imgurl: str = None,
@@ -22,6 +23,7 @@ class Player:
         self.first_name = first_name
         self.last_name = last_name
         self.position = position
+        self.number = number
         self.grade = grade
         self.school = school
         self.imgurl = imgurl
@@ -39,7 +41,7 @@ class Player:
 
     def __str__(self) -> str:
         return (
-            f"{self.last_name}, {self.first_name} [{self.position}] "
+            f"#{self.number} {self.first_name} {self.last_name} [{self.position}] "
             + f"| {self.grade} at {self.school}"
         )
 
@@ -49,6 +51,7 @@ class Player:
             "first_name": f"{self.first_name}",
             "last_name": f"{self.last_name}",
             "position": self.position,
+            "number": self.number,
             "grade": self.grade,
             "school": f"{self.school}",
             "imgurl": f"{self.imgurl}",

@@ -10,6 +10,7 @@ logger = Logger("player-data-service-client")
 
 class PlayerDataServiceClient:
     async def exchange_with_query_parameters(
+        self,
         req: PlayerDataServiceRequest,
     ) -> PlayerDataServiceResponse:
         """

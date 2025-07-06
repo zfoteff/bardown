@@ -15,7 +15,7 @@ class MySQLClient:
         self.__host = host
         self.__table = table
         self.__connection = mysql
-        self.__database = "LaxDB"
+        self.__database = "bardown"
 
     def open_connection(
         self,
