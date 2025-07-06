@@ -29,6 +29,7 @@ class CacheClient:
             retry_on_timeout=False,
             socket_keepalive=True,
         )
+        self._ttl = config.ttl
 
     def cache_response(self, url: str, response: PlayerDataServiceResponse) -> bool:
         response_bytes = json.dumps(response.data).encode("utf-8")
@@ -36,7 +37,7 @@ class CacheClient:
             self._client.set(
                 name=url,
                 value=response_bytes,
-                ex=self._config.ttl,
+                ex=self._ttl,
             )
             logger.info(f"Cached value for {url}")
             return True

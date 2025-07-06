@@ -10,6 +10,7 @@ class Player:
     _first_name: str
     _last_name: str
     _position: Position
+    _number: int
     _grade: Grade
     _school: str
     _img_url: str
@@ -22,6 +23,7 @@ class Player:
         first_name: str,
         last_name: str,
         position: str,
+        number: int,
         grade: str,
         school: str,
         imgurl: str,
@@ -32,6 +34,7 @@ class Player:
         self._first_name = first_name
         self._last_name = last_name
         self._position = Position(position)
+        self._number = number
         self._grade = Grade(grade)
         self._school = school
         self._img_url = imgurl
@@ -57,6 +60,10 @@ class Player:
     @property
     def position(self) -> str:
         return str(self._position).replace("_", " ")
+    
+    @property
+    def number(self) -> int:
+        return self._number
 
     @property
     def grade(self) -> str:
@@ -84,6 +91,7 @@ class Player:
             "first_name": self._first_name,
             "last_name": self._last_name,
             "position": self._position,
+            "number": self._number,
             "grade": self._grade,
             "school": self._school,
             "img_url": self._img_url,

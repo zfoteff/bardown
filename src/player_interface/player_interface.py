@@ -4,6 +4,7 @@ from typing import List, Self
 from api.player_interface_router import PLAYER_INTERFACE_ROUTER
 from config.player_interface_config import PlayerInterfaceBaseConfig
 from fastapi import APIRouter, FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from bin.metadata import servers, tags
 
@@ -44,6 +45,7 @@ class PlayerInterface:
     async def lifespan(app):
         # --- Startup events ---
         # Startup events
+        app.mount("/static", StaticFiles(directory="static"), name="static")
         app.state.startup_called = True
         # Event Loop
         yield

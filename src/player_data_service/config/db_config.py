@@ -1,4 +1,4 @@
-from typing import Dict, Self
+from typing import Self
 
 from games import GAMES_TABLE_NAME
 from players import COACHES_TABLE_NAME, PLAYERS_TABLE_NAME, TEAMS_TABLE_NAME

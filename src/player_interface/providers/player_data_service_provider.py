@@ -41,7 +41,7 @@ class PlayerDataServiceProvider:
         """
         Create request for the get by filters endpoint of the player interface:
         """
-        url = ClientUrl("GET", config=self._endpoint_config)
+        url = ClientUrl("GET", config=PlayerDataServiceEndpointConfig(base_path="players", app_pathname="player"))
         request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
         full_request_url = url.url + request.query_string()
 
@@ -85,7 +85,7 @@ class PlayerDataServiceProvider:
             url=get_statistics_url, query_parameters={"filter.player.playerId": player_id}
         )
         player_cache_result, get_player_response = self._cache_client.retrieve_response(
-            get_player_url + player_request.query_stringg()
+            get_player_url.url + player_request.query_string()
         )
         statistics_cache_result, get_statistics_response = self._cache_client.retrieve_response(
             get_statistics_url.url + statistics_request.query_string()
