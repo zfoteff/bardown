@@ -60,7 +60,7 @@ class Player:
     @property
     def position(self) -> str:
         return str(self._position).replace("_", " ")
-    
+
     @property
     def number(self) -> int:
         return self._number

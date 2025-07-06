@@ -41,7 +41,10 @@ class PlayerDataServiceProvider:
         """
         Create request for the get by filters endpoint of the player interface:
         """
-        url = ClientUrl("GET", config=PlayerDataServiceEndpointConfig(base_path="players", app_pathname="player"))
+        url = ClientUrl(
+            "GET",
+            config=PlayerDataServiceEndpointConfig(base_path="players", app_pathname="player"),
+        )
         request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
         full_request_url = url.url + request.query_string()
 
