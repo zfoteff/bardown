@@ -1,3 +1,6 @@
+__author__ = "Zac Foteff"
+__version__ = "0.1.2"
+
 from contextlib import asynccontextmanager
 from typing import List, Self
 
@@ -23,7 +26,7 @@ class PlayerInterface:
             title=self._application_config.app_name,
             description="Player Interface for the Bardown application",
             lifespan=PlayerInterface.lifespan,
-            version=self._application_config.version,
+            version=__version__,
             debug=self._application_config.debug,
             license_info={"name": "MIT", "url": "https://opensource.org/license/mit"},
             openapi_tags=tags,
@@ -31,7 +34,7 @@ class PlayerInterface:
         )
         self.debug = application_config.debug
         self.log_level = application_config.log_level
-        self.version = application_config.version
+        self.version = __version__
 
         for route in self._routes:
             self._app.include_router(route)

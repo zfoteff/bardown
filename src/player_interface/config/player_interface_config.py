@@ -7,7 +7,6 @@ class PlayerInterfaceBaseConfig(BaseSettings):
     app_name: str = "Player Interface Service"
     debug: bool = True
     profile: str = "local"
-    version: str
     log_level: str = "info"
     cache_host: str = "localhost"
     cache_port: int = 6379

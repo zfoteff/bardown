@@ -56,12 +56,12 @@ services:
   player-data-service:
     container_name: "player-data-service"
     image: player-data-service
-    build: ./player_data_service/
+    build: ./src/player_data_service/
     environment:
+      MYSQL_HOST: db
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_HOST: ${MYSQL_HOST}
-      MYSQL_DATABASE: LaxDB
+      LOG_LEVEL: debug
     ports:
       - "3001:3001"
     depends_on:
@@ -71,9 +71,13 @@ services:
   player-interface:
     container_name: "player-interface"
     image: player-interface
-    build: ./player_interface/
+    build: ./src/player_interface/
     environment:
       CACHE_HOST: ${CACHE_HOST}
+      CACHE_PORT: 6379
+      CACHE_TTL: 500
+      CACHE_TIMEOUT: 10
+      CACHE_CONNECT_TIMEOUT: 5
     ports:
       - "3000:3000"
     depends_on:
@@ -87,6 +91,8 @@ services:
   #   container_name: "bardown-events-listener"
   #   image: bardown-events-listener
   #   build: ./src/bardown_events_listener
+  #   env_file:
+  #     - ./src/bardown_events_listener/.env
   #   ports:
   #     - "3002:3002"
   #   depends_on:

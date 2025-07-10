@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-__author__ = "Zac Foteff"
-__version__ = "0.1.2"
 
 import argparse
 
