@@ -1,34 +1,37 @@
 class EndpointConfig:
-    _base_url: str
+    _host: str
     _base_path: str
     _api_version: str
     _app_pathname: str
+    _tls_enabled: bool = False
     _connect_timeout_ms: int
     _read_timeout_ms: int
 
     def __init__(
         self,
-        base_url: str = "",
+        host: str = "",
         base_path: str = "",
         api_version: str = "",
         app_pathname: str = "",
+        tls_enabled: bool = False,
         connect_timeout_ms: int = 500,
         read_timeout_ms: int = 500,
     ) -> None:
-        self._base_url = base_url
+        self._host = host
         self._base_path = base_path
         self._api_version = api_version
         self._app_pathname = app_pathname
+        self._tls_enabled = tls_enabled
         self._connect_timeout_ms = connect_timeout_ms
         self._read_timeout_ms = read_timeout_ms
 
     @property
-    def base_url(self) -> str:
-        return self._base_url
-
-    @base_url.setter
-    def base_url(self, new_base_url: str) -> None:
-        self._base_url = new_base_url
+    def host(self) -> str:
+        return self._host
+    
+    @host.setter
+    def host(self, new_host: str) -> None:
+        self._host = new_host
 
     @property
     def base_path(self) -> str:
@@ -55,6 +58,14 @@ class EndpointConfig:
         self._app_pathname = new_app_pathname
 
     @property
+    def tls_enabled(self) -> bool:
+        return self._tls_enabled
+    
+    @tls_enabled.setter
+    def tls_enabled(self, new_tls_enabled: bool) -> None:
+        self._tls_enabled = new_tls_enabled
+
+    @property
     def connect_timeout_ms(self) -> int:
         return self._connect_timeout_ms
 
@@ -74,8 +85,9 @@ class EndpointConfig:
         """
         Create base path for all requests based on environment configuration
         """
+        protocol = "https://" if self._tls_enabled else "http://"
         return (
-            f"{self.base_url}/{self.base_path}/{self.api_version}/{self.app_pathname}"
+            f"{protocol}{self.host}/{self.base_path}/{self.api_version}/{self.app_pathname}"
             if self.app_pathname is not None
-            else f"{self.base_url}/{self.base_path}/{self.api_version}/"
+            else f"{protocol}{self.host}/{self.base_path}/{self.api_version}/"
         )

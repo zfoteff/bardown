@@ -47,3 +47,126 @@ data:
   away_team:
     Composite Team
 #+END_SRC
+Managing configurations with profiles in FastAPI
+FastAPI doesn't have a built-in "profile" system like Spring Boot's application.yml profiles, but you can achieve a similar and effective solution using a combination of FastAPI's dependency injection system, Pydantic's BaseSettings, and separate configuration files. This approach provides flexibility, type checking, and maintainability for different environments like local, development, and production. 
+1. Project structure
+Organize your configurations into separate YAML files, one for each profile (or environment) you intend to support. 
+
+config/
+├── __init__.py
+├── base.yaml
+├── local.yaml
+├── dev.yaml
+└── prod.yaml
+
+    base.yaml: Contains common configurations applicable to all environments.
+    local.yaml, dev.yaml, prod.yaml: Override specific settings from the base.yaml for each respective profile, according to Stack Overflow. 
+
+yaml
+
+# config/base.yaml
+database_url: "sqlite:///./sql_app.db"
+log_level: "INFO"
+app_name: "My FastAPI App"
+
+yaml
+
+# config/dev.yaml
+database_url: "postgresql://user:password@dev-db/dev_db"
+log_level: "DEBUG"
+
+yaml
+
+# config/prod.yaml
+database_url: "postgresql://user:password@prod-db/prod_db"
+log_level: "ERROR"
+
+2. Configuration loading
+Create a Settings class using Pydantic's BaseSettings to load and validate your configurations. 
+python
+
+# config/__init__.py
+import yaml
+import os
+from functools import lru_cache
+from pydantic_settings import BaseSettings
+
+class Settings(BaseSettings):
+    database_url: str
+    log_level: str
+    app_name: str
+
+    def __init__(self, profile: str = "base", **data):
+        super().__init__(**data)
+        # Load base configuration
+        base_config_path = os.path.join(os.path.dirname(__file__), "base.yaml")
+        with open(base_config_path) as f:
+            base_config = yaml.safe_load(f)
+        
+        # Load profile-specific configuration
+        if profile != "base":
+            profile_config_path = os.path.join(os.path.dirname(__file__), f"{profile}.yaml")
+            if os.path.exists(profile_config_path):
+                with open(profile_config_path) as f:
+                    profile_config = yaml.safe_load(f)
+                base_config.update(profile_config)  # Override base settings
+
+        for key, value in base_config.items():
+            setattr(self, key, value)
+
+# Environment variable to define the active profile
+def get_current_profile() -> str:
+    return os.getenv("APP_PROFILE", "base")
+
+@lru_cache
+def get_settings() -> Settings:
+    profile = get_current_profile()
+    return Settings(profile=profile)
+
+3. Integrating with FastAPI dependency injection
+FastAPI's dependency injection system is perfect for injecting the Settings object into your routes and other dependencies. 
+python
+
+# main.py
+from fastapi import FastAPI, Depends
+from config import get_settings, Settings
+
+app = FastAPI()
+
+@app.get("/config")
+async def read_config(settings: Settings = Depends(get_settings)):
+    return {
+        "app_name": settings.app_name,
+        "database_url": settings.database_url,
+        "log_level": settings.log_level,
+    }
+
+# Example of using a setting in another dependency
+def get_some_service(settings: Settings = Depends(get_settings)):
+    # Use settings.log_level for logging within this service
+    print(f"Service using log level: {settings.log_level}")
+    return "some_service_instance"
+
+@app.get("/service")
+async def use_service(service: str = Depends(get_some_service)):
+    return {"service_status": service}
+
+4. Running the application with different profiles
+You can define the active profile using an environment variable like APP_PROFILE. 
+bash
+
+# Run with 'dev' profile
+APP_PROFILE=dev uvicorn main:app --reload
+
+# Run with 'prod' profile
+APP_PROFILE=prod uvicorn main:app --reload
+
+Benefits of this approach
+
+    Clarity and Organization: Separate configuration files for each profile improve readability and make it easier to manage settings for different environments.
+    Centralized Configuration: The Settings class provides a single, type-hinted point of access for all application settings.
+    Dependency Injection: Using FastAPI's dependency injection simplifies the process of making configurations available throughout your application, according to developer-service.blog.
+    Type Safety: Pydantic ensures that configuration values are loaded with the correct types and provides validation.
+    Overriding with Environment Variables: While this example focuses on YAML files, Pydantic's BaseSettings automatically supports overriding settings with environment variables, which is a powerful feature for production deployments where secrets should not be hardcoded in files. 
+
+This approach offers a structured and robust way to manage configurations with environment-specific profiles in your FastAPI projects, providing a similar feel to Spring Boot's profile management. 

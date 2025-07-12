@@ -1,5 +1,5 @@
 from random import randint
-from typing import Dict, Self
+from typing import Self
 
 
 class CacheConfig:
