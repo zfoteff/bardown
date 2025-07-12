@@ -11,7 +11,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: LaxDB
+      MYSQL_DATABASE: bardown
     ports:
       - "3306:3306"
       - "33060:33060"
@@ -73,11 +73,12 @@ services:
     image: player-interface
     build: ./src/player_interface/
     environment:
-      CACHE_HOST: ${CACHE_HOST}
+      CACHE_HOST: cache
       CACHE_PORT: 6379
       CACHE_TTL: 500
       CACHE_TIMEOUT: 10
       CACHE_CONNECT_TIMEOUT: 5
+      LOG_LEVEL: debug
     ports:
       - "3000:3000"
     depends_on:
