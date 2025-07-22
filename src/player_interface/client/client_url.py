@@ -1,10 +1,10 @@
 from typing import Self
 
-from config.player_data_service_endpoint_config import EndpointConfig
+from config.player_data_service_endpoint_config import PlayerDataServiceConfig
 
 
 class ClientUrl:
-    def __init__(self, method: str, config: EndpointConfig) -> Self:
+    def __init__(self, method: str, config: PlayerDataServiceConfig) -> Self:
         self.__method = method
         self.__config = config
 

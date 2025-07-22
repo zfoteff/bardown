@@ -1,12 +1,12 @@
 from typing import Self
 
-from config.endpoint_config import EndpointConfig
+from config.endpoint_config import PlayerDataServiceConfig
 
 
-class PlayerDataServiceEndpointConfig(EndpointConfig):
+class PlayerDataServiceEndpointConfig(PlayerDataServiceConfig):
     def __init__(
         self,
-        host: str = "localhost:3001",
+        host: str,
         base_path: str = "players",
         api_version: str = "v0",
         app_pathname: str = "players",

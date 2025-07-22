@@ -5,7 +5,7 @@ import requests
 from client.cache.cache_client import CacheClient
 from client.client_url import ClientUrl
 from client.playerdataservice.player_data_service_client import PlayerDataServiceClient
-from config.endpoint_config import EndpointConfig
+from config.endpoint_config import PlayerDataServiceConfig
 from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
 from mappers.player_response_mapper import (
     player_data_service_response_to_composite_statistics,
@@ -26,16 +26,30 @@ logger = Logger("player-data-service-provider")
 
 
 class PlayerDataServiceProvider:
+    _host: str
     _player_data_service_client: PlayerDataServiceClient
     _cache_client: CacheClient
+    _players_endpoint_config: PlayerDataServiceEndpointConfig
+    _statistics_endpoint_config: PlayerDataServiceEndpointConfig
+    _games_endpoint_config: PlayerDataServiceEndpointConfig
+    _teams_endpoint_config: PlayerDataServiceEndpointConfig
 
-    def __init__(
-        self,
-        endpoint_config: EndpointConfig = PlayerDataServiceEndpointConfig(),
-    ) -> Self:
+    def __init__(self, host: str) -> Self:
+        self._host = host
         self._player_data_service_client = PlayerDataServiceClient()
         self._cache_client = CacheClient()
-        self._endpoint_config = endpoint_config
+        self._players_endpoint_config = PlayerDataServiceEndpointConfig(
+            host=host, base_path="players", api_version="v0", app_pathname="player"
+        )
+        self._statistics_endpoint_config = PlayerDataServiceEndpointConfig(
+            host=host, base_path="statistics", api_version="v0", app_pathname="statistics"
+        )
+        self._games_endpoint_config = PlayerDataServiceEndpointConfig(
+            host=host, base_path="game", api_version="v0", app_pathname=None
+        )
+        self._teams_endpoint_config = PlayerDataServiceEndpointConfig(
+            host=host, base_path="team", api_version="v0", app_pathname=None
+        )
 
     async def get_players_by_filters(self, filters: PlayersFilters) -> List[Player]:
         """
@@ -43,7 +57,7 @@ class PlayerDataServiceProvider:
         """
         url = ClientUrl(
             "GET",
-            config=PlayerDataServiceEndpointConfig(base_path="players", app_pathname="player"),
+            config=self._players_endpoint_config,
         )
         request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
         full_request_url = url.url + request.query_string()
@@ -71,16 +85,8 @@ class PlayerDataServiceProvider:
         """
         Get player with associated statistics for games and seasons
         """
-        get_player_url = ClientUrl(
-            "GET",
-            config=PlayerDataServiceEndpointConfig(base_path="players", app_pathname="player"),
-        )
-        get_statistics_url = ClientUrl(
-            "GET",
-            config=PlayerDataServiceEndpointConfig(
-                base_path="statistics", app_pathname="statistics"
-            ),
-        )
+        get_player_url = ClientUrl("GET", config=self._players_endpoint_config,)
+        get_statistics_url = ClientUrl("GET", config=self._statistics_endpoint_config)
         player_request = PlayerDataServiceRequest(
             url=get_player_url, query_parameters={"filter.playerId": player_id}
         )
@@ -124,9 +130,7 @@ class PlayerDataServiceProvider:
         """
         Create request for the get by filters endpoint of the teams interface:
         """
-        url = ClientUrl(
-            "GET", config=PlayerDataServiceEndpointConfig(base_path="team", app_pathname=None)
-        )
+        url = ClientUrl("GET", config=self._teams_endpoint_config)
         request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
         full_request_url = url.url + request.query_string()
 
@@ -150,9 +154,7 @@ class PlayerDataServiceProvider:
         return teams
 
     async def get_games_by_filters(self, filters: GameFilters) -> List[Game]:
-        url = ClientUrl(
-            "GET", config=PlayerDataServiceEndpointConfig(base_path="game", app_pathname=None)
-        )
+        url = ClientUrl("GET", config=self._games_endpoint_config)
         request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
         full_request_url = url.url + request.query_string()
 
