@@ -1,6 +1,5 @@
 from client.client_url import ClientURL
-from config.endpoint_config import PlayerDataServiceConfig
-from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
+from config.player_data_service_config import PlayerDataServiceConfig
 from tests.bin.decorators.timed import timed
 
 from bin.logger import Logger
@@ -11,7 +10,7 @@ logger = Logger("test")
 @timed(logger)
 def test_valid_endpoint_config() -> None:
     config = PlayerDataServiceConfig("123")
-    config2 = PlayerDataServiceEndpointConfig()
+    config2 = PlayerDataServiceConfig()
     config2.base_url = "456"
     assert config.base_url == "123"
     assert config2.base_url == "456"

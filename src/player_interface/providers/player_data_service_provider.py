@@ -1,12 +1,14 @@
 from logging import Logger
-from typing import Dict, List, Self, Tuple
+from typing import Annotated, Dict, List, Self, Tuple
 
+from fastapi import Depends
+
+from config import player_data_service_config
 import requests
 from client.cache.cache_client import CacheClient
 from client.client_url import ClientUrl
 from client.playerdataservice.player_data_service_client import PlayerDataServiceClient
-from config.endpoint_config import PlayerDataServiceConfig
-from config.player_data_service_endpoint_config import PlayerDataServiceEndpointConfig
+from config.player_data_service_config import PlayerDataServiceConfig
 from mappers.player_response_mapper import (
     player_data_service_response_to_composite_statistics,
     player_data_service_response_to_games,
@@ -28,28 +30,19 @@ logger = Logger("player-data-service-provider")
 class PlayerDataServiceProvider:
     _host: str
     _player_data_service_client: PlayerDataServiceClient
+    _player_data_service_config: PlayerDataServiceConfig
     _cache_client: CacheClient
-    _players_endpoint_config: PlayerDataServiceEndpointConfig
-    _statistics_endpoint_config: PlayerDataServiceEndpointConfig
-    _games_endpoint_config: PlayerDataServiceEndpointConfig
-    _teams_endpoint_config: PlayerDataServiceEndpointConfig
 
-    def __init__(self, host: str) -> Self:
-        self._host = host
+    def __init__(
+        self,
+        player_data_service_config: PlayerDataServiceConfig = Annotated[
+            player_data_service_config.get_player_data_service_config(),
+            Depends(player_data_service_config.get_player_data_service_config()),
+        ],
+    ) -> Self:
         self._player_data_service_client = PlayerDataServiceClient()
         self._cache_client = CacheClient()
-        self._players_endpoint_config = PlayerDataServiceEndpointConfig(
-            host=host, base_path="players", api_version="v0", app_pathname="player"
-        )
-        self._statistics_endpoint_config = PlayerDataServiceEndpointConfig(
-            host=host, base_path="statistics", api_version="v0", app_pathname="statistics"
-        )
-        self._games_endpoint_config = PlayerDataServiceEndpointConfig(
-            host=host, base_path="game", api_version="v0", app_pathname=None
-        )
-        self._teams_endpoint_config = PlayerDataServiceEndpointConfig(
-            host=host, base_path="team", api_version="v0", app_pathname=None
-        )
+        self._player_data_service_config = player_data_service_config
 
     async def get_players_by_filters(self, filters: PlayersFilters) -> List[Player]:
         """
@@ -85,7 +78,10 @@ class PlayerDataServiceProvider:
         """
         Get player with associated statistics for games and seasons
         """
-        get_player_url = ClientUrl("GET", config=self._players_endpoint_config,)
+        get_player_url = ClientUrl(
+            "GET",
+            config=self._players_endpoint_config,
+        )
         get_statistics_url = ClientUrl("GET", config=self._statistics_endpoint_config)
         player_request = PlayerDataServiceRequest(
             url=get_player_url, query_parameters={"filter.playerId": player_id}
