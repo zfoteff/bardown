@@ -29,9 +29,9 @@ logger = Logger("player-data-service-provider")
 
 class PlayerDataServiceProvider:
     _host: str
-    _player_data_service_client: PlayerDataServiceClient
     _player_data_service_config: PlayerDataServiceConfig
     _cache_client: CacheClient
+
 
     def __init__(
         self,
@@ -50,14 +50,15 @@ class PlayerDataServiceProvider:
         """
         url = ClientUrl(
             "GET",
-            config=self._players_endpoint_config,
+            path="players/v0/player",
+            config=self._player_data_service_config,
         )
         request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
         full_request_url = url.url + request.query_string()
 
-        result, response = self._cache_client.retrieve_response(full_request_url)
+        cache_result, response = self._cache_client.retrieve_response(full_request_url)
 
-        if not result:
+        if not cache_result:
             # If url dne in cache, make request to PDS
             response = await self._player_data_service_client.exchange_with_query_parameters(
                 request
@@ -68,7 +69,7 @@ class PlayerDataServiceProvider:
             players = []
         else:
             players = player_data_service_response_to_players(response.data)
-            if not result:
+            if not cache_result:
                 # If a there was a cache miss then cache the url and response
                 self._cache_client.cache_response(url=full_request_url, response=response)
 
@@ -80,9 +81,13 @@ class PlayerDataServiceProvider:
         """
         get_player_url = ClientUrl(
             "GET",
-            config=self._players_endpoint_config,
+            path="players/v0/player",
+            config=self._player_data_service_config
         )
-        get_statistics_url = ClientUrl("GET", config=self._statistics_endpoint_config)
+        get_statistics_url = ClientUrl(
+            "GET",
+            path="statistics/v0/statistics",
+            config=self._player_data_service_config)
         player_request = PlayerDataServiceRequest(
             url=get_player_url, query_parameters={"filter.playerId": player_id}
         )

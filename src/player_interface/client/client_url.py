@@ -1,6 +1,6 @@
 from typing import Self
 
-from config.player_data_service_endpoint_config import PlayerDataServiceConfig
+from config.player_data_service_config import PlayerDataServiceConfig
 
 
 class ClientUrl:
