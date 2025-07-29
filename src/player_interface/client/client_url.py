@@ -14,17 +14,13 @@ class ClientUrl:
         return self.__method
 
     @property
-    def path(self) -> str:
+    def url(self) -> str:
         """
         Create base path for all requests based on environment configuration
         """
-        protocol = "https://" if self._tls_enabled else "http://"
+        protocol = "https://" if self.__config.tls_enabled else "http://"
         return f"{protocol}{self.__config.host}/{self.__path}"
-    
+
     @property
     def connect_timeout_in_ms(self) -> int:
         return self.__config.connect_timeout_ms
-
-    @property
-    def url(self) -> str:
-        return self.__config.compose_path()

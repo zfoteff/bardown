@@ -3,11 +3,12 @@ import time
 from fastapi import Request
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
-from player_interface import __version__ as player_interface_version
 from mappers.game_filters_mapper import GameFiltersMapper
 from mappers.player_filters_mapper import PlayerFiltersMapper
 from mappers.team_filters_mapper import TeamFiltersMapper
 from providers.player_data_service_provider import PlayerDataServiceProvider
+
+from player_interface import __version__ as player_interface_version
 
 FAVICON_PATH = "static/favicon.ico"
 

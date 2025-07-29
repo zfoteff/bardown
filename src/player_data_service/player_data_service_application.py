@@ -25,7 +25,7 @@ class PlayerDataServiceApplication:
         application_config: PlayerDataServiceBaseConfig = PlayerDataServiceBaseConfig(),
     ) -> Self:
         self._application_config = application_config
-        self.version = __version__ 
+        self.version = __version__
         self.debug = application_config.debug
         self.log_level = application_config.log_level
         self._routes = [

@@ -78,7 +78,7 @@ services:
       CACHE_TTL: 500
       CACHE_TIMEOUT: 10
       CACHE_CONNECT_TIMEOUT: 5
-      PLAYER_DATA_SERVICE_HOST: player-data-service
+      PLAYER_DATA_SERVICE_HOST: player-data-service:3001
       LOG_LEVEL: debug
     ports:
       - "3000:3000"

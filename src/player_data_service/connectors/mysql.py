@@ -9,13 +9,13 @@ logger = Logger("db")
 
 
 class MySQLClient:
-    def __init__(self, user: str, password: str, host: str, table: str) -> Self:
+    def __init__(self, user: str, password: str, host: str, table: str, database: str = "bardown") -> Self:
         self.__user = user
         self.__password = password
         self.__host = host
         self.__table = table
         self.__connection = mysql
-        self.__database = "bardown"
+        self.__database = database
 
     def open_connection(
         self,

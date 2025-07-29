@@ -1,6 +1,7 @@
 from functools import lru_cache
 from typing import Self
 
+
 class PlayerDataServiceConfig:
     def __init__(
         self,
@@ -14,6 +15,7 @@ class PlayerDataServiceConfig:
         self.tls_enabled = tls_enabled
         self.connect_timeout_ms = connect_timeout_ms
         self.read_timeout_ms = read_timeout_ms
+
 
 @lru_cache()
 def get_player_data_service_config() -> PlayerDataServiceConfig:
