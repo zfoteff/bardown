@@ -37,6 +37,7 @@ class StatisticsDatabaseInterface:
             user=config.mysql_user,
             password=config.mysql_password,
             host=config.mysql_host,
+            database=config.mysql_database,
             table=GAME_STATISTICS_TABLE_NAME,
         )
         self.__season_client = MySQLClient(

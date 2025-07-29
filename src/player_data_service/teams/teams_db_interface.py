@@ -28,6 +28,7 @@ class TeamsDBInterface:
             host=config.mysql_host,
             user=config.mysql_user,
             password=config.mysql_password,
+            database=config.mysql_database,
             table=TEAMS_TABLE_NAME,
         )
         self.__client.open_connection()

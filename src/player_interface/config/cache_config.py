@@ -1,5 +1,6 @@
+from functools import lru_cache
 from random import randint
-from typing import Dict, Self
+from typing import Self
 
 
 class CacheConfig:
@@ -17,5 +18,6 @@ class CacheConfig:
         return f"rediss://{self.host}:{self.port}"
 
 
+@lru_cache()
 def get_cache_config() -> CacheConfig:
     return CacheConfig()

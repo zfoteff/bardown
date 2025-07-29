@@ -65,21 +65,23 @@ def player_data_service_response_to_composite_statistics(
             )
             for game in data["games"]
         ],
-        season=[
-            CompositeSeasonStatisticsFull(
-                year=season["year"],
-                team_id=season["team_id"],
-                team_name=season["team_name"],
-                players=[
-                    PlayerStatistics(
-                        player_id=season_stats["player_id"],
-                        statistics=season_stats["statistics"],
-                    )
-                    for season_stats in season["players"]
-                ],
-            )
-            for season in data["season"]
-        ]
-        if not order_by_year
-        else composite_season_to_composite_season_by_year(data["season"]),
+        season=(
+            [
+                CompositeSeasonStatisticsFull(
+                    year=season["year"],
+                    team_id=season["team_id"],
+                    team_name=season["team_name"],
+                    players=[
+                        PlayerStatistics(
+                            player_id=season_stats["player_id"],
+                            statistics=season_stats["statistics"],
+                        )
+                        for season_stats in season["players"]
+                    ],
+                )
+                for season in data["season"]
+            ]
+            if not order_by_year
+            else composite_season_to_composite_season_by_year(data["season"])
+        ),
     )

@@ -7,11 +7,10 @@ class PlayerDataServiceBaseConfig(BaseSettings):
     app_name: str = "Player Data Service"
     debug: bool = True
     profile: str = "local"
-    mysql_host: str = "localhost"
+    mysql_host: str
     mysql_user: str
     mysql_password: str
-    mysql_root_password: str
-    version: str
+    mysql_database: str = "bardown"
     log_level: str = "info"
 
     model_config = SettingsConfigDict(env_file=".env")

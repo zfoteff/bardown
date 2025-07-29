@@ -1,3 +1,6 @@
+__author__ = "Zac Foteff"
+__version__ = "0.2.0"
+
 from contextlib import asynccontextmanager
 from typing import List, Self
 
@@ -22,7 +25,7 @@ class PlayerDataServiceApplication:
         application_config: PlayerDataServiceBaseConfig = PlayerDataServiceBaseConfig(),
     ) -> Self:
         self._application_config = application_config
-        self.version = application_config.version
+        self.version = __version__
         self.debug = application_config.debug
         self.log_level = application_config.log_level
         self._routes = [
@@ -36,7 +39,7 @@ class PlayerDataServiceApplication:
             title="Player Data Service",
             description="Interface for player data for the Bardown application",
             lifespan=PlayerDataServiceApplication.lifespan,
-            version=self._application_config.version,
+            version=self.version,
             debug=self._application_config.debug,
             license_info={"name": "MIT", "url": "https://opensource.org/license/mit"},
             openapi_tags=tags,
@@ -60,31 +63,3 @@ class PlayerDataServiceApplication:
         yield
         # Shutdown events
         app.state.shutdown_called = True
-
-    # Future work to load config from yaml file
-    # def _load_profile_configurations(self) -> Dict[str, str]:
-    #     load_dotenv()
-
-    #     profile = os.environ["PROFILE"].strip().lower()
-
-    #     if profile == "local":
-    #         config_file = "./config/local.application.yaml"
-    #     if profile == "local-compose":
-    #         config_file = "./config/local-compose.application.yaml"
-    #     if profile == "dev":
-    #         config_file = "./config/dev.application.yaml"
-    #     if profile == "prod":
-    #         config_file = "./config/prod.application.yaml"
-    #     else:
-    #         config_file = "./config/local.application.yaml"
-
-    #     with open(config_file) as f:
-    #         config_content = f.read()
-
-    #     pattern = re.compile(r"\${(\w+)}")
-    #     updated_content = re.sub(
-    #         pattern, lambda match: os.environ.get(match.group(1), match.group(0)), config_content
-    #     )
-
-    #     content = yaml.safe_load(updated_content)
-    #     return content
