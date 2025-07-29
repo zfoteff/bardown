@@ -11,6 +11,7 @@ from games.models.dao.game import Game as GameDAO
 from games.models.dto.game import Game as GameDTO
 from games.models.game_request_filters import GameRequestFilters
 from typing_extensions import Annotated
+from utils.db_utils import build_update_fields
 
 
 class GamesDBInterface:
@@ -46,20 +47,8 @@ class GamesDBInterface:
 
         return query
 
-    def _build_update_fields(self, game: GameDTO) -> str:
-        modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        game_dict = {}
-
-        for k, v in dict(game).items():
-            if v is not None:
-                game_dict[k] = v
-
-        update_fields = [f"{k}='{v}'" for k, v in dict(game_dict).items()]
-        update_fields.append(f"modified='{modify_time}'")
-        return ", ".join(update_fields)
-
     def _build_update_query(self, game: GameDTO, game_id: str) -> str:
-        update_fields = self._build_update_fields(game)
+        update_fields = build_update_fields(game)
         query = f"UPDATE {GAMES_TABLE_NAME} SET {update_fields} WHERE gameid='{game_id}'"
         return query
 
@@ -135,10 +124,8 @@ class GamesDBInterface:
         query = f"SELECT gameid FROM {GAMES_TABLE_NAME} WHERE "
 
         if game_id is None:
-            # Perform query with title and date
             query += f"title='{title}' AND date='{date}'"
         else:
-            # Perform query with game id
             query += f"gameid='{game_id}'"
 
         success, game = self.__client.execute_query(query, return_results=True)

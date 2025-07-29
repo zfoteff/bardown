@@ -111,11 +111,7 @@ class PlayerDataServiceRequest:
 
     @property
     def url_path(self) -> str:
-        return self._url.path
-
-    @url_path.setter
-    def url_path(self, new_url_path) -> None:
-        self._url.path = new_url_path
+        return self._url
 
     @property
     def method(self) -> str:

@@ -13,6 +13,7 @@ from teams.models.team_request_filters import TeamRequestFilters
 from typing_extensions import Annotated
 
 from bin.logger import Logger
+from utils.db_utils import build_update_fields
 
 logger = Logger("db")
 
@@ -53,20 +54,8 @@ class TeamsDBInterface:
 
         return query
 
-    def _build_update_fields(self, team: TeamDTO) -> str:
-        modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        team_dict = {}
-
-        for k, v in dict(team).items():
-            if v is not None:
-                team_dict[k] = v
-
-        update_fields = [f"{k}='{v}'" for k, v in dict(team_dict).items()]
-        update_fields.append(f"modified='{modify_time}'")
-        return ", ".join(update_fields)
-
     def _build_update_query(self, team: TeamDTO, team_id: str) -> str:
-        update_fields = self._build_update_fields(team)
+        update_fields = build_update_fields(team)
         query = f"UPDATE {TEAMS_TABLE_NAME} SET {update_fields} WHERE teamid='{team_id}'"
         return query
 
@@ -74,7 +63,7 @@ class TeamsDBInterface:
         create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         new_team_id = str(uuid5(namespace=NAMESPACE_OID, name=team.name))
 
-        exists, team_id = self.team_exists(name=team.name)
+        exists, team_id = self.team_exists(team_name=team.name)
 
         if exists:
             raise TeamAlreadyExists("Team already exists", existing_team_id=team_id)
@@ -115,41 +104,33 @@ class TeamsDBInterface:
     # def get_composite_teams(self, filters: CompositeTeamRequestFilters) -> Tuple[bool, List]
 
     def update_team(self, team: TeamDTO, team_id: str) -> str | TeamDoesNotExist:
-        exists, team_id = self.team_exists(team_id)
-
-        if exists is False:
-            raise TeamDoesNotExist(f"Team does not exists with this id: {team_id}")
-
+        team_id = self.team_exists(team_id)
         query = self._build_update_query(team, team_id)
         success, _ = self.__client.execute_query(query, commit_candidate=True)
-
-        if not success:
-            return False
-
-        return True
+        return True if not success else False
 
     def delete_team(self, team_id: str) -> str | TeamDoesNotExist:
+        team_id = self.team_exists(team_id)
         query = f"DELETE FROM {TEAMS_TABLE_NAME} WHERE teamid='{team_id}'"
         success = self.__client.execute_query(query, commit_candidate=True)
+        return True if not success else False
 
-        if not success:
-            return False
-
-        return True
-
-    def team_exists(self, team_id: str = None, name: str = None) -> Tuple[bool, str | None]:
+    def team_exists(self, team_id: str = None, team_name: str = None) -> str | TeamDoesNotExist:
         query = f"SELECT teamid FROM {TEAMS_TABLE_NAME} WHERE "
 
         if team_id is None:
-            # Perform query with title and date
-            query += f"name='{name}'"
+            query += f"name='{team_name}'"
         else:
-            # Perform query with team id
             query += f"teamid='{team_id}'"
 
         success, team = self.__client.execute_query(query, return_results=True)
 
         if not success or (len(team) == 0 or team is None):
-            return False, None
+            raise TeamDoesNotExist(
+                f"""
+                Team does not exist with these fields:
+                    team_id: {team_id}, team_name: {team_name}
+                """
+            )
 
-        return True, team[0][0]
+        return team[0][0]

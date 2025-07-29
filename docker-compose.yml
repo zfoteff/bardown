@@ -26,7 +26,7 @@ services:
       retries: 5
 
   cache:
-    container_name: "bardown_cache"
+    container_name: "bardown-cache"
     image: valkey/valkey
     restart: always
     ports:

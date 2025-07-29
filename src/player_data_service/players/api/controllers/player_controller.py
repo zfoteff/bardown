@@ -21,14 +21,6 @@ db_interface = PlayerDatabaseInterface()
 
 class PlayerController:
     async def create_player(player: Player) -> JSONResponse:
-        """Create player record in the database
-
-        Args:\n
-            player (Player): Player data to persist in the database
-
-        Returns:\n
-            JSONResponse: Created player record
-        """
         try:
             result = db_interface.create_player(player)
         except PlayerAlreadyExists as err:
@@ -54,24 +46,6 @@ class PlayerController:
         )
 
     async def get_players(request: Request) -> JSONResponse:
-        """Retrieve player data from database with multiple filters and pagination
-
-        Args:\n
-            limit (int, optional): Limit the number of retrieved entries. Defaults to None.
-            offset (int, optional): Offset to apply to retrieved entries. Defaults to None.
-            order (str, optional): Ordering rules for retrieved values. Defaults to None.
-                - ASC
-                - DESC
-            orderBy (str, optional): Field to order retrieved entries by. Acceptable values include:
-                - number
-                - first_name
-                - last_name
-                - position
-            Defaults to None.
-
-        Returns:\n
-            JSONResponse: Player data
-        """
         try:
             filters = validate_get_players_query_parameters(request.query_params)
             result, players = db_interface.get_players(filters)
@@ -97,15 +71,6 @@ class PlayerController:
         )
 
     async def update_player(player_id: str, player: Player) -> JSONResponse:
-        """Update a player record in the database
-
-        Args:\n
-            player_id (str): Player_id to retrieve and update
-            player (Player): Player values to update
-
-        Returns:\n
-            JSONResponse: Updated player object
-        """
         try:
             success = db_interface.update_player(player, player_id)
         except PlayerDoesNotExist as err:
@@ -120,14 +85,6 @@ class PlayerController:
         )
 
     async def delete_player(player_id: str) -> JSONResponse:
-        """Delete a player record from the database
-
-        Args:\n
-            player_id (str): Player ID of the player record to delete from the database
-
-        Returns:\n
-            Response: Response with no content
-        """
         try:
             result = db_interface.delete_players(player_id)
         except PlayerDoesNotExist as err:

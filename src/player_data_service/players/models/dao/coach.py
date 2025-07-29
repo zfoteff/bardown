@@ -8,6 +8,7 @@ class Coach:
         coach_id: str = None,
         first_name: str = None,
         last_name: str = None,
+        role: str = None,
         since: int = None,
         email: str = None,
         phone_number: str = None,
@@ -18,6 +19,7 @@ class Coach:
         self.coach_id = coach_id
         self.first_name = first_name
         self.last_name = last_name
+        self.role = role
         self.since = since
         self.email = email
         self.phone_number = phone_number
@@ -45,6 +47,7 @@ class Coach:
             "coach_id": f"{self.coach_id}",
             "first_name": f"{self.first_name}",
             "last_name": f"{self.last_name}",
+            "role": f"{self.role}",
             "since": self.since,
             "email": f"{self.email}",
             "phone_number": f"{self.phone_number}",
