@@ -14,7 +14,7 @@ db_interface = TeamsDBInterface()
 
 
 class CompositeTeamsController:
-    async def get_composite_teams(request: Request) -> JSONResponse:
+    async def get_composite_team(request: Request) -> JSONResponse:
         try:
             filters = validate_get_composite_team_query_parameters(request.query_params)
             result, teams = db_interface.get_composite_team(filters)

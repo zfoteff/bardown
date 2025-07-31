@@ -7,9 +7,10 @@ from connectors.mysql import MySQLClient
 from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
 from fastapi import Depends
 from teams import TEAMS_TABLE_NAME
+from teams.models.dao.composite_team import CompositeTeam
 from teams.models.dao.team import Team as TeamDAO
 from teams.models.dto.team import Team as TeamDTO
-from teams.models.team_request_filters import TeamRequestFilters
+from teams.models.team_request_filters import CompositeTeamRequestFilters, TeamRequestFilters
 from typing_extensions import Annotated
 
 from bin.logger import Logger
@@ -25,14 +26,17 @@ class TeamsDBInterface:
             application_config.get_config(), Depends(application_config.get_config())
         ],
     ) -> Self:
-        self.__client = MySQLClient(
+        self.__teams_client = MySQLClient(
             host=config.mysql_host,
             user=config.mysql_user,
             password=config.mysql_password,
             database=config.mysql_database,
             table=TEAMS_TABLE_NAME,
         )
-        self.__client.open_connection()
+        self.__players_client = MySQLCLient(
+            host=
+        )
+        self.__teams_client.open_connection()
 
     def _build_query_from_filters(self, filters: TeamRequestFilters) -> str:
         query = f"SELECT * FROM {TEAMS_TABLE_NAME}"
@@ -80,7 +84,7 @@ class TeamsDBInterface:
             )
         """
 
-        success, _ = self.__client.execute_query(query, commit_candidate=True)
+        success, _ = self.__teams_client.execute_query(query, commit_candidate=True)
 
         if not success:
             return False
@@ -92,7 +96,7 @@ class TeamsDBInterface:
 
     def get_team(self, filters: TeamRequestFilters) -> Tuple[bool, List]:
         query = self._build_query_from_filters(filters)
-        success, result = self.__client.execute_query(query, return_results=True)
+        success, result = self.__teams_client.execute_query(query, return_results=True)
 
         if not success:
             return False, []
@@ -101,18 +105,20 @@ class TeamsDBInterface:
 
         return True, teams
 
-    # def get_composite_teams(self, filters: CompositeTeamRequestFilters) -> Tuple[bool, List]
+    def get_composite_teams(self, filters: CompositeTeamRequestFilters) -> Tuple[bool, List[CompositeTeam]]:
+        query = 
+
 
     def update_team(self, team: TeamDTO, team_id: str) -> str | TeamDoesNotExist:
         team_id = self.team_exists(team_id)
         query = self._build_update_query(team, team_id)
-        success, _ = self.__client.execute_query(query, commit_candidate=True)
+        success, _ = self.__teams_client.execute_query(query, commit_candidate=True)
         return True if not success else False
 
     def delete_team(self, team_id: str) -> str | TeamDoesNotExist:
         team_id = self.team_exists(team_id)
         query = f"DELETE FROM {TEAMS_TABLE_NAME} WHERE teamid='{team_id}'"
-        success = self.__client.execute_query(query, commit_candidate=True)
+        success = self.__teams_client.execute_query(query, commit_candidate=True)
         return True if not success else False
 
     def team_exists(self, team_id: str = None, team_name: str = None) -> str | TeamDoesNotExist:
@@ -123,7 +129,7 @@ class TeamsDBInterface:
         else:
             query += f"teamid='{team_id}'"
 
-        success, team = self.__client.execute_query(query, return_results=True)
+        success, team = self.__teams_client.execute_query(query, return_results=True)
 
         if not success or (len(team) == 0 or team is None):
             raise TeamDoesNotExist(
