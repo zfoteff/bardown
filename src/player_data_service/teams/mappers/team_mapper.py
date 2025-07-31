@@ -1,5 +1,6 @@
 from teams.models.dao.team import Team as TeamDAO
 from teams.models.dto.composite_team import CompositeTeam as CompositeTeamDTO
+from teams.models.dao.composite_team import CompositeTeam as CompositeTeamDAO
 from teams.models.dto.team import Team as TeamDTO
 
 
@@ -18,9 +19,5 @@ def team_DAO_to_team_DTO(team_dao: TeamDAO) -> TeamDTO:
     )
 
 
-def composite_team_DTO_to_composite_team_DAO(composite_team_dto: CompositeTeamDTO):
+def composite_team_DAO_to_composite_team_DTO(composite_team_dao: CompositeTeamDAO):
     pass
-
-
-# def composite_team_DAO_to_composite_team_DTO(composite_team_dao: CompositeTeamDAO):
-#     pass
