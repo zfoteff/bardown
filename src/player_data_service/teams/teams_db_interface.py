@@ -6,10 +6,12 @@ import config.player_data_service_config as application_config
 from connectors.mysql import MySQLClient
 from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
 from fastapi import Depends
-from teams import TEAMS_TABLE_NAME
+from teams import TEAMS_TABLE_NAME, TEAM_PLAYER_TABLE_NAME
+from players import PLAYERS_TABLE_NAME
 from teams.models.dao.composite_team import CompositeTeam
 from teams.models.dao.team import Team as TeamDAO
 from teams.models.dto.team import Team as TeamDTO
+from teams.models.dto.team_player import TeamPlayer
 from teams.models.team_request_filters import CompositeTeamRequestFilters, TeamRequestFilters
 from typing_extensions import Annotated
 
@@ -17,6 +19,8 @@ from bin.logger import Logger
 from utils.db_utils import build_update_fields
 
 logger = Logger("db")
+
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 class TeamsDBInterface:
@@ -33,10 +37,30 @@ class TeamsDBInterface:
             database=config.mysql_database,
             table=TEAMS_TABLE_NAME,
         )
-        self.__players_client = MySQLCLient(
-            host=
+        self.__players_client = MySQLClient(
+            host=config.mysql_host,
+            user=config.mysql_user,
+            password=config.mysql_password,
+            database=config.mysql_database,
+            table=PLAYERS_TABLE_NAME,
         )
+        self.__team_players_client = MySQLClient(
+            host=config.mysql_host,
+            user=config.mysql_user,
+            password=config.mysql_password,
+            database=config.mysql_database,
+            table=TEAM_PLAYER_TABLE_NAME,    
+        )
+
+    def __enter__(self) -> None:
         self.__teams_client.open_connection()
+        self.__players_client.open_connection()
+        self.__team_players_client.open_connection()
+
+    def __exit__(self) -> None:
+        self.__teams_client.close_connection()
+        self.__players_client.close_connection()
+        self.__team_players_client.close_connection()
 
     def _build_query_from_filters(self, filters: TeamRequestFilters) -> str:
         query = f"SELECT * FROM {TEAMS_TABLE_NAME}"
@@ -64,7 +88,7 @@ class TeamsDBInterface:
         return query
 
     def create_team(self, team: TeamDTO) -> bool | TeamAlreadyExists:
-        create_modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        create_modify_time = datetime.now().strftime(DATETIME_FORMAT)
         new_team_id = str(uuid5(namespace=NAMESPACE_OID, name=team.name))
 
         exists, team_id = self.team_exists(team_name=team.name)
@@ -93,6 +117,37 @@ class TeamsDBInterface:
         team.created = create_modify_time
         team.modified = create_modify_time
         return True
+    
+    def add_player_to_team(self, team_player_data: TeamPlayer) -> bool:
+        create_modify_time = datetime.now().strftime(DATETIME_FORMAT)
+        team_exists, team_id = self.team_exists(team_id=team_id)
+        
+        if not team_exists:
+            raise TeamDoesNotExist(f"Team does not exist with id: {team_id}")
+
+        query = f"""
+            INSERT INTO {TEAM_PLAYER_TABLE_NAME}
+            VALUES (
+                "{team_player_data.team_id}",
+                "{team_player_data.player_id}",
+                {team_player_data.year},
+                {team_player_data.number},
+                "{str(team_player_data.position)}",
+                "{create_modify_time}",
+                "{create_modify_time}"
+            )
+        """
+
+        success, _ = self.__team_players_client.execute_query(query, commit_candidate=True)
+        
+        if not success:
+            return False
+
+        team_player_data.created = create_modify_time 
+        team_player_data.modified = create_modify_time
+        return success
+
+
 
     def get_team(self, filters: TeamRequestFilters) -> Tuple[bool, List]:
         query = self._build_query_from_filters(filters)

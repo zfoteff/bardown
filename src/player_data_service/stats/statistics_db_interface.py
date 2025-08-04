@@ -46,8 +46,6 @@ class StatisticsDatabaseInterface:
             host=config.mysql_host,
             table=SEASON_STATISTICS_TABLE_NAME,
         )
-        self.__game_client.open_connection()
-        self.__season_client.open_connection()
 
     def __enter__(self) -> None:
         self.__game_client.open_connection()

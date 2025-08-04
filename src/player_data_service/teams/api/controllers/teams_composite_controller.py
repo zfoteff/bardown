@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from teams.api.validators.teams_query_validator import (
     validate_get_composite_team_query_parameters,
 )
+from teams.models.dto.team_player import TeamPlayer
 from teams.teams_db_interface import TeamsDBInterface
 
 from bin.logger import Logger
@@ -14,6 +15,37 @@ db_interface = TeamsDBInterface()
 
 
 class CompositeTeamsController:
+    async def add_player_to_team_roster(team_player_request: TeamPlayer) -> JSONResponse:
+        try:
+           result = db_interface.add_player_to_team(TeamPlayer) 
+        except TeamDoesNotExist as err:
+            return JSONResponse(
+                status_code=409,
+                content={
+                    "status": 409,
+                    "error": {
+                        "message": f"{err}",
+                        "team_id": f"{team_player_request.team_id}"
+                    }
+                }
+            )
+    
+        if not result:
+            return JSONResponse(
+                status_code=403,
+                content={
+                    "status": 409,
+                    "error": {
+                        "message": f"{err}",
+                        "team_id": f"{team_player_request.team_id}"
+                    }
+                }
+            )
+
+        return JSONResponse(
+            status_code=201, content={"status": 201, "data": jsonable_encoder(team_player_request)}
+        )
+
     async def get_composite_team(request: Request) -> JSONResponse:
         try:
             filters = validate_get_composite_team_query_parameters(request.query_params)
