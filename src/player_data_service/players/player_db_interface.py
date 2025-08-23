@@ -110,7 +110,7 @@ class PlayerDatabaseInterface:
         success, _ = self.__client.execute_query(query, commit_candidate=True)
         return True if not success else False
 
-    def delete_players(self, player_id: str) -> str | PlayerDoesNotExist:
+    def delete_players(self, player_id: str) -> bool | PlayerDoesNotExist:
         player_id = self.player_exists(player_id)
         query = f"DELETE FROM {PLAYERS_TABLE_NAME} WHERE playerid='{player_id}'"
         success = self.__client.execute_query(query, commit_candidate=True)
