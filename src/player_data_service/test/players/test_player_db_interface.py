@@ -182,8 +182,8 @@ class TestPlayerDatabaseInterface:
         """Test successful player retrieval"""
         # Mock database response
         mock_player_data = [
-            ("id1", "John", "Doe", "Attack", 15, "Senior", "School1", "img1.jpg", "2024-01-01", "2024-01-01"),
-            ("id2", "Jane", "Smith", "Defense", 20, "Junior", "School2", "img2.jpg", "2024-01-02", "2024-01-02")
+            ("07c48b11-acbb-4725-8f21-21468c6c7d71", "John", "Doe", "Attack", 15, "Senior", "School1", "img1.jpg", "2024-01-01", "2024-01-01"),
+            ("id251ca100e-2563-4e4e-aa0c-c345f03d4f1a", "Jane", "Smith", "Defense", 20, "Junior", "School2", "img2.jpg", "2024-01-02", "2024-01-02")
         ]
         self.mock_client.execute_query.return_value = (True, mock_player_data)
         
@@ -253,7 +253,7 @@ class TestPlayerDatabaseInterface:
         """Test successful player deletion"""
         with patch.object(self.db_interface, 'player_exists') as mock_player_exists:
             mock_player_exists.return_value = "07c48b11-acbb-4725-8f21-21468c6c7d71"
-            self.mock_client.execute_query.return_value = False
+            self.mock_client.execute_query.return_value = (True, [("07c48b11-acbb-4725-8f21-21468c6c7d71")])
             
             player_id = "07c48b11-acbb-4725-8f21-21468c6c7d71"
             
