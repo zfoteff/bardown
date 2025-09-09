@@ -62,14 +62,14 @@ class TeamsDBInterface:
         self.__players_client.close_connection()
         self.__team_players_client.close_connection()
 
-    def _build_query_from_filters(self, filters: TeamRequestFilters) -> str:
+    def _build_team_query_from_filters(self, filters: TeamRequestFilters | CompositeTeamRequestFilters) -> str:
         query = f"SELECT * FROM {TEAMS_TABLE_NAME}"
 
         if filters.team_id is not None:
             query += f" WHERE teamid='{filters.team_id}'"
 
-        if filters.name is not None:
-            query += f" WHERE name='{filters.name}'"
+        if filters.team_name is not None:
+            query += f" WHERE name='{filters.team_name}'"
 
         if filters.order is not None:
             query += f" ORDER BY {filters.order_by} {filters.order}"
@@ -81,6 +81,18 @@ class TeamsDBInterface:
             query += f" OFFSET {filters.offset}"
 
         return query
+
+    def _build_composite_team_players_query_from_filters(self, filter: CompositeTeamRequestFilters) -> str:
+        where_clause = "WHERE tp.teamid={filter.team_id}" if filter.team_id is not None else "WHERE tp.playerid={filter.player_id}"
+
+        query = f"""
+            SELECT 
+                tp.teamid, tp.year, p.playerid, p.firstname, p.lastname,
+                tp.number, p.position, p.grade, p.school, p.imgurl
+            FROM {TEAM_PLAYER_TABLE_NAME} as tp
+            {where_clause}
+            ORDER BY tp.year DESC
+        """
 
     def _build_update_query(self, team: TeamDTO, team_id: str) -> str:
         update_fields = build_update_fields(team)
@@ -147,10 +159,8 @@ class TeamsDBInterface:
         team_player_data.modified = create_modify_time
         return success
 
-
-
-    def get_team(self, filters: TeamRequestFilters) -> Tuple[bool, List]:
-        query = self._build_query_from_filters(filters)
+    def get_team(self, filters: TeamRequestFilters | CompositeTeamRequestFilters) -> Tuple[bool, List]:
+        query = self._build_team_query_from_filters(filters)
         success, result = self.__teams_client.execute_query(query, return_results=True)
 
         if not success:
@@ -160,8 +170,14 @@ class TeamsDBInterface:
 
         return True, teams
 
-    def get_composite_teams(self, filters: CompositeTeamRequestFilters) -> Tuple[bool, List[CompositeTeam]]:
-        query = 
+    def get_composite_teams(self, filters: CompositeTeamRequestFilters) -> Tuple[bool, List[CompositeTeam]] | TeamDoesNotExist:
+        team_exists, team = self.get_team(filters)
+
+        if not team_exists:
+            raise TeamDoesNotExist(f"Team with id {filters.team_id} does not exist")
+
+        player_query = self._build_composite_team_players_query_from_filters(filters)
+        coaches_query = self._build_composite_team_player_query_from_filters(filters)
 
 
     def update_team(self, team: TeamDTO, team_id: str) -> str | TeamDoesNotExist:

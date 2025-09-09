@@ -1,25 +1,25 @@
 from typing import Dict, List, Self
 
 
-class Roster:
-    pass
-
-
-class CompositeTeam:
+class CompositeTeamPlayer:
     team_id: str
-    name: str
-    location: str
+    year: int
+    player_id: str
+    first_name: str
+    last_name: str
+    number: int
+    position: str
+    grade: str
+    school: str
     img_url: str
-    roster: List[Roster]
 
-    def __init__(
-        self, team_id: str, name: str, location: str, img_url: str, roster: List[Roster]
-    ) -> Self:
-        self.team_id = team_id
-        self.name = name
-        self.location = location
-        self.img_url = img_url
-        self.roster = roster
-
-    def to_dict(self) -> Dict:
-        return {"team_id": ""}
+class CompositeTeamCoach:
+    team_id: str
+    year: int
+    img_url: str
+    coach_id: str
+    first_name: str
+    last_name: str
+    role: str
+    since: int
+    img_url: str
