@@ -88,9 +88,11 @@ class CoachController:
             status_code=200,
             content={
                 "status": 200,
-                "data": []
-                if (coaches == []) or (coaches is None)
-                else [jsonable_encoder(coach_DAO_to_coach_DTO(coach)) for coach in coaches],
+                "data": (
+                    []
+                    if (coaches == []) or (coaches is None)
+                    else [jsonable_encoder(coach_DAO_to_coach_DTO(coach)) for coach in coaches]
+                ),
             },
         )
 

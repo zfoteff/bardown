@@ -50,7 +50,7 @@ class CoachesDatabaseInterface:
             query += f" OFFSET {filters.offset}"
 
         return query
-    
+
     def _build_update_query(self, coach: CoachDTO, coach_id: str) -> str:
         update_fields = build_update_fields(coach)
         query = f"UPDATE {COACHES_TABLE_NAME} SET {update_fields} WHERE coachid='{coach_id}'"

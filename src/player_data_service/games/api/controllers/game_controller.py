@@ -62,9 +62,11 @@ class GameController:
             status_code=200,
             content={
                 "status": 200,
-                "data": []
-                if (games == []) or (games is None)
-                else [jsonable_encoder(game_DAO_to_game_DTO(game)) for game in games],
+                "data": (
+                    []
+                    if (games == []) or (games is None)
+                    else [jsonable_encoder(game_DAO_to_game_DTO(game)) for game in games]
+                ),
             },
         )
 

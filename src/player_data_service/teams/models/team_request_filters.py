@@ -18,4 +18,3 @@ class CompositeTeamRequestFilters(BaseModel):
     year: Optional[int] = None
     team_name: Optional[str] = None
     player_name: Optional[str] = None
-

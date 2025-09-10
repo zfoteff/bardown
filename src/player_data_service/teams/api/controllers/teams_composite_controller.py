@@ -17,29 +17,23 @@ db_interface = TeamsDBInterface()
 class CompositeTeamsController:
     async def add_player_to_team_roster(team_player_request: TeamPlayer) -> JSONResponse:
         try:
-           result = db_interface.add_player_to_team(TeamPlayer) 
+            result = db_interface.add_player_to_team(TeamPlayer)
         except TeamDoesNotExist as err:
             return JSONResponse(
                 status_code=409,
                 content={
                     "status": 409,
-                    "error": {
-                        "message": f"{err}",
-                        "team_id": f"{team_player_request.team_id}"
-                    }
-                }
+                    "error": {"message": f"{err}", "team_id": f"{team_player_request.team_id}"},
+                },
             )
-    
+
         if not result:
             return JSONResponse(
                 status_code=403,
                 content={
                     "status": 409,
-                    "error": {
-                        "message": f"{err}",
-                        "team_id": f"{team_player_request.team_id}"
-                    }
-                }
+                    "error": {"message": f"{err}", "team_id": f"{team_player_request.team_id}"},
+                },
             )
 
         return JSONResponse(

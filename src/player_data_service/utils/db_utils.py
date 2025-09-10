@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 def build_update_fields(updated_dto) -> str:
     modify_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     values_dict = {}

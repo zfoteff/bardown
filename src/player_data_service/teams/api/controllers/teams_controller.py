@@ -85,9 +85,11 @@ class TeamController:
             status_code=200,
             content={
                 "status": 200,
-                "data": []
-                if (teams == []) or (teams is None)
-                else [jsonable_encoder(team_DAO_to_team_DTO(team)) for team in teams],
+                "data": (
+                    []
+                    if (teams == []) or (teams is None)
+                    else [jsonable_encoder(team_DAO_to_team_DTO(team)) for team in teams]
+                ),
             },
         )
 

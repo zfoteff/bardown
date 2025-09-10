@@ -64,9 +64,11 @@ class PlayerController:
             status_code=200,
             content={
                 "status": 200,
-                "data": []
-                if (players == []) or (players is None)
-                else [jsonable_encoder(player_DAO_to_player_DTO(player)) for player in players],
+                "data": (
+                    []
+                    if (players == []) or (players is None)
+                    else [jsonable_encoder(player_DAO_to_player_DTO(player)) for player in players]
+                ),
             },
         )
 

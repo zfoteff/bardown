@@ -85,7 +85,9 @@ def _order_missing_pair(order: str, order_by: str) -> bool:
     )
 
 
-def _validate_team_id_filter(filters: TeamRequestFilters | CompositeTeamRequestFilters, team_id: str) -> None:
+def _validate_team_id_filter(
+    filters: TeamRequestFilters | CompositeTeamRequestFilters, team_id: str
+) -> None:
     # Team ID validation, if provided. Must be Non-null str and match UUI4 format
     if type(team_id) is not str:
         raise TeamValidationError(
@@ -110,7 +112,9 @@ def _validate_player_id_filter(filters: CompositeTeamRequestFilters, player_id: 
     regex = re.compile(UUID_REGEX_PATTERN)
     player_id_matches = regex.match(player_id)
     if player_id_matches is None:
-        raise TeamValidationError("Player ID must be a string in UUIDv5 format", ["filter.player.id"])
+        raise TeamValidationError(
+            "Player ID must be a string in UUIDv5 format", ["filter.player.id"]
+        )
 
     filters.player_id = player_id
 
@@ -124,6 +128,7 @@ def _validate_team_name_filter(filters: TeamRequestFilters, name: str) -> None:
         raise TeamValidationError("filter.team.name is invalid", ["filter.team.name"])
 
     filters.team_name = name
+
 
 def _validate_team_name_filter(filters: CompositeTeamRequestFilters, team_name: str) -> None:
     regex = re.compile(NAME_REGEX_PATTERN)
@@ -145,7 +150,6 @@ def _validate_year_filter(filters: CompositeTeamRequestFilters, year: str) -> No
         raise TeamValidationError("Year must not a negative integer", ["filter.year"])
 
     filters.year = valid_year
-
 
 
 def validate_get_teams_query_parameters(

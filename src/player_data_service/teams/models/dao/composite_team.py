@@ -1,4 +1,5 @@
-from typing import Dict, List, Self
+from teams.models.dao.team import Team
+from typing import List
 
 
 class CompositeTeamPlayer:
@@ -13,13 +14,24 @@ class CompositeTeamPlayer:
     school: str
     img_url: str
 
+
 class CompositeTeamCoach:
     team_id: str
     year: int
-    img_url: str
     coach_id: str
     first_name: str
     last_name: str
     role: str
     since: int
     img_url: str
+
+    def __init__(
+        self, team_id: str = None, year: int = None, coach_id: str = None, first_name: str = None
+    ):
+        pass
+
+
+class CompositeTeam:
+    team: Team
+    players: List[CompositeTeamPlayer]
+    coaches: List[CompositeTeamCoach]

@@ -132,12 +132,14 @@ class StatisticsController:
             status_code=200,
             content={
                 "status": 200,
-                "data": []
-                if (statistics == []) or (statistics is None)
-                else [
-                    jsonable_encoder(game_statistics_DAO_to_game_statistics_DTO(statistic))
-                    for statistic in statistics
-                ],
+                "data": (
+                    []
+                    if (statistics == []) or (statistics is None)
+                    else [
+                        jsonable_encoder(game_statistics_DAO_to_game_statistics_DTO(statistic))
+                        for statistic in statistics
+                    ]
+                ),
             },
         )
 
@@ -159,12 +161,14 @@ class StatisticsController:
             status_code=200,
             content={
                 "status": 200,
-                "data": []
-                if (statistics == []) or (statistics is None)
-                else [
-                    jsonable_encoder(season_statistics_DAO_to_season_statistics_DTO(statistic))
-                    for statistic in statistics
-                ],
+                "data": (
+                    []
+                    if (statistics == []) or (statistics is None)
+                    else [
+                        jsonable_encoder(season_statistics_DAO_to_season_statistics_DTO(statistic))
+                        for statistic in statistics
+                    ]
+                ),
             },
         )
 
