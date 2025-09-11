@@ -210,14 +210,14 @@ class StatisticsDatabaseInterface:
             season_query, return_results=True
         )
 
-        query_success = True
+        composite_query_success = True
 
         if not game_success:
-            query_success = False
+            composite_query_success = False
             game_result = []
 
         if not season_success:
-            query_success = False
+            composite_query_success = False
             season_result = []
 
         game_stats = [
@@ -233,7 +233,9 @@ class StatisticsDatabaseInterface:
             for composite_season_statistics_data in season_result
         ]
 
-        return query_success, CompositeStatistics(game_stats=game_stats, season_stats=season_stats)
+        return composite_query_success, CompositeStatistics(
+            game_stats=game_stats, season_stats=season_stats
+        )
 
     def update_game_statistics(
         self, player_id: str, game_statistics: GameStatisticsDTO

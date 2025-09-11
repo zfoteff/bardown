@@ -39,8 +39,8 @@ class CompositeTeamPlayer:
         self.img_url = img_url
 
     @classmethod
-    def from_tuple(cls, composite_team_coach_tuple: Tuple) -> None:
-        return cls(**{k: v for k, v in zip(cls().to_dict().keys(), composite_team_coach_tuple)})
+    def from_tuple(cls, composite_team_player_tuple: Tuple) -> None:
+        return cls(**{k: v for k, v in zip(cls().to_dict().keys(), composite_team_player_tuple)})
 
     def to_dict(self) -> Dict:
         return {

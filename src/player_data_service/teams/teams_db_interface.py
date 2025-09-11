@@ -6,9 +6,9 @@ import config.player_data_service_config as application_config
 from connectors.mysql import MySQLClient
 from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
 from fastapi import Depends
-from teams import TEAMS_TABLE_NAME, TEAM_PLAYER_TABLE_NAME
+from teams import TEAM_COACH_TABLE_NAME, TEAMS_TABLE_NAME, TEAM_PLAYER_TABLE_NAME
 from players import PLAYERS_TABLE_NAME
-from teams.models.dao.composite_team import CompositeTeam
+from teams.models.dao.composite_team import CompositeTeam, CompositeTeamCoach, CompositeTeamPlayer
 from teams.models.dao.team import Team as TeamDAO
 from teams.models.dto.team import Team as TeamDTO
 from teams.models.dto.team_player import TeamPlayer
@@ -50,6 +50,13 @@ class TeamsDBInterface:
             password=config.mysql_password,
             database=config.mysql_database,
             table=TEAM_PLAYER_TABLE_NAME,
+        )
+        self.__team_coaches_client = MySQLClient(
+            host=config.mysql_host,
+            user=config.mysql_user,
+            password=config.mysql_password,
+            database=config.mysql_database,
+            table=TEAM_COACH_TABLE_NAME,
         )
 
     def __enter__(self) -> None:
@@ -100,6 +107,24 @@ class TeamsDBInterface:
             FROM {TEAM_PLAYER_TABLE_NAME} as tp
             {where_clause}
             ORDER BY tp.year DESC
+        """
+
+    def _build_composite_team_coaches_query_from_filters(
+        self, filter: CompositeTeamRequestFilters
+    ) -> str:
+        where_clause = (
+            "WHERE tp.teamid={filter.team_id}"
+            if filter.team_id is not None
+            else "WHERE tc.coachid={filter.coachid}"
+        )
+
+        return f"""
+            SELECT
+                tc.teamid, tc.year, c.coachid, c.firstname, c.lastname,
+                tc.role, tc.since, c.email, c.phonenumber, c.imgurl
+            FROM {TEAM_COACH_TABLE_NAME} as tc
+            {where_clause}
+            ORDER BY tc.year DESC
         """
 
     def _build_update_query(self, team: TeamDTO, team_id: str) -> str:
@@ -182,14 +207,42 @@ class TeamsDBInterface:
 
     def get_composite_teams(
         self, filters: CompositeTeamRequestFilters
-    ) -> Tuple[bool, List[CompositeTeam]] | TeamDoesNotExist:
+    ) -> Tuple[bool, CompositeTeam] | TeamDoesNotExist:
         team_exists, team = self.get_team(filters)
 
         if not team_exists:
             raise TeamDoesNotExist(f"Team with id {filters.team_id} does not exist")
 
-        player_query = self._build_composite_team_players_query_from_filters(filters)
-        coaches_query = self._build_composite_team_player_query_from_filters(filters)
+        players_query = self._build_composite_team_players_query_from_filters(filters)
+        coaches_query = self._build_composite_team_coach_query_from_filters(filters)
+
+        players_query_sucess, players_query_result = self.__team_players_client.execute_query(
+            query=players_query, return_results=True
+        )
+        coaches_query_sucess, coaches_query_result = self.__team_coaches_client.execute_query(
+            query=coaches_query, return_results=True
+        )
+
+        composite_query_success = True
+
+        if not players_query_sucess:
+            composite_query_success = False
+            players_query_result = []
+
+        if not coaches_query_sucess:
+            composite_query_success = False
+            coaches_query_result = []
+
+        players = [
+            CompositeTeamPlayer.from_tuple(composite_team_player_tuple=composite_team_player_data)
+            for composite_team_player_data in players_query_result
+        ]
+        coaches = [
+            CompositeTeamCoach.from_tuple(composite_team_coach_tuple=composite_team_coach_data)
+            for composite_team_coach_data in coaches_query_result
+        ]
+
+        return composite_query_success, CompositeTeam(team=team, players=players, coaches=coaches)
 
     def update_team(self, team: TeamDTO, team_id: str) -> str | TeamDoesNotExist:
         team_id = self.team_exists(team_id)

@@ -20,4 +20,6 @@ def team_DAO_to_team_DTO(team_dao: TeamDAO) -> TeamDTO:
 
 
 def composite_team_DAO_to_composite_team_DTO(composite_team_dao: CompositeTeamDAO):
-    pass
+    composite_team = CompositeTeamDTO(
+        team_id=composite_team_dao.team.team_id, name=composite_team_dao.team.name
+    )

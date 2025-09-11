@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from players.models.dto.coach import Coach
 from players.models.dto.player import Player
 from pydantic import BaseModel
 
@@ -7,6 +8,7 @@ from pydantic import BaseModel
 class Roster(BaseModel):
     year: Optional[int]
     players: Optional[List[Player]]
+    coaches: Optional[List[Coach]]
 
 
 class CompositeTeam(BaseModel):

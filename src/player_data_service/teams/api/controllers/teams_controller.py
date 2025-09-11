@@ -4,8 +4,9 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 from teams.api.validators.teams_query_validator import (
     validate_get_teams_query_parameters,
+    validate_get_composite_team_query_parameters,
 )
-from teams.mappers.team_mapper import team_DAO_to_team_DTO
+from teams.mappers.team_mapper import composite_team_DAO_to_composite_team_DTO, team_DAO_to_team_DTO
 from teams.models.dto.team import Team
 from teams.teams_db_interface import TeamsDBInterface
 
@@ -90,6 +91,30 @@ class TeamController:
                     if (teams == []) or (teams is None)
                     else [jsonable_encoder(team_DAO_to_team_DTO(team)) for team in teams]
                 ),
+            },
+        )
+
+    async def get_composite_teams(request: Request) -> JSONResponse:
+        try:
+            filters = validate_get_composite_team_query_parameters(request.query_params)
+            result, composite_team = db_interface.get_composite_teams(filters)
+        except TeamValidationError as err:
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": {"message": f"{err}"}}
+            )
+        except TeamDoesNotExist as err:
+            return JSONResponse(status_code=404, content={"status": 404, "error": f"{err}"})
+
+        if not result:
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": {"message": "Database error"}}
+            )
+
+        return JSONResponse(
+            status_code=200,
+            content={
+                "status": 200,
+                "data": jsonable_encoder(composite_team_DAO_to_composite_team_DTO(composite_team)),
             },
         )
 
