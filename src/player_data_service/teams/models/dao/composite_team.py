@@ -65,6 +65,8 @@ class CompositeTeamCoach:
     last_name: str
     role: str
     since: int
+    email: str,
+    phone_number: str
     img_url: str
 
     def __init__(
@@ -76,6 +78,8 @@ class CompositeTeamCoach:
         last_name: str = None,
         role: str = None,
         since: int = None,
+        email: str = None,
+        phone_number: str = None,
         img_url: str = None,
     ):
         self.team_id = team_id
@@ -85,6 +89,8 @@ class CompositeTeamCoach:
         self.last_name = last_name
         self.role = role
         self.since = since
+        self.email = email
+        self.phone_number = phone_number
         self.img_url = img_url
 
     @classmethod
@@ -100,6 +106,8 @@ class CompositeTeamCoach:
             "last_name": f"{self.last_name}",
             "role": f"{self.role}",
             "since": f"{self.since}",
+            "email": f"{self.email}",
+            "phone_number": f"{self.phone_number}",
             "img_url": f"{self.img_url}",
         }
 
@@ -115,3 +123,5 @@ class CompositeTeam:
         self.team = team
         self.players = players
         self.coaches = coaches
+
+    def to_dict()
