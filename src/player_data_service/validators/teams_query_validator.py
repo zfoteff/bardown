@@ -1,11 +1,13 @@
 import re
 
 from errors.teams_errors import TeamValidationError
-from teams.api.validators import (
+from validators import (
     BASIC_TEXT_REGEX_PATTERN,
     NAME_REGEX_PATTERN,
     UUID_REGEX_PATTERN,
 )
+from teams.models.dto.team_coach import TeamCoach
+from teams.models.dto.team_player import TeamPlayer
 from teams.models.team_request_filters import (
     CompositeTeamRequestFilters,
     TeamRequestFilters,
@@ -207,3 +209,15 @@ def validate_get_composite_team_query_parameters(
         _validate_year_filter(filters, year)
 
     return filters
+
+
+def validate_team_player_request(
+    team_player_request: TeamPlayer,
+) -> TeamPlayer | TeamValidationError:
+    # TODO: Add more validation for team player post body + other post requests
+    return team_player_request
+
+
+def validate_team_coach_request(team_coach_request: TeamCoach) -> TeamCoach | TeamValidationError:
+    # TODO: Add more validation for team coach post body
+    return team_coach_request

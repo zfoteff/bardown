@@ -4,6 +4,8 @@ from uuid import NAMESPACE_OID, uuid5
 
 import config.player_data_service_config as application_config
 from connectors.mysql import MySQLClient
+from errors.coaches_errors import CoachDoesNotExist
+from errors.players_errors import PlayerDoesNotExist
 from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
 from fastapi import Depends
 from teams import TEAM_COACH_TABLE_NAME, TEAMS_TABLE_NAME, TEAM_PLAYER_TABLE_NAME
@@ -11,6 +13,7 @@ from players import PLAYERS_TABLE_NAME
 from teams.models.dao.composite_team import CompositeTeam, CompositeTeamCoach, CompositeTeamPlayer
 from teams.models.dao.team import Team as TeamDAO
 from teams.models.dto.team import Team as TeamDTO
+from teams.models.dto.team_coach import TeamCoach
 from teams.models.dto.team_player import TeamPlayer
 from teams.models.team_request_filters import CompositeTeamRequestFilters, TeamRequestFilters
 from typing_extensions import Annotated
@@ -165,16 +168,20 @@ class TeamsDBInterface:
 
     def add_player_to_team(self, team_player_data: TeamPlayer) -> bool:
         create_modify_time = datetime.now().strftime(DATETIME_FORMAT)
-        team_exists, team_id = self.team_exists(team_id=team_id)
+        team_exists, team_id = self.team_exists(team_id=team_player_data.team_id)
+        player_exists, player_id = self.player_exists(player_id=team_player_data.player_id)
 
         if not team_exists:
-            raise TeamDoesNotExist(f"Team does not exist with id: {team_id}")
+            raise TeamDoesNotExist(f"Team does not exist with id: {team_player_data.team_id}")
+
+        if not player_exists:
+            raise PlayerDoesNotExist(f"Player does not exist with id: {team_player_data.player_id}")
 
         query = f"""
             INSERT INTO {TEAM_PLAYER_TABLE_NAME}
             VALUES (
-                "{team_player_data.team_id}",
-                "{team_player_data.player_id}",
+                "{team_id}",
+                "{player_id}",
                 {team_player_data.year},
                 {team_player_data.number},
                 "{str(team_player_data.position)}",
@@ -190,6 +197,39 @@ class TeamsDBInterface:
 
         team_player_data.created = create_modify_time
         team_player_data.modified = create_modify_time
+        return success
+
+    def add_coach_to_team(self, team_coach_data: TeamCoach) -> bool:
+        create_modify_time = datetime.now().strftime(DATETIME_FORMAT)
+        team_exists, team_id = self.team_exists(team_id=team_coach_data.team_id)
+        coach_exists, coach_id = self.coach_exists(coach_id=team_coach_data.coach_id)
+
+        if not team_exists:
+            raise TeamDoesNotExist(f"Team does not exist with id: {team_coach_data.team_id}")
+
+        if not coach_exists:
+            raise CoachDoesNotExist(f"Coach does not exist with id: {team_coach_data.coach_id}")
+
+        query = f"""
+            INSERT INTO {TEAM_COACH_TABLE_NAME}
+            VALUES (
+                "{team_id}",
+                "{coach_id}",
+                {team_coach_data.year},
+                "{team_coach_data.role}",
+                {team_coach_data.since},
+                "{create_modify_time}",
+                "{create_modify_time}"
+            )
+        """
+
+        success, _ = self.__team_coaches_client.execute_query(query, commit_candidate=True)
+
+        if not success:
+            return False
+
+        team_coach_data.created = create_modify_time
+        team_coach_data.modified = create_modify_time
         return success
 
     def get_team(
@@ -275,3 +315,25 @@ class TeamsDBInterface:
             )
 
         return team[0][0]
+
+    def player_exists(
+        self, player_id: str = None, first_name: str = None, last_name: str = None
+    ) -> str | PlayerDoesNotExist:
+        query = f"SELECT playerid FROM {PLAYERS_TABLE_NAME} WHERE "
+
+        if player_id is None:
+            query += f"firstname='{first_name}' AND lastname='{last_name}'"
+        else:
+            query += f"playerid='{player_id}'"
+
+        success, player = self.__players_client.execute_query(query, return_results=True)
+
+        if not success or (len(player) == 0 or player is None):
+            raise PlayerDoesNotExist(
+                f"""
+                Player does not exist with these fields:
+                    player_id: {player_id}, first_name: {first_name}, last_name: {last_name}
+                """
+            )
+
+        return player[0][0]

@@ -65,7 +65,7 @@ class CompositeTeamCoach:
     last_name: str
     role: str
     since: int
-    email: str,
+    email: str
     phone_number: str
     img_url: str
 
@@ -124,4 +124,9 @@ class CompositeTeam:
         self.players = players
         self.coaches = coaches
 
-    def to_dict()
+    def to_dict(self) -> Dict:
+        return {
+            "team": self.team.to_dict(),
+            "players": [player.to_dict() for player in self.players],
+            "coaches": [coach.to_dict() for coach in self.coaches],
+        }

@@ -2,7 +2,7 @@ from errors.statistics_errors import StatisticsDoNoExist, StatisticsValidationEr
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from stats.api.validators.statistics_query_validator import (
+from validators.statistics_query_validator import (
     validate_get_composite_statistics_query_parameters,
 )
 from stats.mappers.statistics_mapper import (

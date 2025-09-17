@@ -8,7 +8,7 @@ from errors.statistics_errors import (
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from stats.api.validators.statistics_query_validator import (
+from validators.statistics_query_validator import (
     validate_get_game_statistics_query_parameters,
     validate_get_season_statistics_query_parameters,
 )
