@@ -5,7 +5,10 @@ from teams.models.dao.team import Team
 
 class CompositeTeamPlayer:
     team_id: str
+    team_name: str
+    team_location: str
     year: int
+    team_img_url: str
     player_id: str
     first_name: str
     last_name: str
@@ -18,7 +21,10 @@ class CompositeTeamPlayer:
     def __init__(
         self,
         team_id: str = None,
+        team_name: str = None,
+        team_location: str = None,
         year: int = None,
+        team_img_url: str = None,
         player_id: str = None,
         first_name: str = None,
         last_name: str = None,
@@ -29,7 +35,10 @@ class CompositeTeamPlayer:
         img_url: str = None,
     ):
         self.team_id = team_id
+        self.team_name = team_name
+        self.team_location = team_location
         self.year = year
+        self.team_img_url = team_img_url
         self.player_id = player_id
         self.first_name = first_name
         self.last_name = last_name
@@ -46,7 +55,10 @@ class CompositeTeamPlayer:
     def to_dict(self) -> Dict:
         return {
             "team_id": f"{self.team_id}",
+            "team_name": f"{self.team_location}",
+            "team_location": f"{self.team_location}",
             "year": self.year,
+            "team_img_url": f"{self.team_img_url}",
             "player_id": f"{self.player_id}",
             "first_name": f"{self.first_name}",
             "last_name": f"{self.last_name}",
@@ -59,8 +71,10 @@ class CompositeTeamPlayer:
 
 
 class CompositeTeamCoach:
-    team_id: str
+    team_name: str
+    team_location: str
     year: int
+    team_img_url: str
     coach_id: str
     first_name: str
     last_name: str
@@ -73,7 +87,9 @@ class CompositeTeamCoach:
     def __init__(
         self,
         team_id: str = None,
+        team_name: str = None,
         year: int = None,
+        team_img_url: str = None,
         coach_id: str = None,
         first_name: str = None,
         last_name: str = None,
@@ -84,7 +100,9 @@ class CompositeTeamCoach:
         img_url: str = None,
     ):
         self.team_id = team_id
+        self.team_name = team_name
         self.year = year
+        self.team_img_url = team_img_url
         self.coach_id = coach_id
         self.first_name = first_name
         self.last_name = last_name
@@ -101,7 +119,9 @@ class CompositeTeamCoach:
     def to_dict(self) -> Dict:
         return {
             "team_id": f"{self.team_id}",
+            "team_name": f"{self.team_name}",
             "year": self.year,
+            "team_img_url": f"{self.team_img_url}",
             "coach_id": f"{self.coach_id}",
             "first_name": f"{self.first_name}",
             "last_name": f"{self.last_name}",
@@ -114,21 +134,19 @@ class CompositeTeamCoach:
 
 
 class CompositeTeam:
-    year: int
-    team: Team
     players: List[CompositeTeamPlayer]
     coaches: List[CompositeTeamCoach]
 
     def __init__(
-        self, team: Team, players: List[CompositeTeamPlayer], coaches: List[CompositeTeamCoach]
+        self,
+        players: List[CompositeTeamPlayer],
+        coaches: List[CompositeTeamCoach],
     ):
-        self.team = team
         self.players = players
         self.coaches = coaches
 
     def to_dict(self) -> Dict:
         return {
-            "team": self.team.to_dict(),
             "players": [player.to_dict() for player in self.players],
             "coaches": [coach.to_dict() for coach in self.coaches],
         }

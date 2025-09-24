@@ -112,7 +112,7 @@ class TeamsDBInterface:
 
         return f"""
             SELECT 
-                tp.teamid, tp.year, p.playerid, p.firstname, p.lastname,
+                tp.teamid, t.name, t.location, t.imgurl as teamimgurl, tp.year, p.playerid, p.firstname, p.lastname,
                 tp.number, p.position, p.grade, p.school, p.imgurl
             FROM {TEAM_PLAYER_TABLE_NAME} as tp
                 INNER JOIN {PLAYERS_TABLE_NAME} as p on p.playerid=tp.playerid
@@ -261,11 +261,6 @@ class TeamsDBInterface:
     def get_composite_teams(
         self, filters: CompositeTeamRequestFilters
     ) -> Tuple[bool, CompositeTeam] | TeamDoesNotExist:
-        team_exists, teams = self.get_team(filters)
-
-        if not team_exists:
-            raise TeamDoesNotExist(f"Team with id {filters.team_id} does not exist")
-
         players_query = self._build_composite_team_players_query_from_filters(filters)
         coaches_query = self._build_composite_team_coaches_query_from_filters(filters)
 
@@ -295,7 +290,7 @@ class TeamsDBInterface:
             for composite_team_coach_data in coaches_query_result
         ]
 
-        return composite_query_success, CompositeTeam(team=teams, players=players, coaches=coaches)
+        return composite_query_success, CompositeTeam(players=players, coaches=coaches)
 
     def update_team(self, team: TeamDTO, team_id: str) -> str | TeamDoesNotExist:
         team_id = self.team_exists(team_id)

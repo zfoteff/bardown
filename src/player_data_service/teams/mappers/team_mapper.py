@@ -1,3 +1,4 @@
+from typing import List
 from players.models.dto.coach import Coach
 from players.models.dto.player import Player
 from teams.models.dao.composite_team import CompositeTeam as CompositeTeamDAO
@@ -22,7 +23,9 @@ def team_DAO_to_team_DTO(team_dao: TeamDAO) -> TeamDTO:
     )
 
 
-def composite_team_DAO_to_composite_team_DTO(composite_team_dao: CompositeTeamDAO):
+def composite_team_DAO_to_composite_team_DTO(
+    composite_team_dao: CompositeTeamDAO,
+) -> List[CompositeTeamDTO]:
     roster_data = {}
 
     for player in composite_team_dao.players:
@@ -36,12 +39,18 @@ def composite_team_DAO_to_composite_team_DTO(composite_team_dao: CompositeTeamDA
             school=player.school,
             imgurl=player.img_url,
         )
-        if roster_data.get(player.year) is None:
-            roster_data[player.year] = {}
-        if roster_data[player.year].get("players") is None:
-            roster_data[player.year]["players"] = [player_object]
-        else:
-            roster_data[player.year]["players"].append(player_object)
+
+        if roster_data.get((player.team_id, player.year)) is None:
+            roster_data[(player.team_id, player.year)] = {
+                "team_id": player.team_id,
+                "name": player.team_name,
+                "location": player.team_location,
+                "img_url": player.team_img_url,
+                "players": [],
+                "coaches": [],
+            }
+
+        roster_data[(player.team_id, player.year)]["players"].append(player_object)
 
     for coach in composite_team_dao.coaches:
         coach_object = Coach(
@@ -54,12 +63,18 @@ def composite_team_DAO_to_composite_team_DTO(composite_team_dao: CompositeTeamDA
             phone_number=coach.phone_number,
             imgurl=coach.img_url,
         )
-        if roster_data.get(coach.year) is None:
-            roster_data[coach.year] = {}
-        if roster_data[coach.year].get("coaches") is None:
-            roster_data[coach.year]["coaches"] = [coach_object]
-        else:
-            roster_data[coach.year]["coaches"].append(coach_object)
+
+        if roster_data.get((coach.team_id, coach.year)) is None:
+            roster_data[(coach.team_id, coach.year)] = {
+                "team_id": coach.team_id,
+                "name": coach.team_name,
+                "location": coach.team_location,
+                "img_url": coach.team_img_url,
+                "players": [],
+                "coaches": [],
+            }
+
+        roster_data[(coach.team_id, coach.year)]["coaches"].append(coach_object)
 
     return CompositeTeamDTO(
         team_id=composite_team_dao.team.team_id,
