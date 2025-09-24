@@ -6,12 +6,10 @@ from errors.players_errors import (
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from validators.players_query_validator import (
-    validate_get_players_query_parameters,
-)
 from players.mappers.player_mapper import player_DAO_to_player_DTO
 from players.models.dto.player import Player
 from players.player_db_interface import PlayerDatabaseInterface
+from validators.players_query_validator import validate_get_players_query_parameters
 
 from bin.logger import Logger
 

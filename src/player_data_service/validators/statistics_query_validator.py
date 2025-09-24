@@ -1,7 +1,7 @@
 import re
 
 from errors.statistics_errors import StatisticsValidationError
-from stats.api.validators import UUID_REGEX_PATTERN
+from validators import UUID_REGEX_PATTERN
 from stats.models.statistics_request_filters import (
     CompositeStatisticsRequestFilters,
     GameStatisticsRequestFilters,

@@ -1,5 +1,6 @@
+from typing import Dict, List, Tuple
+
 from teams.models.dao.team import Team
-from typing import List, Tuple, Dict
 
 
 class CompositeTeamPlayer:
@@ -113,6 +114,7 @@ class CompositeTeamCoach:
 
 
 class CompositeTeam:
+    year: int
     team: Team
     players: List[CompositeTeamPlayer]
     coaches: List[CompositeTeamCoach]

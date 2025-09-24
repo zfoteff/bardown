@@ -8,18 +8,25 @@ from errors.coaches_errors import CoachDoesNotExist
 from errors.players_errors import PlayerDoesNotExist
 from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
 from fastapi import Depends
-from teams import TEAM_COACH_TABLE_NAME, TEAMS_TABLE_NAME, TEAM_PLAYER_TABLE_NAME
-from players import PLAYERS_TABLE_NAME
-from teams.models.dao.composite_team import CompositeTeam, CompositeTeamCoach, CompositeTeamPlayer
+from players import COACHES_TABLE_NAME, PLAYERS_TABLE_NAME
+from teams import TEAM_COACH_TABLE_NAME, TEAM_PLAYER_TABLE_NAME, TEAMS_TABLE_NAME
+from teams.models.dao.composite_team import (
+    CompositeTeam,
+    CompositeTeamCoach,
+    CompositeTeamPlayer,
+)
 from teams.models.dao.team import Team as TeamDAO
 from teams.models.dto.team import Team as TeamDTO
 from teams.models.dto.team_coach import TeamCoach
 from teams.models.dto.team_player import TeamPlayer
-from teams.models.team_request_filters import CompositeTeamRequestFilters, TeamRequestFilters
+from teams.models.team_request_filters import (
+    CompositeTeamRequestFilters,
+    TeamRequestFilters,
+)
 from typing_extensions import Annotated
+from utils.db_utils import build_update_fields
 
 from bin.logger import Logger
-from utils.db_utils import build_update_fields
 
 logger = Logger("db")
 
@@ -61,16 +68,16 @@ class TeamsDBInterface:
             database=config.mysql_database,
             table=TEAM_COACH_TABLE_NAME,
         )
-
-    def __enter__(self) -> None:
         self.__teams_client.open_connection()
         self.__players_client.open_connection()
         self.__team_players_client.open_connection()
+        self.__team_coaches_client.open_connection()
 
     def __exit__(self) -> None:
         self.__teams_client.close_connection()
         self.__players_client.close_connection()
         self.__team_players_client.close_connection()
+        self.__team_coaches_client.open_connection()
 
     def _build_team_query_from_filters(
         self, filters: TeamRequestFilters | CompositeTeamRequestFilters
@@ -98,9 +105,9 @@ class TeamsDBInterface:
         self, filter: CompositeTeamRequestFilters
     ) -> str:
         where_clause = (
-            "WHERE tp.teamid={filter.team_id}"
+            f"WHERE tp.teamid='{filter.team_id}'"
             if filter.team_id is not None
-            else "WHERE tp.playerid={filter.player_id}"
+            else f"WHERE tp.playerid='{filter.player_id}'"
         )
 
         return f"""
@@ -108,6 +115,8 @@ class TeamsDBInterface:
                 tp.teamid, tp.year, p.playerid, p.firstname, p.lastname,
                 tp.number, p.position, p.grade, p.school, p.imgurl
             FROM {TEAM_PLAYER_TABLE_NAME} as tp
+                INNER JOIN {PLAYERS_TABLE_NAME} as p on p.playerid=tp.playerid
+                INNER JOIN {TEAMS_TABLE_NAME} as t on t.teamid=tp.teamid
             {where_clause}
             ORDER BY tp.year DESC
         """
@@ -116,9 +125,9 @@ class TeamsDBInterface:
         self, filter: CompositeTeamRequestFilters
     ) -> str:
         where_clause = (
-            "WHERE tp.teamid={filter.team_id}"
+            f"WHERE tc.teamid='{filter.team_id}'"
             if filter.team_id is not None
-            else "WHERE tc.coachid={filter.coachid}"
+            else f"WHERE tc.coachid='{filter.coach_id}'"
         )
 
         return f"""
@@ -126,6 +135,8 @@ class TeamsDBInterface:
                 tc.teamid, tc.year, c.coachid, c.firstname, c.lastname,
                 tc.role, tc.since, c.email, c.phonenumber, c.imgurl
             FROM {TEAM_COACH_TABLE_NAME} as tc
+                INNER JOIN {COACHES_TABLE_NAME} as c on c.coachid=tc.coachid
+                INNER JOIN {TEAMS_TABLE_NAME} as t on t.teamid=tc.teamid
             {where_clause}
             ORDER BY tc.year DESC
         """
@@ -139,10 +150,12 @@ class TeamsDBInterface:
         create_modify_time = datetime.now().strftime(DATETIME_FORMAT)
         new_team_id = str(uuid5(namespace=NAMESPACE_OID, name=team.name))
 
-        exists, team_id = self.team_exists(team_name=team.name)
-
-        if exists:
-            raise TeamAlreadyExists("Team already exists", existing_team_id=team_id)
+        try:
+            exists, team_id = self.team_exists(team_name=team.name)
+            if exists:
+                raise TeamAlreadyExists("Team already exists", existing_team_id=team_id)
+        except TeamDoesNotExist:
+            pass
 
         query = f"""
             INSERT INTO {TEAMS_TABLE_NAME}
@@ -248,13 +261,13 @@ class TeamsDBInterface:
     def get_composite_teams(
         self, filters: CompositeTeamRequestFilters
     ) -> Tuple[bool, CompositeTeam] | TeamDoesNotExist:
-        team_exists, team = self.get_team(filters)
+        team_exists, teams = self.get_team(filters)
 
         if not team_exists:
             raise TeamDoesNotExist(f"Team with id {filters.team_id} does not exist")
 
         players_query = self._build_composite_team_players_query_from_filters(filters)
-        coaches_query = self._build_composite_team_coach_query_from_filters(filters)
+        coaches_query = self._build_composite_team_coaches_query_from_filters(filters)
 
         players_query_sucess, players_query_result = self.__team_players_client.execute_query(
             query=players_query, return_results=True
@@ -282,7 +295,7 @@ class TeamsDBInterface:
             for composite_team_coach_data in coaches_query_result
         ]
 
-        return composite_query_success, CompositeTeam(team=team, players=players, coaches=coaches)
+        return composite_query_success, CompositeTeam(team=teams, players=players, coaches=coaches)
 
     def update_team(self, team: TeamDTO, team_id: str) -> str | TeamDoesNotExist:
         team_id = self.team_exists(team_id)

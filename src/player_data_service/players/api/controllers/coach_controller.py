@@ -6,12 +6,10 @@ from errors.coaches_errors import (
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from validators.coaches_query_validator import (
-    validate_get_coaches_query_parameters,
-)
 from players.coaches_db_interface import CoachesDatabaseInterface
 from players.mappers.coach_mapper import coach_DAO_to_coach_DTO
 from players.models.dto.coach import Coach
+from validators.coaches_query_validator import validate_get_coaches_query_parameters
 
 from bin.logger import Logger
 

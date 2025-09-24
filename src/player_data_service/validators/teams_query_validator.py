@@ -1,17 +1,13 @@
 import re
 
 from errors.teams_errors import TeamValidationError
-from validators import (
-    BASIC_TEXT_REGEX_PATTERN,
-    NAME_REGEX_PATTERN,
-    UUID_REGEX_PATTERN,
-)
 from teams.models.dto.team_coach import TeamCoach
 from teams.models.dto.team_player import TeamPlayer
 from teams.models.team_request_filters import (
     CompositeTeamRequestFilters,
     TeamRequestFilters,
 )
+from validators import BASIC_TEXT_REGEX_PATTERN, NAME_REGEX_PATTERN, UUID_REGEX_PATTERN
 
 
 def _validate_limit(filters: TeamRequestFilters, limit: int) -> None:
@@ -200,7 +196,7 @@ def validate_get_composite_team_query_parameters(
         _validate_team_id_filter(filters, team_id)
 
     if player_id is not None:
-        _validate_player_id_filter(filters, team_id)
+        _validate_player_id_filter(filters, player_id)
 
     if team_name is not None:
         _validate_team_name_filter(filters, team_name)

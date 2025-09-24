@@ -1,13 +1,13 @@
-import pytest
-from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
+from unittest.mock import MagicMock, Mock, patch
 from uuid import NAMESPACE_OID, uuid5
 
-from players.player_db_interface import PlayerDatabaseInterface
-from players.models.dto.player import Player as PlayerDTO
-from players.models.dao.player import Player as PlayerDAO
-from players.models.players_request_filters import PlayersRequestFilters
+import pytest
 from errors.players_errors import PlayerAlreadyExists, PlayerDoesNotExist
+from players.models.dao.player import Player as PlayerDAO
+from players.models.dto.player import Player as PlayerDTO
+from players.models.players_request_filters import PlayersRequestFilters
+from players.player_db_interface import PlayerDatabaseInterface
 
 
 class TestPlayerDatabaseInterface:

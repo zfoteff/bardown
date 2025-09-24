@@ -2,11 +2,9 @@ from errors.players_errors import PlayerDoesNotExist
 from errors.teams_errors import TeamDoesNotExist, TeamValidationError
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from validators.teams_query_validator import (
-    validate_team_player_request,
-)
 from teams.models.dto.team_player import TeamPlayer
 from teams.teams_db_interface import TeamsDBInterface
+from validators.teams_query_validator import validate_team_player_request
 
 from bin.logger import Logger
 
@@ -48,7 +46,7 @@ class TeamPlayersController:
 
         if not result:
             return JSONResponse(
-                status_code=403,
+                status_code=409,
                 content={
                     "status": 409,
                     "error": {

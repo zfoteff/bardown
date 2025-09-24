@@ -2,12 +2,10 @@ from errors.games_errors import GameAlreadyExists, GameDoesNotExist, GameValidat
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from validators.games_query_validator import (
-    validate_get_games_query_parameters,
-)
 from games.games_db_interface import GamesDBInterface
 from games.mappers.game_mapper import game_DAO_to_game_DTO
 from games.models.dto.game import Game
+from validators.games_query_validator import validate_get_games_query_parameters
 
 from bin.logger import Logger
 
