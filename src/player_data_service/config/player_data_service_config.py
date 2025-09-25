@@ -10,7 +10,7 @@ class PlayerDataServiceBaseConfig(BaseSettings):
     mysql_host: str
     mysql_user: str
     mysql_password: str
-    mysql_database: str = "bardown"
+    mysql_database: str = "LaxDB"
     log_level: str = "info"
 
     model_config = SettingsConfigDict(env_file=".env")

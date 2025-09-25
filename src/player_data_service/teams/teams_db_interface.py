@@ -112,7 +112,8 @@ class TeamsDBInterface:
 
         return f"""
             SELECT 
-                tp.teamid, t.name, t.location, t.imgurl as teamimgurl, tp.year, p.playerid, p.firstname, p.lastname,
+                tp.teamid, t.name, t.location, t.imgurl, 
+                tp.year, p.playerid, p.firstname, p.lastname,
                 tp.number, p.position, p.grade, p.school, p.imgurl
             FROM {TEAM_PLAYER_TABLE_NAME} as tp
                 INNER JOIN {PLAYERS_TABLE_NAME} as p on p.playerid=tp.playerid
@@ -132,7 +133,8 @@ class TeamsDBInterface:
 
         return f"""
             SELECT
-                tc.teamid, tc.year, c.coachid, c.firstname, c.lastname,
+                tc.teamid, t.name, t.location, t.imgurl, 
+                tc.year, c.coachid, c.firstname, c.lastname,
                 tc.role, tc.since, c.email, c.phonenumber, c.imgurl
             FROM {TEAM_COACH_TABLE_NAME} as tc
                 INNER JOIN {COACHES_TABLE_NAME} as c on c.coachid=tc.coachid

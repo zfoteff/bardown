@@ -75,27 +75,21 @@ def composite_team_DAO_to_composite_team_DTO(
             }
 
         roster_data[(coach.team_id, coach.year)]["coaches"].append(coach_object)
-    
+
     teams = {}
     for key, value in roster_data:
         team_id, year = key
         roster = Roster(year, value.get("players"), value.get("coaches"))
 
-        if teams.get(team_id)
-
-
-
-    return CompositeTeamDTO(
-        team_id=composite_team_dao.team.team_id,
-        name=composite_team_dao.team.name,
-        location=composite_team_dao.team.location,
-        img_url=composite_team_dao.team.imgurl,
-        rosters=[
-            Roster(
-                year=year,
-                players=roster_data[year].get("players"),
-                coaches=roster_data[year].get("coaches"),
+        if teams.get(team_id) is None:
+            teams[team_id] = CompositeTeamDTO(
+                team_id=value["team_id"],
+                name=value["name"],
+                location=value["location"],
+                img_url=value["imgurl"],
+                rosters=[roster],
             )
-            for year in roster_data.keys()
-        ],
-    )
+        else:
+            teams[team_id].roster.append(roster)
+
+    return list(teams.values())
