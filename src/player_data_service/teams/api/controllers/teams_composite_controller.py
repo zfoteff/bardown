@@ -2,11 +2,11 @@ from errors.teams_errors import TeamDoesNotExist, TeamValidationError
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
+from teams.mappers.team_mapper import composite_team_DAO_to_composite_team_DTO
+from teams.teams_db_interface import TeamsDBInterface
 from validators.teams_query_validator import (
     validate_get_composite_team_query_parameters,
 )
-from teams.mappers.team_mapper import composite_team_DAO_to_composite_team_DTO
-from teams.teams_db_interface import TeamsDBInterface
 
 from bin.logger import Logger
 

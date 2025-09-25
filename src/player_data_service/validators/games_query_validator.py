@@ -2,8 +2,8 @@ import re
 from datetime import datetime
 
 from errors.games_errors import GameValidationError
-from validators import BASIC_TEXT_REGEX_PATTERN, UUID_REGEX_PATTERN
 from games.models.game_request_filters import GameRequestFilters
+from validators import BASIC_TEXT_REGEX_PATTERN, UUID_REGEX_PATTERN
 
 
 def _validate_limit(filters: GameRequestFilters, limit: int) -> None:

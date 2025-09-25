@@ -22,9 +22,9 @@ class CompositeTeamPlayer:
         self,
         team_id: str = None,
         team_name: str = None,
+        team_img_url: str = None,
         team_location: str = None,
         year: int = None,
-        team_img_url: str = None,
         player_id: str = None,
         first_name: str = None,
         last_name: str = None,
@@ -37,8 +37,8 @@ class CompositeTeamPlayer:
         self.team_id = team_id
         self.team_name = team_name
         self.team_location = team_location
-        self.year = year
         self.team_img_url = team_img_url
+        self.year = year
         self.player_id = player_id
         self.first_name = first_name
         self.last_name = last_name
@@ -57,8 +57,8 @@ class CompositeTeamPlayer:
             "team_id": f"{self.team_id}",
             "team_name": f"{self.team_location}",
             "team_location": f"{self.team_location}",
-            "year": self.year,
             "team_img_url": f"{self.team_img_url}",
+            "year": self.year,
             "player_id": f"{self.player_id}",
             "first_name": f"{self.first_name}",
             "last_name": f"{self.last_name}",
@@ -71,10 +71,11 @@ class CompositeTeamPlayer:
 
 
 class CompositeTeamCoach:
+    team_id: str
     team_name: str
     team_location: str
-    year: int
     team_img_url: str
+    year: int
     coach_id: str
     first_name: str
     last_name: str
@@ -88,8 +89,9 @@ class CompositeTeamCoach:
         self,
         team_id: str = None,
         team_name: str = None,
-        year: int = None,
+        team_location: str = None,
         team_img_url: str = None,
+        year: int = None,
         coach_id: str = None,
         first_name: str = None,
         last_name: str = None,
@@ -101,8 +103,9 @@ class CompositeTeamCoach:
     ):
         self.team_id = team_id
         self.team_name = team_name
-        self.year = year
+        self.team_location = team_location
         self.team_img_url = team_img_url
+        self.year = year
         self.coach_id = coach_id
         self.first_name = first_name
         self.last_name = last_name
@@ -120,8 +123,9 @@ class CompositeTeamCoach:
         return {
             "team_id": f"{self.team_id}",
             "team_name": f"{self.team_name}",
-            "year": self.year,
+            "team_location": f"{self.team_location}",
             "team_img_url": f"{self.team_img_url}",
+            "year": self.year,
             "coach_id": f"{self.coach_id}",
             "first_name": f"{self.first_name}",
             "last_name": f"{self.last_name}",

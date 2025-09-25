@@ -1,12 +1,12 @@
 import re
 
 from errors.statistics_errors import StatisticsValidationError
-from validators import UUID_REGEX_PATTERN
 from stats.models.statistics_request_filters import (
     CompositeStatisticsRequestFilters,
     GameStatisticsRequestFilters,
     SeasonStatisticsRequestFilters,
 )
+from validators import UUID_REGEX_PATTERN
 
 
 def _validate_limit(filters, limit: int) -> None:

@@ -1,4 +1,5 @@
 from typing import List
+
 from players.models.dto.coach import Coach
 from players.models.dto.player import Player
 from teams.models.dao.composite_team import CompositeTeam as CompositeTeamDAO
@@ -40,7 +41,9 @@ def composite_team_DAO_to_composite_team_DTO(
             imgurl=player.img_url,
         )
 
-        if roster_data.get((player.team_id, player.year)) is None:
+        key = (player.team_id, player.year)
+
+        if roster_data.get(key) is None:
             roster_data[(player.team_id, player.year)] = {
                 "team_id": player.team_id,
                 "name": player.team_name,
@@ -50,7 +53,7 @@ def composite_team_DAO_to_composite_team_DTO(
                 "coaches": [],
             }
 
-        roster_data[(player.team_id, player.year)]["players"].append(player_object)
+        roster_data[key]["players"].append(player_object)
 
     for coach in composite_team_dao.coaches:
         coach_object = Coach(
@@ -64,7 +67,9 @@ def composite_team_DAO_to_composite_team_DTO(
             imgurl=coach.img_url,
         )
 
-        if roster_data.get((coach.team_id, coach.year)) is None:
+        key = (coach.team_id, coach.year)
+
+        if roster_data.get(key) is None:
             roster_data[(coach.team_id, coach.year)] = {
                 "team_id": coach.team_id,
                 "name": coach.team_name,
@@ -74,19 +79,22 @@ def composite_team_DAO_to_composite_team_DTO(
                 "coaches": [],
             }
 
-        roster_data[(coach.team_id, coach.year)]["coaches"].append(coach_object)
+        roster_data[key]["coaches"].append(coach_object)
 
     teams = {}
-    for key, value in roster_data:
-        team_id, year = key
-        roster = Roster(year, value.get("players"), value.get("coaches"))
+    for team_id, year in roster_data:
+        roster = Roster(
+            year=year,
+            players=roster_data[(team_id, year)].get("players"),
+            coaches=roster_data[(team_id, year)].get("coaches"),
+        )
 
         if teams.get(team_id) is None:
             teams[team_id] = CompositeTeamDTO(
-                team_id=value["team_id"],
-                name=value["name"],
-                location=value["location"],
-                img_url=value["imgurl"],
+                team_id=roster_data[(team_id, year)]["team_id"],
+                name=roster_data[(team_id, year)]["name"],
+                location=roster_data[(team_id, year)]["location"],
+                img_url=roster_data[(team_id, year)]["img_url"],
                 rosters=[roster],
             )
         else:
