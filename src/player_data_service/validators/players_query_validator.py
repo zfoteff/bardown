@@ -1,10 +1,10 @@
 import re
 
 from errors.players_errors import PlayerRequestValidationError
-from players.api.validators import NAME_REGEX_PATTERN, UUID_REGEX_PATTERN
 from players.models.enums.grade import Grade
 from players.models.enums.position import Position
 from players.models.players_request_filters import PlayersRequestFilters
+from validators import NAME_REGEX_PATTERN, UUID_REGEX_PATTERN
 
 
 def _order_equals_allowed_value(order: str) -> bool:

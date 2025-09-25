@@ -9,7 +9,9 @@ logger = Logger("db")
 
 
 class MySQLClient:
-    def __init__(self, user: str, password: str, host: str, table: str, database: str = "bardown") -> Self:
+    def __init__(
+        self, user: str, password: str, host: str, table: str, database: str = "bardown"
+    ) -> Self:
         self.__user = user
         self.__password = password
         self.__host = host

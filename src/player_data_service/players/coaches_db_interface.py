@@ -11,6 +11,7 @@ from players.models.coaches_request_filters import CoachesRequestFilters
 from players.models.dao.coach import Coach as CoachDAO
 from players.models.dto.coach import Coach as CoachDTO
 from typing_extensions import Annotated
+from utils.db_utils import build_update_fields
 
 
 class CoachesDatabaseInterface:
@@ -47,6 +48,11 @@ class CoachesDatabaseInterface:
         if filters.offset is not None:
             query += f" OFFSET {filters.offset}"
 
+        return query
+
+    def _build_update_query(self, coach: CoachDTO, coach_id: str) -> str:
+        update_fields = build_update_fields(coach)
+        query = f"UPDATE {COACHES_TABLE_NAME} SET {update_fields} WHERE coachid='{coach_id}'"
         return query
 
     def create_coach(self, coach: CoachDTO) -> bool | CoachAlreadyExists:
@@ -90,33 +96,15 @@ class CoachesDatabaseInterface:
 
     def update_coach(self, coach_id: str, coach: CoachDTO) -> str | CoachDoesNotExist:
         coach_id = self.coach_exists(coach_id)
-        query = f"""
-            UPDATE {COACHES_TABLE_NAME}
-            SET firstname="{coach.first_name}",
-                lastname="{coach.last_name}",
-                role="{coach.role}",
-                since="{coach.since}",
-                email="{coach.email}",
-                phonenumber="{coach.phone_number}",
-                img_url='{coach.img_url}',
-                modified="{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}"
-            WHERE coachid={coach_id}
-        """
+        query = self._build_update_query(coach, coach_id)
         success, _ = self.__client.execute_query(query, commit_candidate=True)
-
-        if not success:
-            return False
-
-        return True
+        return True if not success else False
 
     def delete_coach(self, coach_id: str) -> str | CoachDoesNotExist:
+        coach_id = self.coach_exists(coach_id)
         query = f"DELETE FROM {COACHES_TABLE_NAME} WHERE coachid='{coach_id}'"
         success = self.__client.execute_query(query, commit_candidate=True)
-
-        if not success:
-            return False
-
-        return True
+        return True if not success else False
 
     def coach_exists(
         self, coach_id: str = None, first_name: str = None, last_name: str = None
@@ -125,13 +113,12 @@ class CoachesDatabaseInterface:
 
         if coach_id is None:
             query += f"firstname='{first_name}' AND lastname='{last_name}'"
-
         else:
             query += f"coachid='{coach_id}'"
 
-        success, team = self.__client.execute_query(query, return_results=True)
+        success, coach = self.__client.execute_query(query, return_results=True)
 
-        if not success or (len(team) == 0 or team is None):
+        if not success or (len(coach) == 0 or coach is None):
             raise CoachDoesNotExist(
                 f"""
                 Coach does not exist with these fields:
@@ -139,4 +126,4 @@ class CoachesDatabaseInterface:
                 """
             )
 
-        return team[0][0]
+        return coach[0][0]

@@ -9,7 +9,7 @@ class PlayerRequestValidationError(Exception):
 
 
 class PlayerDoesNotExist(Exception):
-    def __init__(self, message=None):
+    def __init__(self, message=None, invalid_player_id: str = None) -> None:
         self.__message = message
         super().__init__(self.__message)
 

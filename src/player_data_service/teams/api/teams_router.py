@@ -1,5 +1,8 @@
 from fastapi import APIRouter
+from teams.api.controllers.teams_coaches_controller import TeamCoachesController
+from teams.api.controllers.teams_composite_controller import CompositeTeamsController
 from teams.api.controllers.teams_controller import TeamController
+from teams.api.controllers.teams_players_controller import TeamPlayersController
 
 API_VERSION = "v0"
 TEAMS_ROUTER = APIRouter(prefix=f"/team/{API_VERSION}")
@@ -32,6 +35,41 @@ TEAMS_ROUTER.add_api_route(
             },
         }
     },
+)
+TEAMS_ROUTER.add_api_route(
+    path="/player",
+    endpoint=TeamPlayersController.add_player_to_team_roster,
+    methods=["POST"],
+    tags=["teams"],
+    responses={
+        201: {
+            "description": "Player successfully added to team roster",
+            "content": {
+                "application/json": {
+                    "example": [
+                        {
+                            "status": 201,
+                            "data": [
+                                {
+                                    "team_id": "fb344330-0e2a-4348-9665-9061cae42aab",
+                                    "player_id": "a2bf04fa-bf47-46a5-90ef-c25bcc8df56c",
+                                    "year": 2018,
+                                    "number": 6,
+                                    "position": "A",
+                                }
+                            ],
+                        }
+                    ]
+                }
+            },
+        }
+    },
+)
+TEAMS_ROUTER.add_api_route(
+    path="/coach",
+    endpoint=TeamCoachesController.add_coach_to_team_roster,
+    methods=["GET"],
+    tags=["teams"],
 )
 TEAMS_ROUTER.add_api_route(
     path="/",
@@ -103,4 +141,10 @@ TEAMS_ROUTER.add_api_route(
             "description": "Teams successfully deleted from the database",
         }
     },
+)
+TEAMS_ROUTER.add_api_route(
+    path="/teams",
+    endpoint=CompositeTeamsController.get_composite_team,
+    methods=["GET"],
+    tags=["teams"],
 )

@@ -8,10 +8,6 @@ from errors.statistics_errors import (
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from stats.api.validators.statistics_query_validator import (
-    validate_get_game_statistics_query_parameters,
-    validate_get_season_statistics_query_parameters,
-)
 from stats.mappers.statistics_mapper import (
     game_statistics_DAO_to_game_statistics_DTO,
     season_statistics_DAO_to_season_statistics_DTO,
@@ -19,6 +15,10 @@ from stats.mappers.statistics_mapper import (
 from stats.models.dto.game_statistics import GameStatistics
 from stats.models.dto.season_statistics import SeasonStatistics
 from stats.statistics_db_interface import StatisticsDatabaseInterface
+from validators.statistics_query_validator import (
+    validate_get_game_statistics_query_parameters,
+    validate_get_season_statistics_query_parameters,
+)
 
 from bin.logger import Logger
 
@@ -132,12 +132,14 @@ class StatisticsController:
             status_code=200,
             content={
                 "status": 200,
-                "data": []
-                if (statistics == []) or (statistics is None)
-                else [
-                    jsonable_encoder(game_statistics_DAO_to_game_statistics_DTO(statistic))
-                    for statistic in statistics
-                ],
+                "data": (
+                    []
+                    if (statistics == []) or (statistics is None)
+                    else [
+                        jsonable_encoder(game_statistics_DAO_to_game_statistics_DTO(statistic))
+                        for statistic in statistics
+                    ]
+                ),
             },
         )
 
@@ -159,12 +161,14 @@ class StatisticsController:
             status_code=200,
             content={
                 "status": 200,
-                "data": []
-                if (statistics == []) or (statistics is None)
-                else [
-                    jsonable_encoder(season_statistics_DAO_to_season_statistics_DTO(statistic))
-                    for statistic in statistics
-                ],
+                "data": (
+                    []
+                    if (statistics == []) or (statistics is None)
+                    else [
+                        jsonable_encoder(season_statistics_DAO_to_season_statistics_DTO(statistic))
+                        for statistic in statistics
+                    ]
+                ),
             },
         )
 

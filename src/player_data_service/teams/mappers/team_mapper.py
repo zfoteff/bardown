@@ -1,5 +1,11 @@
+from typing import List
+
+from players.models.dto.coach import Coach
+from players.models.dto.player import Player
+from teams.models.dao.composite_team import CompositeTeam as CompositeTeamDAO
 from teams.models.dao.team import Team as TeamDAO
 from teams.models.dto.composite_team import CompositeTeam as CompositeTeamDTO
+from teams.models.dto.composite_team import Roster
 from teams.models.dto.team import Team as TeamDTO
 
 
@@ -18,9 +24,80 @@ def team_DAO_to_team_DTO(team_dao: TeamDAO) -> TeamDTO:
     )
 
 
-def composite_team_DTO_to_composite_team_DAO(composite_team_dto: CompositeTeamDTO):
-    pass
+def composite_team_DAO_to_composite_team_DTO(
+    composite_team_dao: CompositeTeamDAO,
+) -> List[CompositeTeamDTO]:
+    roster_data = {}
 
+    for player in composite_team_dao.players:
+        player_object = Player(
+            player_id=player.player_id,
+            first_name=player.first_name,
+            last_name=player.last_name,
+            position=player.position,
+            number=player.number,
+            grade=player.grade,
+            school=player.school,
+            imgurl=player.img_url,
+        )
 
-# def composite_team_DAO_to_composite_team_DTO(composite_team_dao: CompositeTeamDAO):
-#     pass
+        key = (player.team_id, player.year)
+
+        if roster_data.get(key) is None:
+            roster_data[(player.team_id, player.year)] = {
+                "team_id": player.team_id,
+                "name": player.team_name,
+                "location": player.team_location,
+                "img_url": player.team_img_url,
+                "players": [],
+                "coaches": [],
+            }
+
+        roster_data[key]["players"].append(player_object)
+
+    for coach in composite_team_dao.coaches:
+        coach_object = Coach(
+            coach_id=coach.coach_id,
+            first_name=coach.first_name,
+            last_name=coach.last_name,
+            role=coach.role,
+            since=coach.since,
+            email=coach.email,
+            phone_number=coach.phone_number,
+            imgurl=coach.img_url,
+        )
+
+        key = (coach.team_id, coach.year)
+
+        if roster_data.get(key) is None:
+            roster_data[(coach.team_id, coach.year)] = {
+                "team_id": coach.team_id,
+                "name": coach.team_name,
+                "location": coach.team_location,
+                "img_url": coach.team_img_url,
+                "players": [],
+                "coaches": [],
+            }
+
+        roster_data[key]["coaches"].append(coach_object)
+
+    teams = {}
+    for team_id, year in roster_data:
+        roster = Roster(
+            year=year,
+            players=roster_data[(team_id, year)].get("players"),
+            coaches=roster_data[(team_id, year)].get("coaches"),
+        )
+
+        if teams.get(team_id) is None:
+            teams[team_id] = CompositeTeamDTO(
+                team_id=roster_data[(team_id, year)]["team_id"],
+                name=roster_data[(team_id, year)]["name"],
+                location=roster_data[(team_id, year)]["location"],
+                img_url=roster_data[(team_id, year)]["img_url"],
+                rosters=[roster],
+            )
+        else:
+            teams[team_id].roster.append(roster)
+
+    return list(teams.values())

@@ -73,7 +73,7 @@ class PlayerDataServiceProvider:
 
         return players
 
-    async def get_player_by_filters(self, player_id: str) -> Tuple[Player, CompositeStatistics]:
+    async def get_player_with_statistics_by_filters(self, player_id: str) -> Tuple[Player, CompositeStatistics]:
         """
         Get player with associated statistics for games and seasons
         """
@@ -148,6 +148,8 @@ class PlayerDataServiceProvider:
                 self._cache_client.cache_response(url=full_request_url, response=response)
 
         return teams
+
+    # async def get_team_with_players_and_coaches_by_filters(self, team_id: str) -> Tuple[Team, CompositeTeam]:
 
     async def get_games_by_filters(self, filters: GameFilters) -> List[Game]:
         url = ClientUrl("GET", path="game/v0/", config=self._player_data_service_config)

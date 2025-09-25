@@ -46,8 +46,6 @@ class StatisticsDatabaseInterface:
             host=config.mysql_host,
             table=SEASON_STATISTICS_TABLE_NAME,
         )
-        self.__game_client.open_connection()
-        self.__season_client.open_connection()
 
     def __enter__(self) -> None:
         self.__game_client.open_connection()
@@ -212,14 +210,14 @@ class StatisticsDatabaseInterface:
             season_query, return_results=True
         )
 
-        query_success = True
+        composite_query_success = True
 
         if not game_success:
-            query_success = False
+            composite_query_success = False
             game_result = []
 
         if not season_success:
-            query_success = False
+            composite_query_success = False
             season_result = []
 
         game_stats = [
@@ -235,7 +233,9 @@ class StatisticsDatabaseInterface:
             for composite_season_statistics_data in season_result
         ]
 
-        return query_success, CompositeStatistics(game_stats=game_stats, season_stats=season_stats)
+        return composite_query_success, CompositeStatistics(
+            game_stats=game_stats, season_stats=season_stats
+        )
 
     def update_game_statistics(
         self, player_id: str, game_statistics: GameStatisticsDTO
