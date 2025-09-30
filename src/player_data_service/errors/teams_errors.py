@@ -9,8 +9,9 @@ class TeamValidationError(Exception):
 
 
 class TeamDoesNotExist(Exception):
-    def __init__(self, message=None):
+    def __init__(self, message=None, invalid_team_id: str = None):
         self.__message = message
+        self.invalid_team_id = invalid_team_id
         super().__init__(self.__message)
 
 

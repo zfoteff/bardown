@@ -11,6 +11,7 @@ class PlayerRequestValidationError(Exception):
 class PlayerDoesNotExist(Exception):
     def __init__(self, message=None, invalid_player_id: str = None) -> None:
         self.__message = message
+        self.invalid_player_id = invalid_player_id
         super().__init__(self.__message)
 
 

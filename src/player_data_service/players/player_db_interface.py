@@ -11,7 +11,7 @@ from players.models.dao.player import Player as PlayerDAO
 from players.models.dto.player import Player as PlayerDTO
 from players.models.players_request_filters import PlayersRequestFilters
 from typing_extensions import Annotated
-from utils.db_utils import build_update_fields
+from bin.db_utils import build_update_fields
 
 
 class PlayerDatabaseInterface:

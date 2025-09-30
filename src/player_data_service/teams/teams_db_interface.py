@@ -24,7 +24,7 @@ from teams.models.team_request_filters import (
     TeamRequestFilters,
 )
 from typing_extensions import Annotated
-from utils.db_utils import build_update_fields
+from bin.db_utils import build_update_fields
 
 from bin.logger import Logger
 

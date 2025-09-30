@@ -11,7 +11,7 @@ from games.models.dao.game import Game as GameDAO
 from games.models.dto.game import Game as GameDTO
 from games.models.game_request_filters import GameRequestFilters
 from typing_extensions import Annotated
-from utils.db_utils import build_update_fields
+from bin.db_utils import build_update_fields
 
 
 class GamesDBInterface:

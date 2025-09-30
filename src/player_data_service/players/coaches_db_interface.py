@@ -11,7 +11,7 @@ from players.models.coaches_request_filters import CoachesRequestFilters
 from players.models.dao.coach import Coach as CoachDAO
 from players.models.dto.coach import Coach as CoachDTO
 from typing_extensions import Annotated
-from utils.db_utils import build_update_fields
+from bin.db_utils import build_update_fields
 
 
 class CoachesDatabaseInterface:
