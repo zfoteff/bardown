@@ -60,3 +60,6 @@ class TeamPlayersController:
             status_code=201,
             content={"status": 201, "data": jsonable_encoder(validated_team_player_request)},
         )
+
+    async def remove_player_from_team_roster(team_id: str, player_id: str) -> JSONResponse:
+        pass

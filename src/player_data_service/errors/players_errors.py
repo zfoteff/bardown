@@ -2,7 +2,7 @@ from typing import List
 
 
 class PlayerRequestValidationError(Exception):
-    def __init__(self, message=None, invalid_fields: List = None):
+    def __init__(self, message=None, invalid_fields: List[str] = None):
         self.__message = message
         self.invalid_fields = invalid_fields
         super().__init__(self.__message)
