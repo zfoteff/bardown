@@ -50,7 +50,7 @@ class TeamCoachesController:
                 content={
                     "status": 403,
                     "error": {
-                        "message": f"{err}",
+                        "message": "Database Error",
                         "team_id": f"{validated_team_coach_request.team_id}",
                     },
                 },
@@ -60,3 +60,9 @@ class TeamCoachesController:
             status_code=201,
             content={"status": 201, "data": jsonable_encoder(validated_team_coach_request)},
         )
+
+    async def remove_coach_from_team_roster(team_id: str, coach_id: str) -> JSONResponse:
+        try:
+            result = teams_db_interface.remove_coach_from_team(team_id, coach_id)
+        except TeamDoesNotExist or CoachDoesNotExist as err:
+            pass

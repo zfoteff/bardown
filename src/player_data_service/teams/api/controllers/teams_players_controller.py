@@ -50,7 +50,7 @@ class TeamPlayersController:
                 content={
                     "status": 409,
                     "error": {
-                        "message": f"{err}",
+                        "message": "Database Error",
                         "team_id": f"{validated_team_player_request.team_id}",
                     },
                 },
@@ -62,4 +62,7 @@ class TeamPlayersController:
         )
 
     async def remove_player_from_team_roster(team_id: str, player_id: str) -> JSONResponse:
-        pass
+        try:
+            result =
+        except TeamDoesNotExist or PlayerDoesNotExist as err:
+            pass
