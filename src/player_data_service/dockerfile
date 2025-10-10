@@ -7,7 +7,8 @@ WORKDIR /player-data-service
 
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir --upgrade -r /player-data-service/requirements.txt
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+RUN uv pip install --no-cache-dir --upgrade -r /player-data-service/requirements.txt
 
 COPY . .
 
