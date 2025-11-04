@@ -1,3 +1,4 @@
+from fastapi import Response
 from errors.players_errors import PlayerDoesNotExist
 from errors.teams_errors import TeamDoesNotExist, TeamValidationError
 from fastapi.encoders import jsonable_encoder
@@ -23,20 +24,20 @@ class TeamPlayersController:
             )
         except PlayerDoesNotExist as err:
             return JSONResponse(
-                status_code=409,
+                status_code=404,
                 content={
-                    "status": 409,
+                    "status": 404,
                     "error": {
                         "message": f"{err}",
-                        "team_id": f"{validated_team_player_request.player_id}",
+                        "player_id": f"{validated_team_player_request.player_id}",
                     },
                 },
             )
         except TeamDoesNotExist as err:
             return JSONResponse(
-                status_code=409,
+                status_code=404,
                 content={
-                    "status": 409,
+                    "status": 404,
                     "error": {
                         "message": f"{err}",
                         "team_id": f"{validated_team_player_request.team_id}",
@@ -51,7 +52,6 @@ class TeamPlayersController:
                     "status": 409,
                     "error": {
                         "message": "Database Error",
-                        "team_id": f"{validated_team_player_request.team_id}",
                     },
                 },
             )
@@ -63,6 +63,33 @@ class TeamPlayersController:
 
     async def remove_player_from_team_roster(team_id: str, player_id: str) -> JSONResponse:
         try:
-            result =
-        except TeamDoesNotExist or PlayerDoesNotExist as err:
-            pass
+            result = teams_db_interface.remove_player_from_team()
+        except PlayerDoesNotExist as err:
+            return JSONResponse(
+                status_code=404,
+                content={
+                    "status": 404,
+                    "error": {
+                        "message": f"{err}",
+                        "player_id": f"{player_id}",
+                    },
+                },
+            )
+        except TeamDoesNotExist as err:
+            return JSONResponse(
+                status_code=404,
+                content={
+                    "status": 404,
+                    "error": {
+                        "message": f"{err}",
+                        "team_id": f"{team_id}",
+                    },
+                },
+            )
+
+        if not result:
+            return JSONResponse(
+                status_code=409, content={"status": 409, "error": {"message": "Database Error"}}
+            )
+
+        return Response(status_code=204)

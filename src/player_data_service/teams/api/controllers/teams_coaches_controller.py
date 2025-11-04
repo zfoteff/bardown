@@ -1,3 +1,4 @@
+from fastapi import Response
 from errors.coaches_errors import CoachDoesNotExist
 from errors.teams_errors import TeamDoesNotExist, TeamValidationError
 from fastapi.encoders import jsonable_encoder
@@ -46,14 +47,7 @@ class TeamCoachesController:
 
         if not result:
             return JSONResponse(
-                status_code=403,
-                content={
-                    "status": 403,
-                    "error": {
-                        "message": "Database Error",
-                        "team_id": f"{validated_team_coach_request.team_id}",
-                    },
-                },
+                status_code=409, content={"status": 409, "error": {"message": "Database Error"}}
             )
 
         return JSONResponse(
@@ -64,5 +58,32 @@ class TeamCoachesController:
     async def remove_coach_from_team_roster(team_id: str, coach_id: str) -> JSONResponse:
         try:
             result = teams_db_interface.remove_coach_from_team(team_id, coach_id)
-        except TeamDoesNotExist or CoachDoesNotExist as err:
-            pass
+        except CoachDoesNotExist as err:
+            return JSONResponse(
+                status_code=404,
+                content={
+                    "status": 404,
+                    "error": {
+                        "message": f"{err}",
+                        "coach_id": f"{coach_id}",
+                    },
+                },
+            )
+        except TeamDoesNotExist as err:
+            return JSONResponse(
+                status_code=404,
+                content={
+                    "status": 404,
+                    "error": {
+                        "message": f"{err}",
+                        "team_id": f"{team_id}",
+                    },
+                },
+            )
+
+        if not result:
+            return JSONResponse(
+                status_code=409, content={"status": 409, "error": {"message": "Database Error"}}
+            )
+
+        return Response(status_code=204)

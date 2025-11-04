@@ -13,5 +13,5 @@ jobs:
     uses: zfoteff/clackamas-lacrosse-application/.github/workflows/ci_python.yaml@develop
     with:
       WORKING_DIR: ./src/player_data_service
-      IMAGE_NAME: player_data_service
+      APPLICATION_NAME: player_data_service
     secrets: inherit

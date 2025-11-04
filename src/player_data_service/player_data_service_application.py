@@ -28,6 +28,8 @@ class PlayerDataServiceApplication:
         self.version = __version__
         self.debug = application_config.debug
         self.log_level = application_config.log_level
+        self.host = application_config.app_host
+        self.port = application_config.app_port
         self._routes = [
             DEFAULT_ROUTER,
             GAMES_ROUTER,

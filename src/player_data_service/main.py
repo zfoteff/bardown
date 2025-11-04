@@ -11,7 +11,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
         description="""
-        Data interface for the Bardown application. Run with no arguments to start API for CRUD operations
+        Data interface for the Bardown application. Run with no arguments to start API
+        for CRUD operations
     """
     )
     parser.add_argument(
@@ -28,8 +29,8 @@ if __name__ == "__main__":
         run(
             app=player_data_service.app,
             log_level=player_data_service.log_level,
-            host="0.0.0.0",
-            port="3001",
+            host=player_data_service.host,
+            port=player_data_service.port,
             workers=1,
-            reload=True,
+            reload=player_data_service.debug,
         )

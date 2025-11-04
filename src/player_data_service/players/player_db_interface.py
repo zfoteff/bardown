@@ -97,24 +97,23 @@ class PlayerDatabaseInterface:
         query = self._build_query_from_filters(filters)
         success, result = self.__client.execute_query(query, return_results=True)
 
-        if not success:
-            return False, []
-
-        players = [PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result]
-
-        return True, players
+        return (
+            (False, [])
+            if not success
+            else (True, [PlayerDAO.from_tuple(player_tuple=player_data) for player_data in result])
+        )
 
     def update_player(self, player: PlayerDTO, player_id: str) -> bool | PlayerDoesNotExist:
         player_id = self.player_exists(player_id)
         query = self._build_update_query(player, player_id)
         success, _ = self.__client.execute_query(query, commit_candidate=True)
-        return True if not success else False
+        return True if success else False
 
     def delete_players(self, player_id: str) -> bool | PlayerDoesNotExist:
         player_id = self.player_exists(player_id)
         query = f"DELETE FROM {PLAYERS_TABLE_NAME} WHERE playerid='{player_id}'"
         success = self.__client.execute_query(query, commit_candidate=True)
-        return True if not success else False
+        return True if success else False
 
     def player_exists(
         self, player_id: str = None, first_name: str = None, last_name: str = None

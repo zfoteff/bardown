@@ -5,6 +5,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class PlayerDataServiceBaseConfig(BaseSettings):
     app_name: str = "Player Data Service"
+    app_host: str = "0.0.0.0"
+    app_port: str = "3001"
     debug: bool = True
     profile: str = "local"
     mysql_host: str
