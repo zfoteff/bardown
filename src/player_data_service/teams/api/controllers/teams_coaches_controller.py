@@ -45,14 +45,15 @@ class TeamCoachesController:
                 },
             )
 
-        if not result:
-            return JSONResponse(
+        return (
+            JSONResponse(
+                status_code=201,
+                content={"status": 201, "data": jsonable_encoder(validated_team_coach_request)},
+            )
+            if result
+            else JSONResponse(
                 status_code=409, content={"status": 409, "error": {"message": "Database Error"}}
             )
-
-        return JSONResponse(
-            status_code=201,
-            content={"status": 201, "data": jsonable_encoder(validated_team_coach_request)},
         )
 
     async def remove_coach_from_team_roster(team_id: str, coach_id: str) -> JSONResponse:
@@ -81,9 +82,10 @@ class TeamCoachesController:
                 },
             )
 
-        if not result:
-            return JSONResponse(
+        return (
+            Response(status_code=204)
+            if result
+            else JSONResponse(
                 status_code=409, content={"status": 409, "error": {"message": "Database Error"}}
             )
-
-        return Response(status_code=204)
+        )

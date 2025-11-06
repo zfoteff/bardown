@@ -14,6 +14,10 @@ class ClientUrl:
         return self.__method
 
     @property
+    def path(self) -> str:
+        return self.__path
+
+    @property
     def url(self) -> str:
         """
         Create base path for all requests based on environment configuration

@@ -10,7 +10,7 @@ logger = Logger("test")
 def test_create_empty_player_filters() -> None:
     filters = PlayersFilters()
     logger.debug(filters.to_dict())
-    assert filters.to_dict() == {}
+    assert filters.to_dict() == {"limit": 40, "offset": 0}
 
 
 @timed(logger)
@@ -28,6 +28,8 @@ def test_create_player_filters_will_all_values() -> None:
         "filter.number": str.join(",", test_numbers),
         "filter.position": str.join(",", test_positions),
         "filter.grade": str.join(",", test_grades),
+        "limit": 40,
+        "offset": 0,
     }
 
     filters = PlayersFilters(
@@ -49,12 +51,14 @@ def test_create_player_filters_will_all_values() -> None:
 @timed(logger)
 def test_create_player_filter_with_empty_values():
     filters = PlayersFilters(
-        player_ids=[],
-        first_names=[],
-        last_names=[],
-        numbers=[],
-        positions=[],
-        grades=[],
+        player_ids=None,
+        first_names=None,
+        last_names=None,
+        numbers=None,
+        positions=None,
+        grades=None,
+        limit=None,
+        offset=None,
     )
 
     logger.debug(filters.to_dict())
@@ -72,6 +76,8 @@ def test_create_player_filter_with_some_empty_values():
         "filter.playerId": str.join(",", test_player_ids),
         "filter.number": str.join(",", test_numbers),
         "filter.grade": str.join(",", test_grades),
+        "limit": 40,
+        "offset": 0,
     }
 
     filters = PlayersFilters(

@@ -1,4 +1,4 @@
-from client.client_url import ClientURL
+from client.client_url import ClientUrl
 from config.player_data_service_config import PlayerDataServiceConfig
 from tests.bin.decorators.timed import timed
 
@@ -11,29 +11,14 @@ logger = Logger("test")
 def test_valid_endpoint_config() -> None:
     config = PlayerDataServiceConfig("123")
     config2 = PlayerDataServiceConfig()
-    config2.base_url = "456"
-    assert config.base_url == "123"
-    assert config2.base_url == "456"
+    config2.host = "456"
+    assert config.host == "123"
+    assert config2.host == "456"
 
 
 @timed(logger)
-def test_create_valid_client_url_with_required_fields() -> None:
-    url = ClientURL("/path", "GET")
+def test_create_valid_client_url_with_empty_config() -> None:
+    config = PlayerDataServiceConfig()
+    url = ClientUrl("/path", "GET", config)
     assert url.path == "/path"
     assert url.method == "GET"
-    assert url.path_parameters is None
-    assert url.query_parameters is None
-
-
-@timed(logger)
-def test_create_valid_client_url_with_optional_fields() -> None:
-    path_params = ["e98cf157-d1cf-42fd-9dd4-39aa9979d864"]
-    query_params = {"filter.number": 6, "filter.position": "Attack"}
-    url = ClientURL("/path", "GET", path_params, query_params)
-    assert url.path == "path"
-    assert url.method == "GET"
-    assert "e98cf157-d1cf-42fd-9dd4-39aa9979d864" in url.path_parameters
-    assert (
-        "filter.number" in url.query_parameters.keys()
-        and "filter.position" in url.query_parameters.keys()
-    )

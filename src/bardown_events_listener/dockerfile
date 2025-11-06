@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -8,7 +8,7 @@ WORKDIR /bardown-events-listener
 COPY requirements.txt  /app/requirements.txt
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
-RUN uv pip install --no-cache-dir --upgrade -r /app/requirements.txt
+RUN uv pip install --no-cache-dir --system --upgrade -r /app/requirements.txt
 
 COPY . /app/
 

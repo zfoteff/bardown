@@ -38,6 +38,13 @@ class PlayerDataServiceRequest:
         return "?" + urlencode(self.construct_query_parameters())
 
     @property
+    def uri(self) -> str:
+        uri = self._url.url
+
+        if self.path_parameters is not None and len(self.path_parameters) > 0:
+            
+
+    @property
     def path_parameters(self) -> Dict:
         return self._path_parameters
 
@@ -108,10 +115,6 @@ class PlayerDataServiceRequest:
     @url.setter
     def url(self, new_url: ClientUrl) -> None:
         self._url = new_url
-
-    @property
-    def url_path(self) -> str:
-        return self._url
 
     @property
     def method(self) -> str:

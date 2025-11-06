@@ -1,5 +1,3 @@
-"""Shared pytest fixtures for player_data_service tests."""
-
 from unittest.mock import Mock, patch
 
 import pytest
