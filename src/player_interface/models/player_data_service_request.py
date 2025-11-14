@@ -42,6 +42,7 @@ class PlayerDataServiceRequest:
         uri = self._url.url
 
         if self.path_parameters is not None and len(self.path_parameters) > 0:
+            uri += 
             
 
     @property
