@@ -18,14 +18,14 @@ class PlayerDataServiceRequest:
     def __init__(
         self,
         url: ClientUrl,
-        path_parameters: Dict = None,
+        path_parameters: str = None,
         query_parameters: Dict = None,
         request_body: Dict = None,
         pagination: Pagination = None,
         ordering: OrderingRules = None,
     ) -> Self:
         self._url = url
-        self._path_parameters = path_parameters if path_parameters is not None else dict()
+        self._path_parameters = path_parameters
         self._query_parameters = query_parameters if query_parameters is not None else dict()
         self._request_body = request_body if request_body is not None else dict()
         self._pagination = pagination if pagination is not None else Pagination(limit=40)
