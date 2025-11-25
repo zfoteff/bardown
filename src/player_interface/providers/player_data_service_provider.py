@@ -41,25 +41,32 @@ class PlayerDataServiceProvider:
         self._player_data_service_client = PlayerDataServiceClient()
         self._cache_client = CacheClient()
         self._player_data_service_config = player_data_service_config
+        self._get_player_url: ClientUrl = ClientUrl(
+            "GET",
+            path="players/v0/player",
+            config=player_data_service_config,
+        )
+        self._get_statistics_url: ClientUrl = ClientUrl(
+            "GET", path="statistics/v0/statistics", config=player_data_service_config
+        )
+        self._get_team_url: ClientUrl = ClientUrl(
+            "GET", path="team/v0/", config=self._player_data_service_config
+        )
 
     async def get_players_by_filters(self, filters: PlayersFilters) -> List[Player]:
         """
         Create request for the get by filters endpoint of the player interface:
         """
-        url = ClientUrl(
-            "GET",
-            path="players/v0/player",
-            config=self._player_data_service_config,
+        get_player_request = PlayerDataServiceRequest(
+            url=self._get_player_url, query_parameters=filters.to_dict()
         )
-        request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
-        full_request_url = url.url + request.query_string()
 
-        cache_result, response = self._cache_client.retrieve_response(full_request_url)
+        cache_result, response = self._cache_client.retrieve_response(get_player_request.uri)
 
         if not cache_result:
             # If url dne in cache, make request to PDS
             response = await self._player_data_service_client.exchange_with_query_parameters(
-                request
+                get_player_request
             )
 
         players = list()
@@ -69,44 +76,40 @@ class PlayerDataServiceProvider:
             players = player_data_service_response_to_players(response.data)
             if not cache_result:
                 # If a there was a cache miss then cache the url and response
-                self._cache_client.cache_response(url=full_request_url, response=response)
+                self._cache_client.cache_response(url=get_player_request.uri, response=response)
 
         return players
 
-    async def get_player_with_statistics_by_filters(self, player_id: str) -> Tuple[Player, CompositeStatistics]:
+    async def get_player_with_statistics_by_filters(
+        self, player_id: str
+    ) -> Tuple[Player, CompositeStatistics]:
         """
         Get player with associated statistics for games and seasons
         """
-        get_player_url = ClientUrl(
-            "GET", path="players/v0/player", config=self._player_data_service_config
-        )
-        get_statistics_url = ClientUrl(
-            "GET", path="statistics/v0/statistics", config=self._player_data_service_config
-        )
         player_request = PlayerDataServiceRequest(
-            url=get_player_url, query_parameters={"filter.playerId": player_id}
+            url=self._get_player_url, query_parameters={"filter.playerId": player_id}
         )
         statistics_request = PlayerDataServiceRequest(
-            url=get_statistics_url, query_parameters={"filter.player.playerId": player_id}
+            url=self._get_statistics_url, query_parameters={"filter.player.playerId": player_id}
         )
         player_cache_result, get_player_response = self._cache_client.retrieve_response(
-            get_player_url.url + player_request.query_string()
+            statistics_request.uri
         )
         statistics_cache_result, get_statistics_response = self._cache_client.retrieve_response(
-            get_statistics_url.url + statistics_request.query_string()
+            statistics_request.uri
         )
 
         if not player_cache_result:
             get_player_response = (
                 await self._player_data_service_client.exchange_with_query_parameters(
-                    player_request
+                    player_request.uri
                 )
             )
 
         if not statistics_cache_result:
             get_statistics_response = (
                 await self._player_data_service_client.exchange_with_query_parameters(
-                    statistics_request
+                    statistics_request.uri
                 )
             )
 
@@ -126,16 +129,16 @@ class PlayerDataServiceProvider:
         """
         Create request for the get by filters endpoint of the teams interface:
         """
-        url = ClientUrl("GET", path="team/v0/", config=self._player_data_service_config)
-        request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
-        full_request_url = url.url + request.query_string()
+        get_team_request = PlayerDataServiceRequest(
+            url=self._get_team_url, query_parameters=filters.to_dict()
+        )
 
-        result, response = self._cache_client.retrieve_response(full_request_url)
+        result, response = self._cache_client.retrieve_response(get_team_request.uri)
 
         if not result:
             # If URL dne in cache, make request to PDS
             response = await self._player_data_service_client.exchange_with_query_parameters(
-                request
+                get_team_request
             )
 
         teams = list()
@@ -145,7 +148,7 @@ class PlayerDataServiceProvider:
         else:
             teams = player_data_sevice_response_to_teams(response.data)
             if not result:
-                self._cache_client.cache_response(url=full_request_url, response=response)
+                self._cache_client.cache_response(url=get_team_request.uri, response=response)
 
         return teams
 
