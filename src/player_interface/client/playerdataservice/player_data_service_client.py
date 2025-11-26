@@ -11,17 +11,17 @@ logger = Logger("player-data-service-client")
 class PlayerDataServiceClient:
     async def exchange_with_query_parameters(
         self,
-        req: PlayerDataServiceRequest,
+        request: PlayerDataServiceRequest,
     ) -> PlayerDataServiceResponse:
         """
         Call the get by filters endpoint of the PDS
         """
         try:
             res = request(
-                method=req.method,
-                url=req.url.url,
-                params=req.construct_query_parameters(),
-                timeout=req.url.connect_timeout_in_ms,
+                method=request.method,
+                url=request.url.url,
+                params=request.construct_query_parameters(),
+                timeout=request.url.connect_timeout_in_ms,
             )
 
             if res.status_code != 200:

@@ -12,7 +12,7 @@ class PlayerDataServiceConfig:
     ) -> Self:
         from os import environ
 
-        self.host = host if host is not None else self.host=environ["PLAYER_DATA_SERVICE_HOST"]
+        self.host = host if host is not None else environ["PLAYER_DATA_SERVICE_HOST"]
         self.tls_enabled = tls_enabled
         self.connect_timeout_ms = connect_timeout_ms
         self.read_timeout_ms = read_timeout_ms

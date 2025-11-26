@@ -19,12 +19,12 @@ class ClientUrl:
 
     @property
     def url(self) -> str:
-        """
-        Create base path for all requests based on environment configuration
-        """
-        protocol = "https://" if self.__config.tls_enabled else "http://"
-        return f"{protocol}{self.__config.host}/{self.__path}"
+        return f"{"https://" if self.__config.tls_enabled else "http://"}{self.__config.host}/{self.__path}"
 
     @property
     def connect_timeout_in_ms(self) -> int:
         return self.__config.connect_timeout_ms
+
+    @property
+    def read_timeout_in_ms(self) -> int:
+        return self.__config.read_timeout_ms

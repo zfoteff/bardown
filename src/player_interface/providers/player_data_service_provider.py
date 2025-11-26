@@ -52,6 +52,12 @@ class PlayerDataServiceProvider:
         self._get_team_url: ClientUrl = ClientUrl(
             "GET", path="team/v0/", config=self._player_data_service_config
         )
+        self._get_game_url: ClientUrl = ClientUrl(
+            "GET", path="game/v0/", config=self._player_data_service_config
+        )
+        self._health_url: ClientUrl = ClientUrl(
+            "GET", path="health/", config=self._player_data_service_client
+        )
 
     async def get_players_by_filters(self, filters: PlayersFilters) -> List[Player]:
         """
@@ -64,7 +70,6 @@ class PlayerDataServiceProvider:
         cache_result, response = self._cache_client.retrieve_response(get_player_request.uri)
 
         if not cache_result:
-            # If url dne in cache, make request to PDS
             response = await self._player_data_service_client.exchange_with_query_parameters(
                 get_player_request
             )
@@ -75,7 +80,6 @@ class PlayerDataServiceProvider:
         else:
             players = player_data_service_response_to_players(response.data)
             if not cache_result:
-                # If a there was a cache miss then cache the url and response
                 self._cache_client.cache_response(url=get_player_request.uri, response=response)
 
         return players
@@ -93,7 +97,7 @@ class PlayerDataServiceProvider:
             url=self._get_statistics_url, query_parameters={"filter.player.playerId": player_id}
         )
         player_cache_result, get_player_response = self._cache_client.retrieve_response(
-            statistics_request.uri
+            player_request.uri
         )
         statistics_cache_result, get_statistics_response = self._cache_client.retrieve_response(
             statistics_request.uri
@@ -155,15 +159,14 @@ class PlayerDataServiceProvider:
     # async def get_team_with_players_and_coaches_by_filters(self, team_id: str) -> Tuple[Team, CompositeTeam]:
 
     async def get_games_by_filters(self, filters: GameFilters) -> List[Game]:
-        url = ClientUrl("GET", path="game/v0/", config=self._player_data_service_config)
-        request = PlayerDataServiceRequest(url=url, query_parameters=filters.to_dict())
-        full_request_url = url.url + request.query_string()
-
-        result, response = self._cache_client.retrieve_response(full_request_url)
+        get_games_request = PlayerDataServiceRequest(
+            url=self._get_game_url, query_parameters=filters.to_dict()
+        )
+        result, response = self._cache_client.retrieve_response(get_games_request.uri)
 
         if not result:
             response = await self._player_data_service_client.exchange_with_query_parameters(
-                request
+                get_games_request
             )
 
         games = list()
@@ -172,12 +175,11 @@ class PlayerDataServiceProvider:
         else:
             games = player_data_service_response_to_games(response.data)
             if not result:
-                self._cache_client.cache_response(url=full_request_url, response=response)
+                self._cache_client.cache_response(url=get_games_request.uri, response=response)
         return games
 
     async def get_health(self) -> Dict:
-        health_url = ClientUrl("GET", path="health/", config=self._player_data_service_client)
-        response = requests.get(health_url.base_url + health_url.base_path)
+        response = requests.get(self._health_url.url)
         return response.json()
 
     async def get_cache_health(self) -> Dict:
