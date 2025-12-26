@@ -57,6 +57,12 @@ class PlayerController:
             context={"request": request, "data": {"player": player[0], "statistics": statistics}},
         )
 
+    async def render_composite_teams_page(request: Request, team_id: str) -> HTMLResponse:
+        team = await player_data_service_provider.get_composite_team_by_team_id(team_id)
+        return templates.TemplateResponse(
+            "team.html", context={"request": request, "data": {"team": team}}
+        )
+
     async def get_health() -> JSONResponse:
         """Healthcheck for the Player Interface service. Asserts the service is running and has
         connection to the Player Data Service

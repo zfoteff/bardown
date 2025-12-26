@@ -1,11 +1,13 @@
 from typing import Iterable, List
 
+from models.coach import Coach
 from models.composite_game_statistics import CompositeGameStatistics
 from models.composite_season_statistics_full import (
     CompositeSeasonByYear,
     CompositeSeasonStatisticsFull,
 )
 from models.composite_statistics import CompositeStatistics
+from models.composite_team import CompositeTeam, Roster
 from models.game import Game
 from models.player import Player
 from models.player_statistics import PlayerStatistics
@@ -84,4 +86,21 @@ def player_data_service_response_to_composite_statistics(
             if not order_by_year
             else composite_season_to_composite_season_by_year(data["season"])
         ),
+    )
+
+
+def composite_teams_response_to_composite_teams(data: Iterable) -> CompositeTeam:
+    return CompositeTeam(
+        team_id=data["team_id"],
+        name=data["name"],
+        location=data["location"],
+        img_url=data["img_url"],
+        rosters=[
+            Roster(
+                year=roster["year"],
+                players=[Player(**player) for player in roster["players"]],
+                coaches=[Coach(**coach) for coach in roster["coaches"]],
+            )
+            for roster in data["rosters"]
+        ],
     )

@@ -38,6 +38,14 @@ PLAYER_INTERFACE_ROUTER.add_api_route(
 )
 
 PLAYER_INTERFACE_ROUTER.add_api_route(
+    path="/teams/{team_id}",
+    endpoint=PlayerController.render_composite_teams_page,
+    description="Render composite team information page for a single team",
+    methods=["GET"],
+    response_class=HTMLResponse,
+)
+
+PLAYER_INTERFACE_ROUTER.add_api_route(
     path="/games",
     endpoint=PlayerController.render_game_page,
     description="Render games page",

@@ -9,6 +9,7 @@ from config import player_data_service_config
 from config.player_data_service_config import PlayerDataServiceConfig
 from fastapi import Depends
 from mappers.player_response_mapper import (
+    composite_teams_response_to_composite_teams,
     player_data_service_response_to_composite_statistics,
     player_data_service_response_to_games,
     player_data_service_response_to_players,
@@ -57,6 +58,9 @@ class PlayerDataServiceProvider:
         )
         self._health_url: ClientUrl = ClientUrl(
             "GET", path="health/", config=self._player_data_service_client
+        )
+        self._get_composite_teams_url: ClientUrl = ClientUrl(
+            "GET", path="/teams/v0/team", config=self._player_data_service_config
         )
 
     async def get_players_by_filters(self, filters: PlayersFilters) -> List[Player]:
@@ -156,7 +160,25 @@ class PlayerDataServiceProvider:
 
         return teams
 
-    # async def get_team_with_players_and_coaches_by_filters(self, team_id: str) -> Tuple[Team, CompositeTeam]:
+    async def get_composite_team_by_team_id(self, team_id: str) -> Tuple[Team, Compositeteam]:
+        request = PlayerDataServiceRequest(
+            url=self._get_composite_teams_url, query_parameters={"filter.team.id": team_id}
+        )
+        cache_hit, response = self._cache_client.retrieve_response(request.uri)
+
+        if not cache_hit:
+            response = await self._player_data_service_client.exchange_with_query_paramters(request)
+
+        team = None
+        if response is None or response.status != 200:
+            # TODO: Create composite teams error response handler
+            pass
+        else:
+            teams = composite_teams_response_to_composite_teams(response.data)
+            if not cache_hit:
+                self._cache_client.cache_response(url=request.uri, response=response)
+
+        return teams
 
     async def get_games_by_filters(self, filters: GameFilters) -> List[Game]:
         get_games_request = PlayerDataServiceRequest(
