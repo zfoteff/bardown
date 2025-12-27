@@ -3,7 +3,7 @@ from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from games.games_db_interface import GamesDBInterface
-from games.mappers.game_mapper import game_DAO_to_game_DTO
+from games.mappers.game_mapper import game_DAO_to_game_DTO, game_result_DAO_to_game_result_DTO
 from games.models.dto.game import Game
 from validators.games_query_validator import validate_get_games_query_parameters
 
@@ -70,7 +70,23 @@ class GameController:
         try:
             result, game = db_interface.get_game_results(game_id)
         except GameDoesNotExist as err:
+            return JSONResponse(
+                status_code=400, content={"status": 400, "error": {"message": f"{err}"}}
+            )
 
+        if not result:
+            return JSONResponse(
+                status_code=400,
+                content={"status": 400, "error": {"message": "Database error"}},
+            )
+
+        return JSONResponse(
+            status_code=200,
+            content={
+                "status": 200,
+                "data": jsonable_encoder(game_result_DAO_to_game_result_DTO(game)),
+            },
+        )
 
     async def update_game(game_id: str, game: Game) -> JSONResponse:
         try:
