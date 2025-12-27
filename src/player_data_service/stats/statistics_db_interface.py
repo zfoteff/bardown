@@ -46,14 +46,8 @@ class StatisticsDatabaseInterface:
             host=config.mysql_host,
             table=SEASON_STATISTICS_TABLE_NAME,
         )
-
-    def __enter__(self) -> None:
         self.__game_client.open_connection()
         self.__season_client.open_connection()
-
-    def __exit__(self) -> None:
-        self.__game_client.close_connection()
-        self.__season_client.close_connection()
 
     def _build_query_from_game_statistics_filters(
         self, filters: GameStatisticsRequestFilters
@@ -117,7 +111,7 @@ class StatisticsDatabaseInterface:
                 players p
                 inner join team_player tp on p.playerid = tp.playerid
                 inner join teams t on t.teamid=tp.teamid
-                inner join season_statistics s on p.playerid = s.playerid and tp.teamid = s.teamid
+                inner join season_statistics s on p.playerid=s.playerid and tp.teamid=s.teamid
             where 
                 p.playerid="{filters.player_id}"
             order by year DESC
@@ -240,11 +234,13 @@ class StatisticsDatabaseInterface:
     def update_game_statistics(
         self, player_id: str, game_statistics: GameStatisticsDTO
     ) -> str | GameStatisticsDoNoExist:
+        # TODO: Create update game statistics database logic
         pass
 
     def update_season_statistics(
         self, player_id: str, game_statistics: GameStatisticsDTO
     ) -> str | GameStatisticsDoNoExist:
+        # TODO: Create update season statistics database logic
         pass
 
     def delete_game_statistics(self, player_id: str, game_id: str) -> str | StatisticsDoNoExist:
@@ -260,8 +256,7 @@ class StatisticsDatabaseInterface:
         self, player_id: str, team_id: str, year: str
     ) -> str | StatisticsDoNoExist:
         query = f"""
-        DELETE FROM {SEASON_STATISTICS_TABLE_NAME} 
-        WHERE playerid='{player_id}' AND teamid='{team_id}' AND year='{year}'
+        DELETE FROM {SEASON_STATISTICS_TABLE_NAME} WHERE playerid='{player_id}' AND teamid='{team_id}' AND year='{year}'
         """
         success = self.__season_client.execute_query(query, commit_candidate=True)
 

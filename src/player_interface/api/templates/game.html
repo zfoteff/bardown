@@ -1,0 +1,30 @@
+{% extends "index.html" %}
+{% block title %}GAME{% endblock %}
+{% block head %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="/static/stylesheets/game.css" />
+{% endblock %}
+{% block content %}
+<div class="game">
+  <div class="content-card" id="game-header-content">
+    <img id="home" src="../{{data.game.home.imgurl or 'static/blank.jpg'}}">
+    <p id="score">{{data.game.home.score or 0}} - {{data.game.away.score or 0}}</p>
+    <img id="home" src="../{{data.game.away.imgurl or 'static/blank.jpg'}}">
+  </div>
+  <div class="content-card">
+    <div class="team-container" id="home-team">
+      <h3>{{data.game.home.name or "Home"}}</h3>
+      <table>
+
+      </table>
+    </div>
+    <div class="team-container" id="away-team">
+      <h3>{{data.game.away.name or "Away"}}</h3>
+      <table>
+
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -11,17 +11,17 @@ logger = Logger("player-data-service-client")
 class PlayerDataServiceClient:
     async def exchange_with_query_parameters(
         self,
-        request: PlayerDataServiceRequest,
+        player_data_service_request: PlayerDataServiceRequest,
     ) -> PlayerDataServiceResponse:
         """
         Call the get by filters endpoint of the PDS
         """
         try:
             res = request(
-                method=request.method,
-                url=request.url.url,
-                params=request.construct_query_parameters(),
-                timeout=request.url.connect_timeout_in_ms,
+                method=player_data_service_request.method,
+                url=player_data_service_request.url.url,
+                params=player_data_service_request.construct_query_parameters(),
+                timeout=player_data_service_request.url.connect_timeout_in_ms,
             )
 
             if res.status_code != 200:
@@ -31,16 +31,16 @@ class PlayerDataServiceClient:
         except InvalidSchema as e:
             logger.error(e)
             return PlayerDataServiceResponse(
-                500,
+                400,
                 {
-                    "message": "Schema error in request to Player Data Service",
+                    "message": "Request schema error in request to Player Data Service",
                     "error": f"{e}",
                 },
             )
         except ConnectionError as e:
             logger.error(f"Connection error reaching the Player Data Service: {e}")
             return PlayerDataServiceResponse(
-                504,
+                503,
                 {
                     "message": "Connection error reaching the Player Data Service",
                     "error": f"{e}",

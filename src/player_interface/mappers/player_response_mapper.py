@@ -1,4 +1,5 @@
 from typing import Iterable, List
+from venv import create
 
 from models.coach import Coach
 from models.composite_game_statistics import CompositeGameStatistics
@@ -9,6 +10,7 @@ from models.composite_season_statistics_full import (
 from models.composite_statistics import CompositeStatistics
 from models.composite_team import CompositeTeam, Roster
 from models.game import Game
+from models.game_result import GameResult
 from models.player import Player
 from models.player_statistics import PlayerStatistics
 from models.team import Team
@@ -24,6 +26,10 @@ def player_data_sevice_response_to_teams(data: Iterable) -> List[Team]:
 
 def player_data_service_response_to_games(data: Iterable) -> List[Game]:
     return [Game(**game) for game in data]
+
+
+def player_data_service_response_to_game(data: Iterable) -> GameResult:
+    pass
 
 
 def composite_season_to_composite_season_by_year(
@@ -89,18 +95,21 @@ def player_data_service_response_to_composite_statistics(
     )
 
 
-def composite_teams_response_to_composite_teams(data: Iterable) -> CompositeTeam:
-    return CompositeTeam(
-        team_id=data["team_id"],
-        name=data["name"],
-        location=data["location"],
-        img_url=data["img_url"],
-        rosters=[
-            Roster(
-                year=roster["year"],
-                players=[Player(**player) for player in roster["players"]],
-                coaches=[Coach(**coach) for coach in roster["coaches"]],
-            )
-            for roster in data["rosters"]
-        ],
-    )
+def composite_teams_response_to_composite_teams(data: Iterable) -> List[CompositeTeam]:
+    return [
+        CompositeTeam(
+            team_id=composite_team["team_id"],
+            name=composite_team["name"],
+            location=composite_team["location"],
+            img_url=composite_team["img_url"],
+            rosters=[
+                Roster(
+                    year=roster["year"],
+                    players=[Player(**player) for player in roster["players"]],
+                    coaches=[Coach(**coach) for coach in roster["coaches"]],
+                )
+                for roster in composite_team["rosters"]
+            ],
+        )
+        for composite_team in data
+    ]

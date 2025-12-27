@@ -12,14 +12,14 @@
             <tr>
                 <th>Date</th>
                 <th>Name</th>
-                <th>Score</th>
+                <th class="num-field">Score</th>
                 <th>Location</th>
             </tr>
             {% for game in games %}
             <tr>
                 <td class="text-field">{{ game.date }}</td>
-                <td class="text-field">{{ game.title }}</td>
-                <td class="text-field">{{ game.score }}</td>
+                <td class="text-field"><a href="/game/{{game.id}}">{{ game.title }}</a></td>
+                <td class="num-field">{{ game.score }}</td>
                 <td class="text-field">{{ game.location }}</td>
             </tr>
             {% endfor %}

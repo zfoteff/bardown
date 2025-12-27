@@ -73,12 +73,6 @@ class TeamsDBInterface:
         self.__team_players_client.open_connection()
         self.__team_coaches_client.open_connection()
 
-    def __exit__(self) -> None:
-        self.__teams_client.close_connection()
-        self.__players_client.close_connection()
-        self.__team_players_client.close_connection()
-        self.__team_coaches_client.open_connection()
-
     def _build_team_query_from_filters(
         self, filters: TeamRequestFilters | CompositeTeamRequestFilters
     ) -> str:

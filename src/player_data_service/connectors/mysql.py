@@ -59,12 +59,14 @@ class MySQLClient:
         logger.debug(f"Executing query: {query}")
         data = []
         cursor = self.__connection.cursor()
+
         try:
             cursor.execute(query + ";")
         except mysql.Error as err:
             logger.error(
                 f"Database error from {self.__host}@{self.__database}:{self.__table} when running query: {query}\nError:{err}"
             )
+            cursor.close()
             return (False, err)
 
         if commit_candidate:
@@ -73,4 +75,5 @@ class MySQLClient:
         if return_results:
             data = cursor.fetchall()
 
+        cursor.close()
         return (True, data)

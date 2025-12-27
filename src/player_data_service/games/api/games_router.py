@@ -50,6 +50,14 @@ GAMES_ROUTER.add_api_route(
     },
 )
 GAMES_ROUTER.add_api_route(
+    path="/result",
+    endpoint=GameController.get_game_results,
+    description="Get results of a game, including the score and statistics of players",
+    methods=["GET"],
+    tags=["games"],
+    responses={200: {}},
+)
+GAMES_ROUTER.add_api_route(
     path="/",
     endpoint=GameController.create_game,
     description="Create game record in the database",

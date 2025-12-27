@@ -6,6 +6,7 @@ from fastapi.templating import Jinja2Templates
 from mappers.game_filters_mapper import GameFiltersMapper
 from mappers.player_filters_mapper import PlayerFiltersMapper
 from mappers.team_filters_mapper import TeamFiltersMapper
+from models.composite_team import CompositeTeam
 from providers.player_data_service_provider import PlayerDataServiceProvider
 
 from player_interface import __version__ as player_interface_version
@@ -60,16 +61,21 @@ class PlayerController:
     async def render_composite_teams_page(request: Request, team_id: str) -> HTMLResponse:
         team = await player_data_service_provider.get_composite_team_by_team_id(team_id)
         return templates.TemplateResponse(
-            "team.html", context={"request": request, "data": {"team": team}}
+            "team.html",
+            context={
+                "request": request,
+                "data": {"team": team[0] if len(team) > 0 else CompositeTeam()},
+            },
+        )
+
+    async def render_game_page(request: Request, game_id: str) -> HTMLResponse:
+        game = None
+        return templates.TemplateResponse(
+            "game.html",
+            context={"request": request, "data": {"home": {"score": 9}, "away": {"score": 10}}},
         )
 
     async def get_health() -> JSONResponse:
-        """Healthcheck for the Player Interface service. Asserts the service is running and has
-        connection to the Player Data Service
-
-        Returns:
-            JSONResponse: Healthcheck response
-        """
         return JSONResponse(
             status_code=200,
             content={

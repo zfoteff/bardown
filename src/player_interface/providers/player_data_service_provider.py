@@ -16,6 +16,7 @@ from mappers.player_response_mapper import (
     player_data_sevice_response_to_teams,
 )
 from models.composite_statistics import CompositeStatistics
+from models.composite_team import CompositeTeam
 from models.game import Game
 from models.game_filters import GameFilters
 from models.player import Player
@@ -53,27 +54,27 @@ class PlayerDataServiceProvider:
         self._get_team_url: ClientUrl = ClientUrl(
             "GET", path="team/v0/", config=self._player_data_service_config
         )
-        self._get_game_url: ClientUrl = ClientUrl(
+        self._get_games_url: ClientUrl = ClientUrl(
             "GET", path="game/v0/", config=self._player_data_service_config
         )
         self._health_url: ClientUrl = ClientUrl(
             "GET", path="health/", config=self._player_data_service_client
         )
         self._get_composite_teams_url: ClientUrl = ClientUrl(
-            "GET", path="/teams/v0/team", config=self._player_data_service_config
+            "GET", path="/team/v0/teams", config=self._player_data_service_config
+        )
+        self._get_games_url: ClientUrl = ClientUrl(
+            "GET", path="game/v0/result", config=self._player_data_service_config
         )
 
     async def get_players_by_filters(self, filters: PlayersFilters) -> List[Player]:
-        """
-        Create request for the get by filters endpoint of the player interface:
-        """
         get_player_request = PlayerDataServiceRequest(
             url=self._get_player_url, query_parameters=filters.to_dict()
         )
 
-        cache_result, response = self._cache_client.retrieve_response(get_player_request.uri)
+        cache_hit, response = self._cache_client.retrieve_response(get_player_request.uri)
 
-        if not cache_result:
+        if not cache_hit:
             response = await self._player_data_service_client.exchange_with_query_parameters(
                 get_player_request
             )
@@ -83,7 +84,7 @@ class PlayerDataServiceProvider:
             players = []
         else:
             players = player_data_service_response_to_players(response.data)
-            if not cache_result:
+            if not cache_hit:
                 self._cache_client.cache_response(url=get_player_request.uri, response=response)
 
         return players
@@ -91,33 +92,30 @@ class PlayerDataServiceProvider:
     async def get_player_with_statistics_by_filters(
         self, player_id: str
     ) -> Tuple[Player, CompositeStatistics]:
-        """
-        Get player with associated statistics for games and seasons
-        """
         player_request = PlayerDataServiceRequest(
             url=self._get_player_url, query_parameters={"filter.playerId": player_id}
         )
         statistics_request = PlayerDataServiceRequest(
             url=self._get_statistics_url, query_parameters={"filter.player.playerId": player_id}
         )
-        player_cache_result, get_player_response = self._cache_client.retrieve_response(
+        player_cache_hit, get_player_response = self._cache_client.retrieve_response(
             player_request.uri
         )
-        statistics_cache_result, get_statistics_response = self._cache_client.retrieve_response(
+        statistics_cache_hit, get_statistics_response = self._cache_client.retrieve_response(
             statistics_request.uri
         )
 
-        if not player_cache_result:
+        if not player_cache_hit:
             get_player_response = (
                 await self._player_data_service_client.exchange_with_query_parameters(
-                    player_request.uri
+                    player_request
                 )
             )
 
-        if not statistics_cache_result:
+        if not statistics_cache_hit:
             get_statistics_response = (
                 await self._player_data_service_client.exchange_with_query_parameters(
-                    statistics_request.uri
+                    statistics_request
                 )
             )
 
@@ -134,16 +132,13 @@ class PlayerDataServiceProvider:
         return (player_data, statistics_data)
 
     async def get_teams_by_filters(self, filters: TeamFilters) -> List[Team]:
-        """
-        Create request for the get by filters endpoint of the teams interface:
-        """
         get_team_request = PlayerDataServiceRequest(
             url=self._get_team_url, query_parameters=filters.to_dict()
         )
 
-        result, response = self._cache_client.retrieve_response(get_team_request.uri)
+        cache_hit, response = self._cache_client.retrieve_response(get_team_request.uri)
 
-        if not result:
+        if not cache_hit:
             # If URL dne in cache, make request to PDS
             response = await self._player_data_service_client.exchange_with_query_parameters(
                 get_team_request
@@ -155,38 +150,44 @@ class PlayerDataServiceProvider:
             teams = []
         else:
             teams = player_data_sevice_response_to_teams(response.data)
-            if not result:
+            if not cache_hit:
                 self._cache_client.cache_response(url=get_team_request.uri, response=response)
 
         return teams
 
-    async def get_composite_team_by_team_id(self, team_id: str) -> Tuple[Team, Compositeteam]:
+    async def get_composite_team_by_team_id(self, team_id: str) -> CompositeTeam:
         request = PlayerDataServiceRequest(
             url=self._get_composite_teams_url, query_parameters={"filter.team.id": team_id}
         )
         cache_hit, response = self._cache_client.retrieve_response(request.uri)
 
         if not cache_hit:
-            response = await self._player_data_service_client.exchange_with_query_paramters(request)
+            response = await self._player_data_service_client.exchange_with_query_parameters(
+                request
+            )
 
-        team = None
+        team = list()
         if response is None or response.status != 200:
             # TODO: Create composite teams error response handler
-            pass
+            return team
         else:
-            teams = composite_teams_response_to_composite_teams(response.data)
+            team = (
+                composite_teams_response_to_composite_teams(response.data)
+                if len(response.data) > 0
+                else team
+            )
             if not cache_hit:
                 self._cache_client.cache_response(url=request.uri, response=response)
 
-        return teams
+        return team
 
     async def get_games_by_filters(self, filters: GameFilters) -> List[Game]:
         get_games_request = PlayerDataServiceRequest(
-            url=self._get_game_url, query_parameters=filters.to_dict()
+            url=self._get_games_url, query_parameters=filters.to_dict()
         )
-        result, response = self._cache_client.retrieve_response(get_games_request.uri)
+        cache_hit, response = self._cache_client.retrieve_response(get_games_request.uri)
 
-        if not result:
+        if not cache_hit:
             response = await self._player_data_service_client.exchange_with_query_parameters(
                 get_games_request
             )
@@ -196,9 +197,26 @@ class PlayerDataServiceProvider:
             games = []
         else:
             games = player_data_service_response_to_games(response.data)
-            if not result:
+            if not cache_hit:
                 self._cache_client.cache_response(url=get_games_request.uri, response=response)
         return games
+
+    async def get_game(self, game_id) -> List[Game]:
+        get_game_request = PlayerDataServiceRequest(url=self._get_games_url + f"/{game_id}")
+        cache_hit, result = self._cache_client.retrieve_response(get_game_request.uri)
+
+        if not cache_hit:
+            response = await self._player_data_service_client.exchange_with_query_parameters(
+                get_game_request
+            )
+
+        if response is None or response.status != 200:
+            return None
+
+        game = player_data_service_response_to_games(response.data)
+        if not cache_hit:
+            self._cache_client.cache_response(url=get_game_request.uri, response=response)
+        return game
 
     async def get_health(self) -> Dict:
         response = requests.get(self._health_url.url)

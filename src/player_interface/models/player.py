@@ -1,103 +1,41 @@
 from datetime import datetime
-from typing import Self
+from typing import Self, Optional
+
+from pydantic import BaseModel
 
 from .enums.grade import Grade
 from .enums.position import Position
 
 
-class Player:
-    _player_id: str
-    _first_name: str
-    _last_name: str
-    _position: Position
-    _number: int
-    _grade: Grade
-    _school: str
-    _img_url: str
-    _created: datetime
-    _modified: datetime
-
-    def __init__(
-        self,
-        player_id: str,
-        first_name: str,
-        last_name: str,
-        position: str,
-        number: int,
-        grade: str,
-        school: str,
-        imgurl: str,
-        created: str,
-        modified: str,
-    ) -> Self:
-        self._player_id = player_id
-        self._first_name = first_name
-        self._last_name = last_name
-        self._position = Position(position)
-        self._number = number
-        self._grade = Grade(grade)
-        self._school = school
-        self._img_url = imgurl
-        self._created = datetime.fromisoformat(created)
-        self._modified = datetime.fromisoformat(modified)
-
-    @property
-    def player_id(self) -> str:
-        return self._player_id
-
-    @property
-    def first_name(self) -> str:
-        return self._first_name
-
-    @property
-    def last_name(self) -> str:
-        return self._last_name
+class Player(BaseModel):
+    player_id: Optional[str]
+    first_name: Optional[str]
+    last_name: Optional[str]
+    position: Optional[Position]
+    number: Optional[int]
+    grade: Optional[Grade]
+    school: Optional[str]
+    imgurl: Optional[str]
+    created: Optional[datetime]
+    modified: Optional[datetime]
 
     @property
     def name(self) -> str:
-        return f"{self._first_name} {self._last_name}"
-
-    @property
-    def position(self) -> str:
-        return str(self._position).replace("_", " ")
-
-    @property
-    def number(self) -> int:
-        return self._number
-
-    @property
-    def grade(self) -> str:
-        return str(self._grade)
-
-    @property
-    def school(self) -> str:
-        return self._school
-
-    @property
-    def img_url(self) -> str:
-        return self._img_url
-
-    @property
-    def created(self) -> str:
-        return str(self._created)
-
-    @property
-    def modified(self) -> str:
-        return str(self._modified)
+        return f"{self.first_name} {self.last_name}"
 
     def to_dict(self, full_definition: bool = False) -> dict:
         player_dict = {
-            "player_id": self._player_id,
-            "first_name": self._first_name,
-            "last_name": self._last_name,
-            "position": self._position,
-            "number": self._number,
-            "grade": self._grade,
-            "school": self._school,
-            "img_url": self._img_url,
+            "player_id": self.player_id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "position": self.position,
+            "number": self.number,
+            "grade": self.grade,
+            "school": self.school,
+            "img_url": self.imgurl,
         }
 
         if full_definition:
-            player_dict.update({"created": self._created, "modified": self._modified})
+            player_dict.update({"created": self.created, "modified": self.modified})
 
         return player_dict

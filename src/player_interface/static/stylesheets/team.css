@@ -1,0 +1,61 @@
+.team-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.team-header img {
+  width: 25vh;
+  padding: 1em;
+  border-radius: 2em;
+}
+
+.team-header-content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1em;
+}
+
+.team-header-content h2 {
+  text-align: left;
+  margin: 0;
+}
+
+.team-header-content h3 {
+  text-align: left;
+}
+
+.roster {
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+}
+
+.coach-roster {
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+.player-roster {
+  flex-grow: 2;
+  padding: 1rem;
+}
+
+.content-card h4 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  font-size: 2em;
+  align-self: center;
+}
+
+.content-card h5 {
+  font-size: 1.75em;
+  margin: 0;
+  margin-left: 0.5em;
+}
+
+.content-card hr {
+  width: 100%;
+  align-self: center;
+  border: 5px #57494c solid;
+  border-radius: 1em;
+}

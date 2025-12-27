@@ -14,3 +14,7 @@ class Coach(BaseModel):
     imgurl: Optional[str] = None
     created: Optional[datetime] = None
     modified: Optional[datetime] = None
+
+    @property
+    def name(self) -> str:
+        return f"{self.first_name} {self.last_name}"

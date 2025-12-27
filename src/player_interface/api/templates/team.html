@@ -13,38 +13,52 @@
     </div>
   </div>
   <div class="content-card">
-    <h4>Rosters</h4>
     {% for roster in data.team.rosters %}
-    <div class="roster">
+    <div class="rosters">
       <h5>{{roster.year}}</h5>
       <hr />
-      <table class="coach-roster">
-        <tbody>
-          <tr>
-            <th>Name</th>
-            <th>Role</th>
-            <th>Since</th>
-          </tr>
-          {{% for coach in roster.coaches%}}
-        </tbody>
-      </table>
-      <table class="player-roster">
-        <tbody>
-          <tr>
-            <th>Number</th>
-            <th>Position</th>
-            <th>Name</th>
-          </tr>
-          {% for player in roster.players %}
-          <tr>
-            <td class="num-field">{{player.number}}</td>
-            <td class="text-field">{{player.position}}</td>
-            <td class="text-field"><a href="/players/{{player.player_id}}">{{player.name}}</a></td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div class="roster">
+        <div class="coach-roster">
+          <h5>Coaches</h5>
+          <table class="coach-table">
+            <tbody>
+              <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Since</th>
+              </tr>
+              {% for coach in roster.coaches %}
+              <tr>
+                <td class="text-field">{{coach.name}}</td>
+                <td class="text-field">{{coach.role}}</td>
+                <td class="num-field">{{coach.since}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="player-roster">
+          <h5>Players</h5>
+          <table class="player-table">
+            <tbody>
+              <tr>
+                <th>Number</th>
+                <th>Position</th>
+                <th>Name</th>
+              </tr>
+              {% for player in roster.players %}
+              <tr>
+                <td class="num-field">{{player.number}}</td>
+                <td class="text-field">{{player.position}}</td>
+                <td class="text-field"><a href="/players/{{player.player_id}}">{{player.name}}</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
     {% endfor %}
   </div>
 </div>
+{%endblock%}

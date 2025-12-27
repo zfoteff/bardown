@@ -39,7 +39,7 @@ class Game:
     @property
     def date(self) -> str:
         date = datetime.fromisoformat(self._date)
-        return f"{date.month}/{date.day} - {date.hour % 12}:{date.minute}"
+        return date.strftime("%A \t %m/%d/%Y \t - \t %I:%M %p")
 
     @property
     def score(self) -> str:
