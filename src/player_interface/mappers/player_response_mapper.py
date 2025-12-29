@@ -1,5 +1,4 @@
 from typing import Iterable, List
-from venv import create
 
 from models.coach import Coach
 from models.composite_game_statistics import CompositeGameStatistics
