@@ -1,3 +1,4 @@
+from re import I
 from typing import Iterable, List
 
 from models.coach import Coach
@@ -9,9 +10,10 @@ from models.composite_season_statistics_full import (
 from models.composite_statistics import CompositeStatistics
 from models.composite_team import CompositeTeam, Roster
 from models.game import Game
-from models.game_result import GameResult
+from models.game_result import GameResult, GameTeamResult, PlayerWithStatistics
 from models.player import Player
 from models.player_statistics import PlayerStatistics
+from models.statistics import Statistics
 from models.team import Team
 
 
@@ -27,8 +29,46 @@ def player_data_service_response_to_games(data: Iterable) -> List[Game]:
     return [Game(**game) for game in data]
 
 
-def player_data_service_response_to_game(data: Iterable) -> GameResult:
-    pass
+def player_data_service_response_to_game_result(data: Iterable) -> GameResult:
+    return GameResult(
+        game_id=data["game_id"],
+        title=data["title"],
+        date=data["date"],
+        score=data["score"],
+        location=data["location"],
+        home=GameTeamResult(
+            team_id=data["home"]["team_id"],
+            name=data["home"]["name"],
+            img_url=data["home"]["img_url"],
+            roster=[
+                PlayerWithStatistics(
+                    player_id=player["player_id"],
+                    first_name=player["first_name"],
+                    last_name=player["last_name"],
+                    position=player["position"],
+                    statistics=Statistics(player["statistics"]),
+                    img_url=player["img_url"],
+                )
+                for player in data["home"]["roster"]
+            ],
+        ),
+        away=GameTeamResult(
+            team_id=data["away"]["team_id"],
+            name=data["away"]["name"],
+            img_url=data["away"]["img_url"],
+            roster=[
+                PlayerWithStatistics(
+                    player_id=player["player_id"],
+                    first_name=player["first_name"],
+                    last_name=player["last_name"],
+                    position=player["position"],
+                    statistics=Statistics(**player["statistics"]),
+                    img_url=player["img_url"],
+                )
+                for player in data["away"]["roster"]
+            ],
+        ),
+    )
 
 
 def composite_season_to_composite_season_by_year(

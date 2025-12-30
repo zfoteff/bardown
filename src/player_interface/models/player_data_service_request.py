@@ -42,7 +42,7 @@ class PlayerDataServiceRequest:
         uri = self._url.url
 
         if self.path_parameters is not None and len(self.path_parameters) > 0:
-            uri += self.path_parameters
+            uri += f"/{self.path_parameters}"
 
         if self.query_parameters is not None and len(self.query_parameters) > 0:
             uri += self.query_string()

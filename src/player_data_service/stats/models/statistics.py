@@ -21,7 +21,7 @@ class Statistics(BaseModel):
     gb: Optional[int] = 0
     t: Optional[int] = 0
     ct: Optional[int] = 0
-    p: Optional[int] = 0
+    p: Optional[int] = 1
     k: Optional[int] = 0
     ms: Optional[int] = 0
     hga: Optional[int] = 0

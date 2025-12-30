@@ -1,0 +1,44 @@
+.game {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0.5rem;
+}
+
+#game-header-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: fit-content;
+}
+
+#game-header-content h2 {
+  margin: auto;
+  font-size: 6rem;
+}
+
+#game-header-content h3 {
+  margin: 0;
+  font-size: 3rem;
+}
+
+#game-header-content img {
+  width: 20rem;
+  margin: auto;
+  padding: 1rem;
+  border-radius: 5rem;
+}
+
+.game-header-team-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.team-statistics-container {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+}

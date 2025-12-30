@@ -11,6 +11,7 @@ from fastapi import Depends
 from mappers.player_response_mapper import (
     composite_teams_response_to_composite_teams,
     player_data_service_response_to_composite_statistics,
+    player_data_service_response_to_game_result,
     player_data_service_response_to_games,
     player_data_service_response_to_players,
     player_data_sevice_response_to_teams,
@@ -19,6 +20,7 @@ from models.composite_statistics import CompositeStatistics
 from models.composite_team import CompositeTeam
 from models.game import Game
 from models.game_filters import GameFilters
+from models.game_result import GameResult
 from models.player import Player
 from models.player_data_service_request import PlayerDataServiceRequest
 from models.players_filters import PlayersFilters
@@ -61,9 +63,9 @@ class PlayerDataServiceProvider:
             "GET", path="health/", config=self._player_data_service_client
         )
         self._get_composite_teams_url: ClientUrl = ClientUrl(
-            "GET", path="/team/v0/teams", config=self._player_data_service_config
+            "GET", path="team/v0/teams", config=self._player_data_service_config
         )
-        self._get_games_url: ClientUrl = ClientUrl(
+        self._get_game_result_url: ClientUrl = ClientUrl(
             "GET", path="game/v0/result", config=self._player_data_service_config
         )
 
@@ -201,9 +203,11 @@ class PlayerDataServiceProvider:
                 self._cache_client.cache_response(url=get_games_request.uri, response=response)
         return games
 
-    async def get_game(self, game_id) -> List[Game]:
-        get_game_request = PlayerDataServiceRequest(url=self._get_games_url + f"/{game_id}")
-        cache_hit, result = self._cache_client.retrieve_response(get_game_request.uri)
+    async def get_game_result(self, game_id) -> GameResult:
+        get_game_request = PlayerDataServiceRequest(
+            url=self._get_game_result_url, path_parameters=f"{game_id}/"
+        )
+        cache_hit, response = self._cache_client.retrieve_response(get_game_request.uri)
 
         if not cache_hit:
             response = await self._player_data_service_client.exchange_with_query_parameters(
@@ -211,11 +215,12 @@ class PlayerDataServiceProvider:
             )
 
         if response is None or response.status != 200:
-            return None
+            return GameResult()
 
-        game = player_data_service_response_to_games(response.data)
         if not cache_hit:
             self._cache_client.cache_response(url=get_game_request.uri, response=response)
+
+        game = player_data_service_response_to_game_result(response.data)
         return game
 
     async def get_health(self) -> Dict:

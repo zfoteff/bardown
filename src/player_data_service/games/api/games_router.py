@@ -50,7 +50,7 @@ GAMES_ROUTER.add_api_route(
     },
 )
 GAMES_ROUTER.add_api_route(
-    path="/result",
+    path="/result/{game_id}",
     endpoint=GameController.get_game_results,
     description="Get results of a game, including the score and statistics of players",
     methods=["GET"],

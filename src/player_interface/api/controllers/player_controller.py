@@ -68,11 +68,11 @@ class PlayerController:
             },
         )
 
-    async def render_game_page(request: Request, game_id: str) -> HTMLResponse:
-        game = None
+    async def render_game_result_page(request: Request, game_id: str) -> HTMLResponse:
+        game = await player_data_service_provider.get_game_result(game_id)
         return templates.TemplateResponse(
             "game.html",
-            context={"request": request, "data": {"home": {"score": 9}, "away": {"score": 10}}},
+            context={"request": request, "data": game},
         )
 
     async def get_health() -> JSONResponse:

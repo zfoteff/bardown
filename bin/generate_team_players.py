@@ -1,10 +1,11 @@
 import argparse
 from datetime import datetime
-from typing import List
+from typing import Dict, List
 
 
-def generate_team_players(team_id: str = None, player_ids: List[str] = None) -> str:
+def generate_team_players(team_id: str = None, players: List[Dict] = None) -> str:
     result = ""
-    for player_id in player_ids:
-        result += f'("{player_id}", "{team_id}", "{datetime.now()}", "{datetime.now()}"),\n'
+    time = datetime.now()
+    for player in players:
+        result += f'("{team_id}", "{player["id"]}", "{player["number"]}", "{player["position"]}", "{time}", "{time}"),\n'
     return result[:-2] + ";"

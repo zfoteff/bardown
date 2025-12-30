@@ -1,6 +1,5 @@
 {% extends "index.html" %}
-{% block title %}GAME{% endblock %}
-{% block head %}
+{% block title %}{{data.title}}{% endblock %}
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="/static/stylesheets/game.css" />
@@ -8,22 +7,139 @@
 {% block content %}
 <div class="game">
   <div class="content-card" id="game-header-content">
-    <img id="home" src="../{{data.game.home.imgurl or 'static/blank.jpg'}}">
-    <p id="score">{{data.game.home.score or 0}} - {{data.game.away.score or 0}}</p>
-    <img id="home" src="../{{data.game.away.imgurl or 'static/blank.jpg'}}">
+    <div class="game-header-team-container">
+      <h3>{{data.home.name or "Home"}}</h3>
+      <img id="home" src="../{{data.home.imgurl or 'static/blank.jpg'}}">
+    </div>
+    <h2 id="score">{{data.score}}</h2>
+    <div class="game-header-team-container">
+      <img id="away" src="../{{data.away.imgurl or 'static/blank.jpg'}}">
+      <h3>{{data.away.name or "Away"}}</h3>
+    </div>
   </div>
   <div class="content-card">
-    <div class="team-container" id="home-team">
-      <h3>{{data.game.home.name or "Home"}}</h3>
-      <table>
-
-      </table>
-    </div>
-    <div class="team-container" id="away-team">
-      <h3>{{data.game.away.name or "Away"}}</h3>
-      <table>
-
-      </table>
+    <div class="team-statistics-container">
+      <div class="team-container" id="home-team">
+        <table>
+          <tr>
+            <th></th>
+            <th class="num-field">#</th>
+            <th class="text-field">Name</th>
+            <th class="text-field">Position</th>
+            <th class="num-field">HSH</th>
+            <th class="num-field">MSH</th>
+            <th class="num-field">LSH</th>
+            <th class="num-field">HG</th>
+            <th class="num-field">MG</th>
+            <th class="num-field">LG</th>
+            <th class="num-field">A</th>
+            <th class="num-field">GB</th>
+            <th class="num-field">T</th>
+            <th class="num-field">CT</th>
+            <th class="num-field">P</th>
+            <th class="num-field">K</th>
+            <th class="num-field">MS</th>
+            <th class="num-field">HGA</th>
+            <th class="num-field">MGA</th>
+            <th class="num-field">LGA</th>
+            <th class="num-field">HGS</th>
+            <th class="num-field">MGS</th>
+            <th class="num-field">LGS</th>
+            <th class="num-field">FOW</th>
+            <th class="num-field">FOL</th>
+          </tr>
+          {% for player in data.home.roster %}
+          <tr>
+            <td class="image-field"><img src="{{player.img_url}}" alt="player image"></td>
+            <td class="num-field">{{player.number}}</td>
+            <td class="text-field"><a href="player/{{player.player_id}}">{{player.name}}</a></td>
+            <td class="text-field">{{player.position}}</td>
+            <td class="num-field">{{player.statistics.hsh}}</td>
+            <td class="num-field">{{player.statistics.msh}}</td>
+            <td class="num-field">{{player.statistics.lsh}}</td>
+            <td class="num-field">{{player.statistics.hg}}</td>
+            <td class="num-field">{{player.statistics.mg}}</td>
+            <td class="num-field">{{player.statistics.lg}}</td>
+            <td class="num-field">{{player.statistics.a}}</td>
+            <td class="num-field">{{player.statistics.gb}}</td>
+            <td class="num-field">{{player.statistics.t}}</td>
+            <td class="num-field">{{player.statistics.ct}}</td>
+            <td class="num-field">{{player.statistics.p}}</td>
+            <td class="num-field">{{player.statistics.k}}</td>
+            <td class="num-field">{{player.statistics.ms}}</td>
+            <td class="num-field">{{player.statistics.hga}}</td>
+            <td class="num-field">{{player.statistics.mga}}</td>
+            <td class="num-field">{{player.statistics.lga}}</td>
+            <td class="num-field">{{player.statistics.hgs}}</td>
+            <td class="num-field">{{player.statistics.mgs}}</td>
+            <td class="num-field">{{player.statistics.lgs}}</td>
+            <td class="num-field">{{player.statistics.fow}}</td>
+            <td class="num-field">{{player.statistics.fol}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <hr />
+      <div class="team-container" id="away-team">
+        <table>
+          <tr>
+            <th></th>
+            <th class="num-field">#</th>
+            <th class="text-field">Name</th>
+            <th class="text-field">Position</th>
+            <th class="num-field">HSH</th>
+            <th class="num-field">MSH</th>
+            <th class="num-field">LSH</th>
+            <th class="num-field">HG</th>
+            <th class="num-field">MG</th>
+            <th class="num-field">LG</th>
+            <th class="num-field">A</th>
+            <th class="num-field">GB</th>
+            <th class="num-field">T</th>
+            <th class="num-field">CT</th>
+            <th class="num-field">P</th>
+            <th class="num-field">K</th>
+            <th class="num-field">MS</th>
+            <th class="num-field">HGA</th>
+            <th class="num-field">MGA</th>
+            <th class="num-field">LGA</th>
+            <th class="num-field">HGS</th>
+            <th class="num-field">MGS</th>
+            <th class="num-field">LGS</th>
+            <th class="num-field">FOW</th>
+            <th class="num-field">FOL</th>
+          </tr>
+          {% for player in data.away.roster %}
+          <tr>
+            <td class="image-field"><img src="../{{player.img_url or 'static/blank.jpg'}}" alt="player image"></td>
+            <td class="num-field">{{player.number}}</td>
+            <td class="text-field"><a href="player/{{player.player_id}}">{{player.name}}</a></td>
+            <td class="text-field">{{player.position}}</td>
+            <td class="num-field">{{player.statistics.hsh}}</td>
+            <td class="num-field">{{player.statistics.msh}}</td>
+            <td class="num-field">{{player.statistics.lsh}}</td>
+            <td class="num-field">{{player.statistics.hg}}</td>
+            <td class="num-field">{{player.statistics.mg}}</td>
+            <td class="num-field">{{player.statistics.lg}}</td>
+            <td class="num-field">{{player.statistics.a}}</td>
+            <td class="num-field">{{player.statistics.gb}}</td>
+            <td class="num-field">{{player.statistics.t}}</td>
+            <td class="num-field">{{player.statistics.ct}}</td>
+            <td class="num-field">{{player.statistics.p}}</td>
+            <td class="num-field">{{player.statistics.k}}</td>
+            <td class="num-field">{{player.statistics.ms}}</td>
+            <td class="num-field">{{player.statistics.hga}}</td>
+            <td class="num-field">{{player.statistics.mga}}</td>
+            <td class="num-field">{{player.statistics.lga}}</td>
+            <td class="num-field">{{player.statistics.hgs}}</td>
+            <td class="num-field">{{player.statistics.mgs}}</td>
+            <td class="num-field">{{player.statistics.lgs}}</td>
+            <td class="num-field">{{player.statistics.fow}}</td>
+            <td class="num-field">{{player.statistics.fol}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
     </div>
   </div>
 </div>

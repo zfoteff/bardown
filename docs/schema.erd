@@ -4,9 +4,9 @@
   "settings": {
     "width": 2300,
     "height": 2300,
-    "scrollTop": 0,
-    "scrollLeft": 0,
-    "zoomLevel": 1,
+    "scrollTop": -42,
+    "scrollLeft": -114,
+    "zoomLevel": 0.88,
     "show": 423,
     "database": 4,
     "databaseName": "bardown",

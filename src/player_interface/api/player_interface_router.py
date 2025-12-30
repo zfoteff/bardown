@@ -54,6 +54,14 @@ PLAYER_INTERFACE_ROUTER.add_api_route(
 )
 
 PLAYER_INTERFACE_ROUTER.add_api_route(
+    path="/game/{game_id}",
+    endpoint=PlayerController.render_game_result_page,
+    description="Render game results page with player and team statistics",
+    methods=["GET"],
+    response_class=HTMLResponse,
+)
+
+PLAYER_INTERFACE_ROUTER.add_api_route(
     path="/health",
     endpoint=PlayerController.get_health,
     description="Healthcheck endpoint for Player Interface",

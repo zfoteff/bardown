@@ -19,7 +19,7 @@ class PlayerDataServiceClient:
         try:
             res = request(
                 method=player_data_service_request.method,
-                url=player_data_service_request.url.url,
+                url=player_data_service_request.uri,
                 params=player_data_service_request.construct_query_parameters(),
                 timeout=player_data_service_request.url.connect_timeout_in_ms,
             )

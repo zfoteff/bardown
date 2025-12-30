@@ -37,6 +37,7 @@ body {
   border-radius: 1rem;
   padding: 1em;
   margin-bottom: 1em;
+  justify-content: center;
 }
 
 @media (max-width: 800px) {
@@ -97,12 +98,19 @@ td {
 }
 
 .text-field {
-  width: min-content;
+  width: max-content;
 }
 
 .num-field {
   text-align: center;
   width: min-content;
+}
+
+.image-field img {
+  border-radius: 2rem;
+  width: 2.5rem;
+  justify-content: center;
+  padding: 0.25rem;
 }
 
 .content-card h4 {

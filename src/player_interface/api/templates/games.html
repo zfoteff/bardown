@@ -18,7 +18,7 @@
             {% for game in games %}
             <tr>
                 <td class="text-field">{{ game.date }}</td>
-                <td class="text-field"><a href="/game/{{game.id}}">{{ game.title }}</a></td>
+                <td class="text-field"><a href="/game/{{game.game_id}}">{{ game.title }}</a></td>
                 <td class="num-field">{{ game.score }}</td>
                 <td class="text-field">{{ game.location }}</td>
             </tr>

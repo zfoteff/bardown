@@ -8,8 +8,9 @@ from errors.games_errors import GameAlreadyExists, GameDoesNotExist
 from fastapi import Depends
 from games import GAMES_TABLE_NAME
 from games.models.dao.game import Game as GameDAO
-from games.models.dao.game_result import GameResult
+from games.models.dao.game_result import GameResult as GameResultDAO
 from games.models.dto.game import Game as GameDTO
+from games.models.dto.game_result import GameResult as GameResultDTO
 from games.models.game_request_filters import GameRequestFilters
 from typing_extensions import Annotated
 from bin.db_utils import build_update_fields
@@ -96,24 +97,26 @@ class GamesDBInterface:
 
         return True, games
 
-    def get_game_results(self, game_id) -> Tuple[bool, List]:
+    def get_game_results(self, game_id) -> List[GameResultDTO]:
         query = f"""
             SELECT
                 g.gameid,
+                gt.hometeamid,
+                gt.awayteamid,
                 g.title,
                 g.date,
                 g.score,
                 g.location,
-                gt.hometeamid,
-                gt.awayteamid,
-                p.playerid,
+                t.teamid,
+                t.name,
+                t.imgurl,
+                tp.playerid,
                 p.firstname,
                 p.lastname,
-                p.position,
+                tp.position,
+                tp.number,
                 p.imgurl,
-                gs.statistics,
-                tp.teamid,
-                t.name
+                gs.statistics
             from
                 games g
                 inner join game_teams gt on g.gameid = gt.gameid
@@ -131,12 +134,10 @@ class GamesDBInterface:
         if not success:
             return False, []
 
-        game_result = [
-            GameResult.DAO.from_tuple(game_result_tuple=game_result_data)
+        return True, [
+            GameResultDAO.from_tuple(game_result_tuple=game_result_data)
             for game_result_data in result
         ]
-
-        return True, game_result
 
     def update_game(self, game: GameDTO, game_id: str) -> str | GameDoesNotExist:
         exists, game_id = self.game_exists(game_id)
