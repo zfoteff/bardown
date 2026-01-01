@@ -1,10 +1,12 @@
 from datetime import datetime
 from random import shuffle, randint
-from typing import Tuple, List
-from uuid import NAMESPACE_OID, uuid4, uuid5
+from typing import Dict, Tuple, List
+from uuid import NAMESPACE_OID, uuid5
+
+from utils import generate_statistics_string
 
 
-def generate_players(school: str, num_players: int = 11) -> Tuple[List[str], str]:
+def generate_players(school: str, num_players: int = 11) -> Tuple[List[Dict], str]:
     positions = ["G", "D", "D", "D", "A", "A", "A", "M", "M", "M", "LSM"]
     with open("first_names.txt") as f:
         first_names = [line.strip() for line in f.readlines()]
@@ -14,9 +16,10 @@ def generate_players(school: str, num_players: int = 11) -> Tuple[List[str], str
     shuffle(first_names)
     shuffle(last_names)
 
-    result = "--PLAYERS\nINSERT INTO players\nVALUES\n"
+    result = "-- PLAYERS\nINSERT INTO players\nVALUES\n"
 
     player_data = []
+    time = datetime.now()
 
     for i in range(num_players):
         first_name = first_names[i]
@@ -25,15 +28,38 @@ def generate_players(school: str, num_players: int = 11) -> Tuple[List[str], str
         uuid = uuid5(namespace=NAMESPACE_OID, name=first_name + last_name)
         position = positions[i % len(positions)]
         player_data.append({"id": str(uuid), "number": number, "position": position})
-        time = datetime.now()
         result += f'("{uuid}", "{first_name}", "{last_name}", "{position}", {number}, "{school}", "static/blank.jpg", "{time}", "{time}"),\n'
 
     return player_data, result[:-2] + ";\n"
 
+
+def generate_team_players(player_data: List[Dict], team_id: str) -> str:
+    result = "-- TEAM PLAYERS\nINSERT INTO team_player\nVALUES\n"
+
+    time = datetime.now()
+
+    for player in player_data:
+        result += f'("{team_id}", "{player["id"]}", 2018, {player["number"]}, "{player["position"]}", "{time}", "{time}"),\n'
+
+    return result[:-2] + ";\n"
+
+def generate_player_season_statistics(player_data: List[Dict], team_id: str) -> str:
+    result = "-- SEASON STATISTICS\nINSERT INTO season_statistics\nVALUES\n"
+
+    time = datetime.now()
+
+    for player in player_data:
+        result += f'("{player["id"]}", "{team_id}", 2018, "{generate_statistics_string(0, 20)}", "{time}", "{time}"),\n'
+
+    return result[:-2] + ";\n"
+
+
 def main():
     player_data, query = generate_players("Aloha High School")
+    team_player_query = generate_team_players(player_data, "000")
     print(query)
-    print(player_data)
+    print(team_player_query)
+
 
 if __name__ == "__main__":
     main()
