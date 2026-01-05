@@ -8,6 +8,7 @@ from utils import generate_statistics_string
 
 def generate_players(school: str, num_players: int = 11) -> Tuple[List[Dict], str]:
     positions = ["G", "D", "D", "D", "A", "A", "A", "M", "M", "M", "LSM"]
+    grades = ["SR", "JR", "SO", "FR"]
     with open("first_names.txt") as f:
         first_names = [line.strip() for line in f.readlines()]
     with open("last_names.txt") as f:
@@ -27,10 +28,11 @@ def generate_players(school: str, num_players: int = 11) -> Tuple[List[Dict], st
         number = randint(0, 99)
         uuid = uuid5(namespace=NAMESPACE_OID, name=first_name + last_name)
         position = positions[i % len(positions)]
+        grade = grades[randint(0, len(grades) - 1)]
         player_data.append({"id": str(uuid), "number": number, "position": position})
-        result += f'("{uuid}", "{first_name}", "{last_name}", "{position}", {number}, "{school}", "static/blank.jpg", "{time}", "{time}"),\n'
+        result += f'\t("{uuid}", "{first_name}", "{last_name}", "{position}", {number}, "{grade}", "{school}", "static/blank.jpg", "{time}", "{time}"),\n'
 
-    return player_data, result[:-2] + ";\n"
+    return player_data, result[:-2] + ";\n\n"
 
 
 def generate_team_players(player_data: List[Dict], team_id: str) -> str:
@@ -39,9 +41,9 @@ def generate_team_players(player_data: List[Dict], team_id: str) -> str:
     time = datetime.now()
 
     for player in player_data:
-        result += f'("{team_id}", "{player["id"]}", 2018, {player["number"]}, "{player["position"]}", "{time}", "{time}"),\n'
+        result += f'\t("{team_id}", "{player["id"]}", 2018, {player["number"]}, "{player["position"]}", "{time}", "{time}"),\n'
 
-    return result[:-2] + ";\n"
+    return result[:-2] + ";\n\n"
 
 def generate_player_season_statistics(player_data: List[Dict], team_id: str) -> str:
     result = "-- SEASON STATISTICS\nINSERT INTO season_statistics\nVALUES\n"
@@ -49,9 +51,9 @@ def generate_player_season_statistics(player_data: List[Dict], team_id: str) -> 
     time = datetime.now()
 
     for player in player_data:
-        result += f'("{player["id"]}", "{team_id}", 2018, "{generate_statistics_string(0, 20)}", "{time}", "{time}"),\n'
+        result += f'\t("{player["id"]}", "{team_id}", 2018, "{generate_statistics_string(0, 20)}", "{time}", "{time}"),\n'
 
-    return result[:-2] + ";\n"
+    return result[:-2] + ";\n\n"
 
 
 def main():

@@ -10,8 +10,8 @@ from utils import generate_statistics_string
 def generate_game_statistics(game_id: str = None, player_ids: List[str] = None) -> str:
     result = ""
     for player_id in player_ids:
-        result += f'("{player_id}", "{game_id}", "{generate_statistics_string(0, 10)}", "{datetime.now()}", "{datetime.now()}"),\n'
-    return result[:-2] + ";"
+        result += f'\t("{player_id}", "{game_id}", "{generate_statistics_string(0, 10)}", "{datetime.now()}", "{datetime.now()}"),\n'
+    return result[:-2] + ";\n\n"
 
 
 def main() -> None:

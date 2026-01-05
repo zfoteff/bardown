@@ -7,5 +7,5 @@ def generate_team_players(team_id: str = None, players: List[Dict] = None) -> st
     result = ""
     time = datetime.now()
     for player in players:
-        result += f'("{team_id}", "{player["id"]}", "{player["number"]}", "{player["position"]}", "{time}", "{time}"),\n'
-    return result[:-2] + ";"
+        result += f'\t("{team_id}", "{player["id"]}", "{player["number"]}", "{player["position"]}", "{time}", "{time}"),\n'
+    return result[:-2] + ";\n\n"
