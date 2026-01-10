@@ -80,6 +80,16 @@ TEAMS = [
         "team_id": "9b972a51-ac44-4b63-a014-dadcf6da84c5",
     },
 ]
+GAMES = [{
+    "home": {
+        
+    },
+    "away": {
+        "": [{
+            
+        }]
+    }
+}]
 BLANK_IMG = "static/blank.jpg"
 
 
@@ -92,8 +102,8 @@ def generate_team_test_data(team: Dict) -> str:
     team_coach_result = generate_team_coaches(coaches, team["team_id"])
     player_season_statistics_result = generate_player_season_statistics(players, team["team_id"])
 
-    with open(f"{team["school_name"]}-test-data.sql", "w+") as f:
-        f.write(f"-- {team["school_name"]} TEST DATA --\n\n{team_result} {player_result} {team_player_result} {player_season_statistics_result} {coach_result} {team_coach_result}")
+    with open(f"./test_data/{team["school_name"]}-test-data.sql", "w+") as f:
+        f.write(f"{team_result} {player_result} {team_player_result} {player_season_statistics_result} {coach_result} {team_coach_result}")
 
 def main():
     for team in TEAMS:

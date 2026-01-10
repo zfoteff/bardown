@@ -1,5 +1,5 @@
-from players.models.dao.coach import Coach as CoachDAO
-from players.models.dto.coach import Coach as CoachDTO
+from bardown_lib.models.dao.coach import Coach as CoachDAO
+from bardown_lib.models.dto.coach import Coach as CoachDTO
 
 
 def coach_DTO_to_coach_DAO(coach_dto: CoachDTO) -> CoachDAO:

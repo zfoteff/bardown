@@ -1,13 +1,13 @@
 from typing import List
-from games.models.dao.game import Game as GameDAO
-from games.models.dto.game import Game as GameDTO
-from games.models.dao.game_result import GameResult as GameResultDAO
-from games.models.dto.game_result import (
+from bardown_lib.models.dao.game import Game as GameDAO
+from bardown_lib.models.dto.game import Game as GameDTO
+from bardown_lib.models.dao.game_result import GameResult as GameResultDAO
+from bardown_lib.models.dto.game_result import (
     GameResult as GameResultDTO,
     GameTeamResult,
     PlayerWithStatistics,
 )
-from stats.models.statistics import Statistics
+from bardown_lib.models.dto.statistics import Statistics
 
 
 def game_DTO_to_game_DAO(game_dto: GameDTO) -> GameDAO:
@@ -51,7 +51,7 @@ def game_result_DAO_to_game_result_DTO(game_dao: List[GameResultDAO]) -> GameRes
             position=game.position,
             number=game.number,
             statistics=Statistics.from_string(game.statistics),
-            player_image_url=game.player_image_url,
+            img_url=game.player_image_url,
         )
         if game.team_id == home.team_id:
             home.roster.append(player)

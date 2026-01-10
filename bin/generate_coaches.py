@@ -13,7 +13,7 @@ def generate_coaches(num_coaches: int = 3) -> Tuple[List[Dict], str]:
     shuffle(first_names)
     shuffle(last_names)
 
-    result = "--COACHES\nINSERT INTO coaches\nVALUES\n"
+    result = "INSERT INTO coaches VALUES "
 
     coach_data = []
     time = datetime.now()
@@ -26,26 +26,26 @@ def generate_coaches(num_coaches: int = 3) -> Tuple[List[Dict], str]:
         phone_number = "0000000000"
         email = "email@domain"
         coach_data.append({"id": str(uuid), "year": year})
-        result += f'\t("{uuid}", "{first_name}", "{last_name}", {year}, "{email}", "{phone_number}", "static/blank.jpg", "{time}", "{time}"),\n'
+        result += f'("{uuid}", "{first_name}", "{last_name}", {year}, "{email}", "{phone_number}", "static/blank.jpg", "{time}", "{time}"), '
 
-    return coach_data, result[:-2] + ";\n\n"
+    return coach_data, result[:-2] + ";\n"
 
 
 def generate_team_coaches(coach_data: List[Dict], team_id: str) -> str:
     roles = ["Head Coach", "Assistant Coach"]
-    result = "--TEAM COACHES\nINSERT INTO team_coach\nVALUES\n"
+    result = "INSERT INTO team_coach VALUES "
 
     roles_counter = 0
     time = datetime.now()
 
     for coach in coach_data:
         role = roles[roles_counter]
-        result += f'\t("{team_id}", "{coach["id"]}", {coach["year"]}, "{role}", {coach["year"]}, "{time}", "{time}"),\n'
+        result += f'("{team_id}", "{coach["id"]}", {coach["year"]}, "{role}", {coach["year"]}, "{time}", "{time}"), '
 
         if roles_counter < len(roles) - 1:
             roles_counter += 1
 
-    return result[:-2] + ";\n\n"
+    return result[:-2] + ";\n"
 
 
 def main():

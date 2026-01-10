@@ -6,12 +6,12 @@ import config.player_data_service_config as application_config
 from connectors.mysql import MySQLClient
 from errors.games_errors import GameAlreadyExists, GameDoesNotExist
 from fastapi import Depends
-from games import GAMES_TABLE_NAME
-from games.models.dao.game import Game as GameDAO
-from games.models.dao.game_result import GameResult as GameResultDAO
-from games.models.dto.game import Game as GameDTO
-from games.models.dto.game_result import GameResult as GameResultDTO
-from games.models.game_request_filters import GameRequestFilters
+from games import GAMES_TABLE_NAME, GAMES_TEAMS_TABLE_NAME
+from bardown_lib.models.dao.game import Game as GameDAO
+from bardown_lib.models.dao.game_result import GameResult as GameResultDAO
+from bardown_lib.models.dto.game import Game as GameDTO
+from bardown_lib.models.dto.game_result import GameResult as GameResultDTO
+from bardown_lib.requests.game_request_filters import GameRequestFilters
 from typing_extensions import Annotated
 from bin.db_utils import build_update_fields
 
@@ -119,7 +119,7 @@ class GamesDBInterface:
                 gs.statistics
             from
                 games g
-                inner join game_teams gt on g.gameid = gt.gameid
+                inner join {GAMES_TEAMS_TABLE_NAME} gt on g.gameid = gt.gameid
                 inner join team_player tp on tp.teamid = gt.hometeamid
                 or tp.teamid = gt.awayteamid
                 inner join teams t on tp.teamid = t.teamid

@@ -1,15 +1,13 @@
 ---
-name: Python CI
+name: Python Project CI
 on:
-  worflow_dispatch:
-    inputs:
-
   workflow_call:
     inputs:
       WORKING_DIR:
-        decription: "Working directory for the service being built and tested"
+        description: "Working directory for the service being built and tested"
         required: true
         type: string
+        default: "."
       INSTALL_PACKAGES:
         description: "Space-separated list of packages to install using apt-get."
         default: ""
@@ -18,6 +16,10 @@ on:
         description: "Name of the image to be published"
         type: string
         required: true
+    outputs:
+      BUILD_VERSION:
+        description: "Full build version tag"
+        value: ${{ jobs.build.ouputs.version }}
 
 env:
   REGISTRY: ghcr.io
@@ -33,9 +35,7 @@ jobs:
       version: ${{ steps.version.outputs.version}}
     steps:
       - name: Checkout project
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/checkout@v3
 
       - name: Install Python
         uses: actions/setup-python@v4

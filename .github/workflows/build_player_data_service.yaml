@@ -7,7 +7,6 @@ on:
       - ".github/workflows/ci_python.yaml"
       - "dev-requirements.txt"
       - "src/player_data_service/**"
-
 jobs:
   build_player_data_service:
     uses: zfoteff/clackamas-lacrosse-application/.github/workflows/ci_python.yaml@develop

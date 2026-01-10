@@ -46,6 +46,7 @@ def player_data_service_response_to_game_result(data: Iterable) -> GameResult:
                     first_name=player["first_name"],
                     last_name=player["last_name"],
                     position=player["position"],
+                    number=player["number"],
                     statistics=Statistics(player["statistics"]),
                     img_url=player["img_url"],
                 )
@@ -62,6 +63,7 @@ def player_data_service_response_to_game_result(data: Iterable) -> GameResult:
                     first_name=player["first_name"],
                     last_name=player["last_name"],
                     position=player["position"],
+                    number=player["number"],
                     statistics=Statistics(**player["statistics"]),
                     img_url=player["img_url"],
                 )

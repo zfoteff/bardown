@@ -23,7 +23,7 @@ def log_setup(logger_name: str, log_file: str, mode: str = "a"):
 
     #   Initialize handlers
     new_log = log.getLogger(logger_name)
-    formatter = log.Formatter("[%(levelname)s]\t[%(asctime)s] %(message)s")
+    formatter = log.Formatter("[%(levelname)s] [%(asctime)s] %(message)s")
     file_handler = log.FileHandler(log_file, mode=mode)
     file_handler.setFormatter(formatter)
     stream_handler = log.StreamHandler()

@@ -1,5 +1,6 @@
 from typing import List, Self
 
+from models.composite_season_statistics import CompositeSeasonStatistics
 from models.player_statistics import PlayerStatistics
 
 class CompositeSeasonStatistics:

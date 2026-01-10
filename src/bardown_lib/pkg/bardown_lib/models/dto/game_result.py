@@ -2,8 +2,8 @@ from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel
 
-from models.enums.position import Position
-from models.statistics import Statistics
+from enums.position import Position
+from .statistics import Statistics
 
 
 class PlayerWithStatistics(BaseModel):
@@ -20,7 +20,7 @@ class GameTeamResult(BaseModel):
     team_id: Optional[str] = None
     name: Optional[str] = "Team"
     img_url: Optional[str] = "static/blank.jpg"
-    roster: Optional[List[PlayerWithStatistics]] = list()
+    roster: Optional[List[PlayerWithStatistics]] = []
 
 
 class GameResult(BaseModel):
