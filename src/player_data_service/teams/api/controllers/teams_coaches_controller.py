@@ -1,13 +1,13 @@
-from fastapi import Response
 from errors.coaches_errors import CoachDoesNotExist
 from errors.teams_errors import TeamDoesNotExist, TeamValidationError
+from fastapi import Response
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from teams.models.dto.team_coach import TeamCoach
 from teams.teams_db_interface import TeamsDBInterface
 from validators.teams_query_validator import validate_team_coach_request
 
-from bin.logger import Logger
+from bardown_lib.models.dto.team_coach import TeamCoach
+from bardown_lib.utils.logging import Logger
 
 logger = Logger("team-controller")
 teams_db_interface = TeamsDBInterface()

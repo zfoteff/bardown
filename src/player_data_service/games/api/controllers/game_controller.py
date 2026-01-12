@@ -3,11 +3,14 @@ from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from games.games_db_interface import GamesDBInterface
-from games.mappers.game_mapper import game_DAO_to_game_DTO, game_result_DAO_to_game_result_DTO
-from bardown_lib.models.dto.game import Game
+from games.mappers.game_mapper import (
+    game_DAO_to_game_DTO,
+    game_result_DAO_to_game_result_DTO,
+)
 from validators.games_query_validator import validate_get_games_query_parameters
 
-from bin.logger import Logger
+from bardown_lib.bin.logger import Logger
+from bardown_lib.models.dto.game import Game
 
 logger = Logger("player-data-service-controller")
 db_interface = GamesDBInterface()

@@ -3,11 +3,11 @@ from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 from teams.mappers.team_mapper import team_DAO_to_team_DTO
-from teams.models.dto.team import Team
 from teams.teams_db_interface import TeamsDBInterface
 from validators.teams_query_validator import validate_get_teams_query_parameters
 
-from bin.logger import Logger
+from bardown_lib.models.dto.team import Team
+from bardown_lib.utils.logging import Logger
 
 logger = Logger("team-controller")
 db_interface = TeamsDBInterface()

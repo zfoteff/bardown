@@ -1,7 +1,7 @@
 annotated-types==0.6.0
 anyio==4.3.0
 black==24.3.0
-bardown-lib==0.1.0
+bardown_lib==0.1.0
 click==8.1.7
 fastapi==0.116.1
 flake8==4.0.1

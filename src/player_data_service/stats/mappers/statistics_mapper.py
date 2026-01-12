@@ -1,29 +1,33 @@
-from stats.models.dao.composite_game_statistics import (
+from bardown_lib.models.dao.composite_game_statistics import (
     CompositeGameStatistics as CompositeGameStatistics,
 )
-from stats.models.dao.composite_statistics import (
+from bardown_lib.models.dao.composite_statistics import (
     CompositeStatistics as CompositeStatisticsDAO,
 )
-from stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
-from stats.models.dao.season_statistics import SeasonStatistics as SeasonStatisticsDAO
-from stats.models.dto.composite_game_statistics import (
+from bardown_lib.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
+from bardown_lib.models.dao.season_statistics import (
+    SeasonStatistics as SeasonStatisticsDAO,
+)
+from bardown_lib.models.dto.composite_game_statistics import (
     CompositeGameStatistics as CompositeGameStatisticsDTO,
 )
-from stats.models.dto.composite_game_statistics import (
+from bardown_lib.models.dto.composite_game_statistics import (
     PlayerGameStatistics as PlayerGameStatisticsDTO,
 )
-from stats.models.dto.composite_season_statistics import (
+from bardown_lib.models.dto.composite_season_statistics import (
     CompositeSeasonStatistics as CompositeSeasonStatisticsDTO,
 )
-from stats.models.dto.composite_season_statistics import (
+from bardown_lib.models.dto.composite_season_statistics import (
     PlayerSeasonStatistics as PlayerSeasonStatisticsDTO,
 )
-from stats.models.dto.composite_statistics import (
+from bardown_lib.models.dto.composite_statistics import (
     CompositeStatistics as CompositeStatisticsDTO,
 )
-from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
-from stats.models.dto.season_statistics import SeasonStatistics as SeasonStatisticsDTO
-from stats.models.statistics import Statistics
+from bardown_lib.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
+from bardown_lib.models.dto.season_statistics import (
+    SeasonStatistics as SeasonStatisticsDTO,
+)
+from bardown_lib.models.dto.statistics import Statistics
 
 
 def game_statistics_DTO_to_game_statistics_DAO(

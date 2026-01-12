@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from models.game_filters import GameFilters
+from bardown_lib.requests.game_request_filters import GameRequestFilters
 
 
 def string_to_list(data: str) -> List[str]:
@@ -8,8 +8,8 @@ def string_to_list(data: str) -> List[str]:
 
 
 class GameFiltersMapper:
-    def form_to_game_filters(form: Dict) -> GameFilters:
-        filters = GameFilters()
+    def form_to_game_filters(form: Dict) -> GameRequestFilters:
+        filters = GameRequestFilters()
         if "game_id" in form.keys():
             filters.team_ids = string_to_list(form["game_id"])
         if "title" in form.keys():

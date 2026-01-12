@@ -5,7 +5,6 @@ from players.models.dto.player import Player as PlayerDTO
 from players.models.players_request_filters import PlayersRequestFilters
 from players.player_db_interface import PlayerDatabaseInterface
 
-
 # Common test data constants
 SAMPLE_PLAYER_ID = "07c48b11-acbb-4725-8f21-21468c6c7d71"
 SAMPLE_PLAYER_ID_2 = "251ca100e-2563-4e4e-aa0c-c345f03d4f1a"

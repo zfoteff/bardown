@@ -7,10 +7,11 @@ from connectors.mysql import MySQLClient
 from errors.coaches_errors import CoachAlreadyExists, CoachDoesNotExist
 from fastapi import Depends
 from players import COACHES_TABLE_NAME
-from bardown_lib.requests.coaches_request_filters import CoachesRequestFilters
+from typing_extensions import Annotated
+
 from bardown_lib.models.dao.coach import Coach as CoachDAO
 from bardown_lib.models.dto.coach import Coach as CoachDTO
-from typing_extensions import Annotated
+from bardown_lib.requests.coaches_request_filters import CoachesRequestFilters
 from bin.db_utils import build_update_fields
 
 

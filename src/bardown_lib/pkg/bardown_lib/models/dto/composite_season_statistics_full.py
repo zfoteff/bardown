@@ -3,8 +3,10 @@ from typing import List, Self
 from models.composite_season_statistics import CompositeSeasonStatistics
 from models.player_statistics import PlayerStatistics
 
+
 class CompositeSeasonStatistics:
     _year: int
+
 
 class CompositeSeasonStatisticsFull(CompositeSeasonStatistics):
     _team_id: str
@@ -19,7 +21,7 @@ class CompositeSeasonStatisticsFull(CompositeSeasonStatistics):
         self._team_id = team_id
         self._team_name = team_name
         self._players = players
-    
+
     @property
     def year(self) -> int:
         return self._year

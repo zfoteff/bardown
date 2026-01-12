@@ -1,6 +1,6 @@
 from datetime import datetime
-from random import shuffle, randint
-from typing import Dict, Tuple, List
+from random import randint, shuffle
+from typing import Dict, List, Tuple
 from uuid import NAMESPACE_OID, uuid5
 
 from utils import generate_statistics_string
@@ -44,6 +44,7 @@ def generate_team_players(player_data: List[Dict], team_id: str) -> str:
         result += f'("{team_id}", "{player["id"]}", 2018, {player["number"]}, "{player["position"]}", "{time}", "{time}"), '
 
     return result[:-2] + ";\n"
+
 
 def generate_player_season_statistics(player_data: List[Dict], team_id: str) -> str:
     result = "INSERT INTO season_statistics VALUES "

@@ -11,19 +11,24 @@ from errors.statistics_errors import (
 )
 from fastapi import Depends
 from stats import GAME_STATISTICS_TABLE_NAME, SEASON_STATISTICS_TABLE_NAME
-from stats.models.dao.composite_game_statistics import CompositeGameStatistics
-from stats.models.dao.composite_season_statistics import CompositeSeasonStatistics
-from stats.models.dao.composite_statistics import CompositeStatistics
-from stats.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
-from stats.models.dao.season_statistics import SeasonStatistics as SeasonStatisticsDAO
-from stats.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
-from stats.models.dto.season_statistics import SeasonStatistics as SeasonStatisticsDTO
-from stats.models.statistics_request_filters import (
+from typing_extensions import Annotated
+
+from bardown_lib.models.dao.composite_game_statistics import CompositeGameStatistics
+from bardown_lib.models.dao.composite_season_statistics import CompositeSeasonStatistics
+from bardown_lib.models.dao.composite_statistics import CompositeStatistics
+from bardown_lib.models.dao.game_statistics import GameStatistics as GameStatisticsDAO
+from bardown_lib.models.dao.season_statistics import (
+    SeasonStatistics as SeasonStatisticsDAO,
+)
+from bardown_lib.models.dto.game_statistics import GameStatistics as GameStatisticsDTO
+from bardown_lib.models.dto.season_statistics import (
+    SeasonStatistics as SeasonStatisticsDTO,
+)
+from bardown_lib.requests.statistics_request_filters import (
     CompositeStatisticsRequestFilters,
     GameStatisticsRequestFilters,
     SeasonStatisticsRequestFilters,
 )
-from typing_extensions import Annotated
 
 
 class StatisticsDatabaseInterface:

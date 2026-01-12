@@ -1,20 +1,23 @@
-from re import I
 from typing import Iterable, List
 
-from models.coach import Coach
-from models.composite_game_statistics import CompositeGameStatistics
-from models.composite_season_statistics_full import (
+from bardown_lib.models.dto.coach import Coach
+from bardown_lib.models.dto.composite_game_statistics import CompositeGameStatistics
+from bardown_lib.models.dto.composite_season_statistics_full import (
     CompositeSeasonByYear,
     CompositeSeasonStatisticsFull,
 )
-from models.composite_statistics import CompositeStatistics
-from models.composite_team import CompositeTeam, Roster
-from models.game import Game
-from models.game_result import GameResult, GameTeamResult, PlayerWithStatistics
-from models.player import Player
-from models.player_statistics import PlayerStatistics
-from models.statistics import Statistics
-from models.team import Team
+from bardown_lib.models.dto.composite_statistics import CompositeStatistics
+from bardown_lib.models.dto.composite_team import CompositeTeam, Roster
+from bardown_lib.models.dto.game import Game
+from bardown_lib.models.dto.game_result import (
+    GameResult,
+    GameTeamResult,
+    PlayerWithStatistics,
+)
+from bardown_lib.models.dto.player import Player
+from bardown_lib.models.dto.player_statistics import PlayerStatistics
+from bardown_lib.models.dto.statistics import Statistics
+from bardown_lib.models.dto.team import Team
 
 
 def player_data_service_response_to_players(data: Iterable) -> List[Player]:

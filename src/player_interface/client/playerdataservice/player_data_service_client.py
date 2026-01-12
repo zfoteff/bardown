@@ -1,8 +1,8 @@
-from models.player_data_service_request import PlayerDataServiceRequest
-from models.player_data_service_response import PlayerDataServiceResponse
 from requests import request
 from requests.exceptions import ConnectionError, InvalidSchema
 
+from bardown_lib.requests.player_data_service_request import PlayerDataServiceRequest
+from bardown_lib.responses.player_data_service_response import PlayerDataServiceResponse
 from bin.logger import Logger
 
 logger = Logger("player-data-service-client")

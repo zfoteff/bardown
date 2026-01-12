@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from models.team_filters import TeamFilters
+from bardown_lib.requests.team_filters import TeamFilters
 
 
 def string_to_list(data: str) -> List[str]:

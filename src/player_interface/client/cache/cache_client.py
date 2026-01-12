@@ -4,10 +4,10 @@ from typing import Annotated, Dict, Self, Tuple
 from config import cache_config
 from config.cache_config import CacheConfig
 from fastapi import Depends
-from models.player_data_service_response import PlayerDataServiceResponse
 from redis import Redis
 from redis.exceptions import ConnectionError, DataError
 
+from bardown_lib.responses.player_data_service_response import PlayerDataServiceResponse
 from bin.logger import Logger
 
 logger = Logger("cache")

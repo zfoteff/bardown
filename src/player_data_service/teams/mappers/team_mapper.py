@@ -1,12 +1,12 @@
 from typing import List
 
-from players.models.dto.coach import Coach
-from players.models.dto.player import Player
-from teams.models.dao.composite_team import CompositeTeam as CompositeTeamDAO
-from teams.models.dao.team import Team as TeamDAO
-from teams.models.dto.composite_team import CompositeTeam as CompositeTeamDTO
-from teams.models.dto.composite_team import Roster
-from teams.models.dto.team import Team as TeamDTO
+from bardown_lib.models.dao.composite_team import CompositeTeam as CompositeTeamDAO
+from bardown_lib.models.dao.team import Team as TeamDAO
+from bardown_lib.models.dto.coach import Coach
+from bardown_lib.models.dto.composite_team import CompositeTeam as CompositeTeamDTO
+from bardown_lib.models.dto.composite_team import Roster
+from bardown_lib.models.dto.player import Player
+from bardown_lib.models.dto.team import Team as TeamDTO
 
 
 def team_DTO_to_team_DAO(team_dto: TeamDTO) -> TeamDAO:

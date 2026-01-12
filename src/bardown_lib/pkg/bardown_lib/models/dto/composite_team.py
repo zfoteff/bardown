@@ -1,8 +1,9 @@
 from typing import List, Optional
 
-from .player import Player
-from .coach import Coach
 from pydantic import BaseModel
+
+from .coach import Coach
+from .player import Player
 
 
 class Roster(BaseModel):

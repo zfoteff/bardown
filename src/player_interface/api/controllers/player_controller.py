@@ -6,9 +6,9 @@ from fastapi.templating import Jinja2Templates
 from mappers.game_filters_mapper import GameFiltersMapper
 from mappers.player_filters_mapper import PlayerFiltersMapper
 from mappers.team_filters_mapper import TeamFiltersMapper
-from models.composite_team import CompositeTeam
 from providers.player_data_service_provider import PlayerDataServiceProvider
 
+from bardown_lib.models.dto.composite_team import CompositeTeam
 from player_interface import __version__ as player_interface_version
 
 FAVICON_PATH = "static/favicon.ico"

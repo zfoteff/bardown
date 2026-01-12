@@ -8,7 +8,7 @@ from validators.teams_query_validator import (
     validate_get_composite_team_query_parameters,
 )
 
-from bin.logger import Logger
+from bardown_lib.utils.logging import Logger
 
 logger = Logger("team-controller")
 db_interface = TeamsDBInterface()

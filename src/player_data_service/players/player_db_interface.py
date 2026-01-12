@@ -7,10 +7,11 @@ from connectors.mysql import MySQLClient
 from errors.players_errors import PlayerAlreadyExists, PlayerDoesNotExist
 from fastapi import Depends
 from players import PLAYERS_TABLE_NAME
-from players.models.dao.player import Player as PlayerDAO
-from players.models.dto.player import Player as PlayerDTO
-from players.models.players_request_filters import PlayersRequestFilters
 from typing_extensions import Annotated
+
+from bardown_lib.models.dao.player import Player as PlayerDAO
+from bardown_lib.models.dto.player import Player as PlayerDTO
+from bardown_lib.requests.players_request_filters import PlayersRequestFilters
 from bin.db_utils import build_update_fields
 
 

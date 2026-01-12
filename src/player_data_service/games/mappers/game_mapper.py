@@ -1,9 +1,10 @@
 from typing import List
+
 from bardown_lib.models.dao.game import Game as GameDAO
-from bardown_lib.models.dto.game import Game as GameDTO
 from bardown_lib.models.dao.game_result import GameResult as GameResultDAO
+from bardown_lib.models.dto.game import Game as GameDTO
+from bardown_lib.models.dto.game_result import GameResult as GameResultDTO
 from bardown_lib.models.dto.game_result import (
-    GameResult as GameResultDTO,
     GameTeamResult,
     PlayerWithStatistics,
 )

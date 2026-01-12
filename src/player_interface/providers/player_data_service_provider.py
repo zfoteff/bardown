@@ -16,16 +16,17 @@ from mappers.player_response_mapper import (
     player_data_service_response_to_players,
     player_data_sevice_response_to_teams,
 )
-from models.composite_statistics import CompositeStatistics
-from models.composite_team import CompositeTeam
-from models.game import Game
-from models.game_filters import GameFilters
-from models.game_result import GameResult
-from models.player import Player
-from models.player_data_service_request import PlayerDataServiceRequest
-from models.players_filters import PlayersFilters
-from models.team import Team
-from models.team_filters import TeamFilters
+
+from bardown_lib.models.dto.composite_statistics import CompositeStatistics
+from bardown_lib.models.dto.composite_team import CompositeTeam
+from bardown_lib.models.dto.game import Game
+from bardown_lib.models.dto.game_result import GameResult
+from bardown_lib.models.dto.player import Player
+from bardown_lib.models.dto.team import Team
+from bardown_lib.requests.game_request_filters import GameRequestFilters
+from bardown_lib.requests.player_data_service_request import PlayerDataServiceRequest
+from bardown_lib.requests.players_filters import PlayersFilters
+from bardown_lib.requests.team_filters import TeamFilters
 
 logger = Logger("player-data-service-provider")
 
@@ -183,7 +184,7 @@ class PlayerDataServiceProvider:
 
         return team
 
-    async def get_games_by_filters(self, filters: GameFilters) -> List[Game]:
+    async def get_games_by_filters(self, filters: GameRequestFilters) -> List[Game]:
         get_games_request = PlayerDataServiceRequest(
             url=self._get_games_url, query_parameters=filters.to_dict()
         )

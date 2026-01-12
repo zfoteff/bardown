@@ -1,7 +1,7 @@
-from bardown_lib.models.dao.player import Player as PlayerDAO
-from bardown_lib.models.dto.player import Player as PlayerDTO
 from bardown_lib.enums.grade import Grade
 from bardown_lib.enums.position import Position
+from bardown_lib.models.dao.player import Player as PlayerDAO
+from bardown_lib.models.dto.player import Player as PlayerDTO
 
 
 def player_DTO_to_player_DAO(player_dto: PlayerDTO) -> PlayerDAO:

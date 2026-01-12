@@ -7,12 +7,13 @@ from connectors.mysql import MySQLClient
 from errors.games_errors import GameAlreadyExists, GameDoesNotExist
 from fastapi import Depends
 from games import GAMES_TABLE_NAME, GAMES_TEAMS_TABLE_NAME
+from typing_extensions import Annotated
+
 from bardown_lib.models.dao.game import Game as GameDAO
 from bardown_lib.models.dao.game_result import GameResult as GameResultDAO
 from bardown_lib.models.dto.game import Game as GameDTO
 from bardown_lib.models.dto.game_result import GameResult as GameResultDTO
 from bardown_lib.requests.game_request_filters import GameRequestFilters
-from typing_extensions import Annotated
 from bin.db_utils import build_update_fields
 
 

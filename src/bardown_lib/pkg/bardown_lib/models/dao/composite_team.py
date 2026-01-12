@@ -1,5 +1,6 @@
 from typing import Dict, List, Tuple
 
+
 class CompositeTeamPlayer:
     team_id: str
     team_name: str

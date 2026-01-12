@@ -1,6 +1,11 @@
 from typing import Dict
+
 from generate_coaches import generate_coaches, generate_team_coaches
-from generate_players import generate_players, generate_team_players, generate_player_season_statistics
+from generate_players import (
+    generate_player_season_statistics,
+    generate_players,
+    generate_team_players,
+)
 from generate_teams import generate_teams
 
 TEAMS = [
@@ -94,7 +99,7 @@ BLANK_IMG = "static/blank.jpg"
 
 
 def generate_team_test_data(team: Dict) -> str:
-    print(f"--- Creating {team["school_name"]} Test Data ---")
+    print(f"--- Creating {team['school_name']} Test Data ---")
     team_result = generate_teams(team["team_id"], team["team_name"], team["school_name"])
     players, player_result = generate_players(team["school_name"])
     coaches, coach_result = generate_coaches()

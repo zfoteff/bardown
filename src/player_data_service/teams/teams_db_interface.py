@@ -10,23 +10,23 @@ from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
 from fastapi import Depends
 from players import COACHES_TABLE_NAME, PLAYERS_TABLE_NAME
 from teams import TEAM_COACH_TABLE_NAME, TEAM_PLAYER_TABLE_NAME, TEAMS_TABLE_NAME
-from teams.models.dao.composite_team import (
+from typing_extensions import Annotated
+
+from bardown_lib.models.dao.composite_team import (
     CompositeTeam,
     CompositeTeamCoach,
     CompositeTeamPlayer,
 )
-from teams.models.dao.team import Team as TeamDAO
-from teams.models.dto.team import Team as TeamDTO
-from teams.models.dto.team_coach import TeamCoach
-from teams.models.dto.team_player import TeamPlayer
-from teams.models.team_request_filters import (
+from bardown_lib.models.dao.team import Team as TeamDAO
+from bardown_lib.models.dto.team import Team as TeamDTO
+from bardown_lib.models.dto.team_coach import TeamCoach
+from bardown_lib.models.dto.team_player import TeamPlayer
+from bardown_lib.requests.team_request_filters import (
     CompositeTeamRequestFilters,
     TeamRequestFilters,
 )
-from typing_extensions import Annotated
+from bardown_lib.utils.logging import Logger
 from bin.db_utils import build_update_fields
-
-from bin.logger import Logger
 
 logger = Logger("db")
 
