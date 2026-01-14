@@ -11,7 +11,7 @@ from players.mappers.coach_mapper import coach_DAO_to_coach_DTO
 from validators.coaches_query_validator import validate_get_coaches_query_parameters
 
 from bardown_lib.models.dto.coach import Coach
-from bardown_lib.utils.logger import Logger
+from bardown_lib.utils.logging import Logger
 
 logger = Logger("coach-controller")
 db_interface = CoachesDatabaseInterface()

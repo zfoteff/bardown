@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Dict, Self, Tuple
 
-from enums import grade, position
+from bardown_lib.enums import grade, position
 
 
 class Player:

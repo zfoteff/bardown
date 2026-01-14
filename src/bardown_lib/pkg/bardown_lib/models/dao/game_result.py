@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Dict, Tuple
 
-from enums import position
+from bardown_lib.enums import position
 
 
 class GameResult:
