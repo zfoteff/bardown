@@ -1,4 +1,4 @@
-from errors.games_errors import GameAlreadyExists, GameDoesNotExist, GameValidationError
+from bardown_lib.errors.games_errors import GameAlreadyExists, GameDoesNotExist, GameValidationError
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
@@ -9,7 +9,7 @@ from games.mappers.game_mapper import (
 )
 from validators.games_query_validator import validate_get_games_query_parameters
 
-from bardown_lib.bin.logger import Logger
+from bardown_lib.utils.logging import Logger
 from bardown_lib.models.dto.game import Game
 
 logger = Logger("player-data-service-controller")

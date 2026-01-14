@@ -1,4 +1,4 @@
-from errors.statistics_errors import StatisticsDoNoExist, StatisticsValidationError
+from bardown_lib.errors.statistics_errors import StatisticsDoNoExist, StatisticsValidationError
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
@@ -13,7 +13,7 @@ from validators.statistics_query_validator import (
 from bardown_lib.requests.statistics_request_filters import (
     CompositeStatisticsRequestFilters,
 )
-from bin.logger import Logger
+from bardown_lib.utils.logging import Logger
 
 logger = Logger("player-data-service-controller")
 db_interface = StatisticsDatabaseInterface()

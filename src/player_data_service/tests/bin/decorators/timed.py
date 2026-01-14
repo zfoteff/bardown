@@ -1,7 +1,7 @@
 import functools
 import time
 
-from bin.logger import Logger
+from bardown_lib.utils.logging import Logger
 
 
 def timed(logger: Logger = None):

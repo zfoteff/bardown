@@ -4,7 +4,7 @@ from stats.api.controller.composite_statistics_controller import (
 )
 from stats.api.controller.statistics_controller import StatisticsController
 
-from bin.logger import Logger
+from bardown_lib.utils.logging import Logger
 
 API_VERSION = "v0"
 STATISTICS_ROUTER = APIRouter(prefix=f"/statistics/{API_VERSION}")

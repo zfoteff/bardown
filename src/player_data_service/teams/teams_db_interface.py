@@ -4,9 +4,9 @@ from uuid import NAMESPACE_OID, uuid5
 
 import config.player_data_service_config as application_config
 from connectors.mysql import MySQLClient
-from errors.coaches_errors import CoachDoesNotExist
-from errors.players_errors import PlayerDoesNotExist
-from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
+from bardown_lib.errors.coaches_errors import CoachDoesNotExist
+from bardown_lib.errors.players_errors import PlayerDoesNotExist
+from bardown_lib.errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist
 from fastapi import Depends
 from players import COACHES_TABLE_NAME, PLAYERS_TABLE_NAME
 from teams import TEAM_COACH_TABLE_NAME, TEAM_PLAYER_TABLE_NAME, TEAMS_TABLE_NAME

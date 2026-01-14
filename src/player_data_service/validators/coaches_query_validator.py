@@ -1,7 +1,7 @@
 import re
 
-from errors.coaches_errors import CoachValidationError
-from players.models.coaches_request_filters import CoachesRequestFilters
+from bardown_lib.errors.coaches_errors import CoachValidationError
+from bardown_lib.requests.coaches_request_filters import CoachesRequestFilters
 from validators import NAME_REGEX_PATTERN, UUID_REGEX_PATTERN
 
 

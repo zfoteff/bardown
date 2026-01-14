@@ -1,4 +1,4 @@
-from errors.coaches_errors import (
+from bardown_lib.errors.coaches_errors import (
     CoachAlreadyExists,
     CoachDoesNotExist,
     CoachValidationError,

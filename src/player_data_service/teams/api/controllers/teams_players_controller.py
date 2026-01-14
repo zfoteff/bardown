@@ -1,5 +1,5 @@
-from errors.players_errors import PlayerDoesNotExist
-from errors.teams_errors import TeamDoesNotExist, TeamValidationError
+from bardown_lib.errors.players_errors import PlayerDoesNotExist
+from bardown_lib.errors.teams_errors import TeamDoesNotExist, TeamValidationError
 from fastapi import Response
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse

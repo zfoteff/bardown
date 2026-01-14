@@ -1,8 +1,8 @@
 import re
 from datetime import datetime
 
-from errors.games_errors import GameValidationError
-from games.models.game_request_filters import GameRequestFilters
+from bardown_lib.errors.games_errors import GameValidationError
+from bardown_lib.requests.game_request_filters import GameRequestFilters
 from validators import BASIC_TEXT_REGEX_PATTERN, UUID_REGEX_PATTERN
 
 

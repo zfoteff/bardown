@@ -1,4 +1,4 @@
-from errors.players_errors import (
+from bardown_lib.errors.players_errors import (
     PlayerAlreadyExists,
     PlayerDoesNotExist,
     PlayerRequestValidationError,

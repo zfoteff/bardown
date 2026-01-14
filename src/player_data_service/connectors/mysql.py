@@ -3,7 +3,7 @@ from typing import List, Self, Tuple
 import mysql.connector as mysql
 from mysql.connector import Error as ConnectorError
 
-from bin.logger import Logger
+from bardown_lib.utils.logging import Logger
 
 logger = Logger("db")
 

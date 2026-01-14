@@ -4,7 +4,7 @@ from uuid import NAMESPACE_OID, uuid5
 
 import config.player_data_service_config as application_config
 from connectors.mysql import MySQLClient
-from errors.games_errors import GameAlreadyExists, GameDoesNotExist
+from bardown_lib.errors.games_errors import GameAlreadyExists, GameDoesNotExist
 from fastapi import Depends
 from games import GAMES_TABLE_NAME, GAMES_TEAMS_TABLE_NAME
 from typing_extensions import Annotated

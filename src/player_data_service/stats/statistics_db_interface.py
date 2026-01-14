@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 import config.player_data_service_config as application_config
 from connectors.mysql import MySQLClient
-from errors.statistics_errors import (
+from bardown_lib.errors.statistics_errors import (
     GameStatisticsAlreadyExist,
     GameStatisticsDoNoExist,
     StatisticsAlreadyExist,

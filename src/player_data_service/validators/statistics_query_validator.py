@@ -1,7 +1,7 @@
 import re
 
-from errors.statistics_errors import StatisticsValidationError
-from stats.models.statistics_request_filters import (
+from bardown_lib.errors.statistics_errors import StatisticsValidationError
+from bardown_lib.requests.statistics_request_filters import (
     CompositeStatisticsRequestFilters,
     GameStatisticsRequestFilters,
     SeasonStatisticsRequestFilters,

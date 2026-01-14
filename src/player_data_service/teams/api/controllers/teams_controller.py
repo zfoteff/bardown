@@ -1,4 +1,4 @@
-from errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist, TeamValidationError
+from bardown_lib.errors.teams_errors import TeamAlreadyExists, TeamDoesNotExist, TeamValidationError
 from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response

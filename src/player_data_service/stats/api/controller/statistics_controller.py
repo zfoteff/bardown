@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from errors.statistics_errors import (
+from bardown_lib.errors.statistics_errors import (
     StatisticsAlreadyExist,
     StatisticsDoNoExist,
     StatisticsValidationError,
@@ -20,7 +20,7 @@ from validators.statistics_query_validator import (
 
 from bardown_lib.models.dto.game_statistics import GameStatistics
 from bardown_lib.models.dto.season_statistics import SeasonStatistics
-from bin.logger import Logger
+from bardown_lib.utils.logging import Logger
 
 logger = Logger("player-data-service-controller")
 db_interface = StatisticsDatabaseInterface()

@@ -1,8 +1,8 @@
 from unittest.mock import Mock, patch
 
 import pytest
-from players.models.dto.player import Player as PlayerDTO
-from players.models.players_request_filters import PlayersRequestFilters
+from bardown_lib.models.dto.player import Player as PlayerDTO
+from bardown_lib.requests.players_request_filters import PlayersRequestFilters
 from players.player_db_interface import PlayerDatabaseInterface
 
 # Common test data constants

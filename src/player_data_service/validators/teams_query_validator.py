@@ -1,9 +1,9 @@
 import re
 
-from errors.teams_errors import TeamValidationError
-from teams.models.dto.team_coach import TeamCoach
-from teams.models.dto.team_player import TeamPlayer
-from teams.models.team_request_filters import (
+from bardown_lib.errors.teams_errors import TeamValidationError
+from bardown_lib.models.dto.team_coach import TeamCoach
+from bardown_lib.models.dto.team_player import TeamPlayer
+from bardown_lib.requests.team_request_filters import (
     CompositeTeamRequestFilters,
     TeamRequestFilters,
 )

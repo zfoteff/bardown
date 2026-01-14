@@ -1,9 +1,9 @@
 from unittest.mock import Mock, patch
 
 import pytest
-from errors.players_errors import PlayerAlreadyExists, PlayerDoesNotExist
-from players.models.dao.player import Player as PlayerDAO
-from players.models.players_request_filters import PlayersRequestFilters
+from bardown_lib.errors.players_errors import PlayerAlreadyExists, PlayerDoesNotExist
+from bardown_lib.models.dao.player import Player as PlayerDAO
+from bardown_lib.requests.players_request_filters import PlayersRequestFilters
 
 
 class TestPlayerDatabaseInterface:
