@@ -18,7 +18,6 @@ dependencies = [
     "httpx==0.27.0",
     "idna==3.7",
     "iniconfig==2.0.0",
-    "isort==5.10.1",
     "mccabe==0.6.1",
     "mypy-extensions==1.0.0",
     "mysql-connector-python==9.1.0",
@@ -44,3 +43,8 @@ dependencies = [
 [project.urls]
 Repository = "https://github.com/zfoteff/clackamas-lacrosse-application/tree/develop/src/player_data_service"
 Issues = "https://github.com/zfoteff/clackamas-lacrosse-application/issues"
+
+[project.optional-dependencies]
+dev = [
+    "bardown_lib @ file:///${PROJECT_ROOT}/../bardown_lib"
+]

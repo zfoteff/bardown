@@ -1,0 +1,2 @@
+-r requirements.txt
+-e ../bardown_lib # editable local installation of the bardown library
