@@ -19,7 +19,7 @@ class ClientUrl:
 
     @property
     def url(self) -> str:
-        return f"{"https://" if self.__config.tls_enabled else "http://"}{self.__config.host}/{self.__path}"
+        return f"{'https://' if self.__config.tls_enabled else 'http://'}{self.__config.host}/{self.__path}"
 
     @property
     def connect_timeout_in_ms(self) -> int:

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 
-from enums.position import Position
+from bardown_lib.enums.position import Position
 from pydantic import BaseModel
 
 from .statistics import Statistics
